@@ -1,14 +1,20 @@
 import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
 
 import './App.css'
 import { decrement, increment } from './features/counter/counterSlice'
-import { RootState } from './store'
-import { authors } from './data/authors.js'
-import { books } from './data/books.js'
+import { AppDispatch, RootState } from './store'
+import { fetchBooks } from './features/book/bookSlice'
+import { GoogleLogin } from '@react-oauth/google'
 
 function App() {
   const count = useSelector((state: RootState) => state.counter.value)
-  const dispatch = useDispatch()
+  const book = useSelector((state: RootState) => state.book.items)
+  const dispatch = useDispatch<AppDispatch>()
+
+  useEffect(() => {
+    dispatch(fetchBooks())
+  }, [])
 
   return (
     <div className="App">
@@ -18,6 +24,21 @@ function App() {
         <button onClick={() => dispatch(increment())}>Increment</button>
         <span className="px-10">{count}</span>
         <button onClick={() => dispatch(decrement())}>Decrement</button>
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            console.log(credentialResponse)
+          }}
+          onError={() => {
+            console.log('Login Failed')
+          }}
+        />
+        <ul>
+          {book !== null
+            ? book.map((item) => {
+                return <li key={item.ISBN}>{item.ISBN}</li>
+              })
+            : null}
+        </ul>
       </div>
     </div>
   )

@@ -37,7 +37,7 @@ export const books: Book[] = [
     returnDate: null
   },
   {
-    ISBN: 9789510430866,
+    ISBN: 9789510425466,
     title: 'Under the North Star',
     description: 'Follow one family from the late 1800ies to the 1960ies',
     publisher: 'WSOY',
