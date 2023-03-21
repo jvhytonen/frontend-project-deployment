@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import './App.css'
 import { decrement, increment } from './features/counter/counterSlice'
 import { RootState } from './store'
+import { authors } from './data/authors.js'
+import { books } from './data/books.js'
 
 function App() {
   const count = useSelector((state: RootState) => state.counter.value)
