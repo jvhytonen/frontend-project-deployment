@@ -11,6 +11,7 @@ function App() {
   return (
     <div className="App">
       <h1>Vite + React + Toolkit + Tailwind</h1>
+      <h2>Library will be build here</h2>
       <div className="card">
         <button onClick={() => dispatch(increment())}>Increment</button>
         <span className="px-10">{count}</span>
