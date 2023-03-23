@@ -35,7 +35,7 @@
       "isBorrowed": true,
       "borrowerId": 1,
       "published": 1959,
-      "borrowDate": "21-03-2023",
-      "returnDate": "21-04-2023"
+      "borrowDate": 0,
+      "returnDate": 234234234234234
     }
   ]

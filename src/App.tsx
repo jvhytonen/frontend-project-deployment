@@ -1,13 +1,25 @@
 import { useDispatch, useSelector } from 'react-redux'
+import { GoogleLogin } from '@react-oauth/google'
 
 import './App.css'
 import { decrement, increment } from './features/counter/counterSlice'
 import { AppDispatch, RootState } from './store'
-import { fetchBooks, updateBook } from './features/book/bookSlice'
-import { fetchAuthors } from './features/author/authorSlice'
-import { GoogleLogin } from '@react-oauth/google'
-import { Book, deleteBook, addBook } from './features/book/bookSlice'
-import { newBook } from './testData/newBook/newBook'
+import {
+  borrowBook,
+  fetchBooks,
+  updateBook,
+  deleteBook,
+  addBook,
+  returnBook
+} from './features/book/bookSlice'
+import { fetchAuthors, addAuthor, updateAuthor, deleteAuthor } from './features/author/authorSlice'
+import {
+  newBook,
+  updatedBook,
+  borrowTest,
+  newAuthor,
+  updatedAuthor
+} from './testData/testVariables'
 
 function App() {
   const count = useSelector((state: RootState) => state.counter.value)
@@ -19,22 +31,21 @@ function App() {
     dispatch(deleteBook(e))
   }
   const updateBookHandler: (e: number) => void = (e) => {
-    const updatedItem: Book = {
-      id: 0,
-      ISBN: 9789517179720,
-      title: 'Seitsemän veljestä',
-      description: 'A story about seven brothers and their life',
-      publisher: 'SKS',
-      authors: 'Aleksis Kivi',
-      isBorrowed: false,
-      borrowerId: null,
-      published: 1870,
-      borrowDate: null,
-      returnDate: null
-    }
     if (book !== null) {
-      dispatch(updateBook(updatedItem))
+      dispatch(updateBook(updatedBook))
     }
+  }
+  const borrowBookHandler: () => void = () => {
+    dispatch(borrowBook(borrowTest))
+  }
+  const returnBookHandler: () => void = () => {
+    dispatch(returnBook(borrowTest))
+  }
+  const deleteAuthorHandler: (e: number) => void = (e) => {
+    dispatch(deleteAuthor(e))
+  }
+  const updateAuthorHandler: (e: number) => void = (e) => {
+    dispatch(updateAuthor(updatedAuthor))
   }
   return (
     <div className="App">
@@ -64,12 +75,20 @@ function App() {
         <button onClick={() => updateBookHandler(0)}>
           Update Seven brothers to `&rdquo;`Seitsemän veljestä`&rdquo;`
         </button>
+        {book !== null && !book[0].isBorrowed ? (
+          <button onClick={() => borrowBookHandler()}>Borrow Seven brothers</button>
+        ) : (
+          <button onClick={() => returnBookHandler()}>Return Seven brothers</button>
+        )}
         <ul>
           {book !== null
             ? book.map((item) => {
                 return (
                   <li onClick={() => deleteBookHandler(item.id)} key={item.ISBN}>
-                    {item.title}: {item.ISBN}
+                    {item.title}: {item.ISBN} {item.isBorrowed ? 'Borrowed' : 'Free'} Returned:
+                    {item.isBorrowed && item.returnDate !== null
+                      ? new Date(item.returnDate).toDateString()
+                      : null}
                   </li>
                 )
               })
@@ -79,13 +98,17 @@ function App() {
           {author !== null
             ? author.map((item) => {
                 return (
-                  <li key={item.id}>
+                  <li onClick={() => deleteAuthorHandler(item.id)} key={item.id}>
                     {item.name}: {item.description}
                   </li>
                 )
               })
             : null}
         </ul>
+        <button onClick={() => dispatch(addAuthor(newAuthor))}>
+          Add Juhani Aho on the author-list
+        </button>
+        <button onClick={() => updateAuthorHandler(0)}>Make Väinö Linna a legend!</button>
       </div>
     </div>
   )

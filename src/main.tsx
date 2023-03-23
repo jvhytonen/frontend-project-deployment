@@ -9,7 +9,7 @@ import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <GoogleOAuthProvider clientId="CLIEN ID HERE">
+    <GoogleOAuthProvider clientId="CLIENT ID HERE">
       <Provider store={store}>
         <App />
       </Provider>

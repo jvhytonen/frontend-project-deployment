@@ -1,6 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
+import { BorrowTest } from '../../testData/borrow'
 
 type BookState = {
   items: Book[] | null
@@ -25,7 +26,7 @@ export type Book = {
   borrowerId: number | null
   published: number
   borrowDate: string | null
-  returnDate: string | null
+  returnDate: number | null
 }
 
 export const fetchBooks = createAsyncThunk('books/fetch', async (url: string) => {
@@ -37,8 +38,28 @@ export const bookSlice = createSlice({
   name: 'books',
   initialState,
   reducers: {
-    borrowAndReturn: (state, action) => {
-      console.log('Borrow and return')
+    borrowBook: (state, action: PayloadAction<BorrowTest>) => {
+      // The return date will be 30 days after the borrowing.
+      const today = new Date()
+      const returnDay = today.setDate(today.getDate() + 30)
+      const objIndex = state.items?.findIndex((obj) => obj.id === action.payload.bookId)
+      if (state.items !== null && objIndex !== undefined) {
+        state.items[objIndex] = {
+          ...state.items[objIndex],
+          isBorrowed: true,
+          returnDate: returnDay
+        }
+      }
+    },
+    returnBook: (state, action: PayloadAction<BorrowTest>) => {
+      const objIndex = state.items?.findIndex((obj) => obj.id === action.payload.bookId)
+      if (state.items !== null && objIndex !== undefined) {
+        state.items[objIndex] = {
+          ...state.items[objIndex],
+          isBorrowed: false,
+          returnDate: null
+        }
+      }
     },
     addBook: (state, action: PayloadAction<Book>) => {
       state.items?.push(action.payload)
@@ -70,6 +91,6 @@ export const bookSlice = createSlice({
   }
 })
 
-export const { borrowAndReturn, addBook, updateBook, deleteBook } = bookSlice.actions
+export const { borrowBook, returnBook, addBook, updateBook, deleteBook } = bookSlice.actions
 
 export default bookSlice.reducer

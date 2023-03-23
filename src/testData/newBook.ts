@@ -1,4 +1,7 @@
-import { Book } from '../../features/book/bookSlice'
+import { Book } from '../features/book/bookSlice'
+
+// Data for manually testing redux before creating UI. Will be deleted once UI is ready.
+// Testing adding a new book.
 
 export const newBook: Book = {
   id: 3,

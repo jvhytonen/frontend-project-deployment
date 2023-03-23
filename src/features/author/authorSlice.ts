@@ -30,13 +30,19 @@ export const authorSlice = createSlice({
   initialState,
   reducers: {
     addAuthor: (state, action) => {
-      console.log('Add author')
+      state.items?.push(action.payload)
     },
     updateAuthor: (state, action) => {
-      console.log('Update author')
+      // We update the whole data of the author even only one field e.g description changes.
+      // Find index of the object needing the update.
+      const objIndex = state.items?.findIndex((obj) => obj.id === action.payload.id)
+      // Assing the payload to that index.
+      if (state.items !== null && objIndex !== undefined) {
+        state.items[objIndex] = action.payload
+      }
     },
     deleteAuthor: (state, action) => {
-      console.log('Delete author')
+      state.items = state.items?.filter((item) => action.payload !== item.id) as Author[]
     }
   },
   extraReducers: (builder) => {
@@ -53,5 +59,7 @@ export const authorSlice = createSlice({
     })
   }
 })
+
+export const { addAuthor, updateAuthor, deleteAuthor } = authorSlice.actions
 
 export default authorSlice.reducer
