@@ -10,11 +10,8 @@ import { GoogleLogin } from '@react-oauth/google'
 function App() {
   const count = useSelector((state: RootState) => state.counter.value)
   const book = useSelector((state: RootState) => state.book.items)
+  // const author = useSelector((state: RootState) => state.)
   const dispatch = useDispatch<AppDispatch>()
-
-  useEffect(() => {
-    dispatch(fetchBooks())
-  }, [])
 
   return (
     <div className="App">
@@ -32,6 +29,12 @@ function App() {
             console.log('Login Failed')
           }}
         />
+        <button onClick={() => dispatch(fetchBooks('http://localhost:5173/books.json'))}>
+          Fetch books
+        </button>
+        <button onClick={() => dispatch(fetchBooks('http://localhost:5173/authors.json'))}>
+          Fetch authors
+        </button>
         <ul>
           {book !== null
             ? book.map((item) => {

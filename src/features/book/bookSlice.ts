@@ -1,7 +1,4 @@
-import { AnyAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-
-import { Book } from '../../data/books'
-import { books } from '../../data/books.js'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 type BookState = {
   items: Book[] | null
@@ -15,12 +12,22 @@ const initialState: BookState = {
   error: null
 }
 
-export const fetchBooks = createAsyncThunk('books/fetch', async () => {
-  // Async fetch here. Needs to changed if we use this to get data about books.
-  const response = books
-  return response
-  /* try {
-    const response = await fetch('URL Here')
+export type Book = {
+  ISBN: number
+  title: string
+  description: string
+  publisher: string
+  authors: string
+  isBorrowed: boolean
+  borrowerId: number | null
+  published: number
+  borrowDate: string | null
+  returnDate: string | null
+}
+
+export const fetchBooks = createAsyncThunk('books/fetch', async (url: string) => {
+  try {
+    const response = await fetch(url)
     if (!response.ok) {
       throw new Error('An error occurred')
     }
@@ -28,13 +35,26 @@ export const fetchBooks = createAsyncThunk('books/fetch', async () => {
     return books
   } catch (err) {
     console.log(err)
-  } */
+  }
 })
 
 export const bookSlice = createSlice({
   name: 'books',
   initialState,
-  reducers: {},
+  reducers: {
+    borrowAndReturn: (state, action) => {
+      console.log('Borrow and return')
+    },
+    addBook: (state, action) => {
+      console.log('Add book')
+    },
+    updateBook: (state, action) => {
+      console.log('Uppdate book')
+    },
+    deleteBook: (state, action) => {
+      console.log('Delete book')
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchBooks.fulfilled, (state, action) => {
       state.isLoading = false
