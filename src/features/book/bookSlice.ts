@@ -1,4 +1,6 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+
+import { fetchData } from '../fetchAPI/fetchAPI'
 
 type BookState = {
   items: Book[] | null
@@ -13,6 +15,7 @@ const initialState: BookState = {
 }
 
 export type Book = {
+  id: number
   ISBN: number
   title: string
   description: string
@@ -26,16 +29,8 @@ export type Book = {
 }
 
 export const fetchBooks = createAsyncThunk('books/fetch', async (url: string) => {
-  try {
-    const response = await fetch(url)
-    if (!response.ok) {
-      throw new Error('An error occurred')
-    }
-    const books = response.json()
-    return books
-  } catch (err) {
-    console.log(err)
-  }
+  const response = fetchData(url)
+  return response
 })
 
 export const bookSlice = createSlice({
@@ -45,14 +40,20 @@ export const bookSlice = createSlice({
     borrowAndReturn: (state, action) => {
       console.log('Borrow and return')
     },
-    addBook: (state, action) => {
-      console.log('Add book')
+    addBook: (state, action: PayloadAction<Book>) => {
+      state.items?.push(action.payload)
     },
-    updateBook: (state, action) => {
-      console.log('Uppdate book')
+    updateBook: (state, action: PayloadAction<Book>) => {
+      // We update the whole data of the book even only one field e.g description changes.
+      // Find index of the object needing the update.
+      const objIndex = state.items?.findIndex((obj) => obj.id === action.payload.id)
+      // Assing the payload to that index.
+      if (state.items !== null && objIndex !== undefined) {
+        state.items[objIndex] = action.payload
+      }
     },
-    deleteBook: (state, action) => {
-      console.log('Delete book')
+    deleteBook: (state, action: PayloadAction<number>) => {
+      state.items = state.items?.filter((item) => action.payload !== item.id) as Book[]
     }
   },
   extraReducers: (builder) => {
@@ -68,5 +69,7 @@ export const bookSlice = createSlice({
     })
   }
 })
+
+export const { borrowAndReturn, addBook, updateBook, deleteBook } = bookSlice.actions
 
 export default bookSlice.reducer

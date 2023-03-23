@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
+import { fetchData } from '../fetchAPI/fetchAPI'
+
 type AuthorState = {
   items: Author[] | null
   isLoading: boolean
@@ -19,16 +21,8 @@ export type Author = {
 }
 
 export const fetchAuthors = createAsyncThunk('authors/fetch', async (url: string) => {
-  try {
-    const response = await fetch(url)
-    if (!response.ok) {
-      throw new Error('An error occurred')
-    }
-    const books = response.json()
-    return books
-  } catch (err) {
-    console.log(err)
-  }
+  const response = fetchData(url)
+  return response
 })
 
 export const authorSlice = createSlice({
@@ -59,3 +53,5 @@ export const authorSlice = createSlice({
     })
   }
 })
+
+export default authorSlice.reducer

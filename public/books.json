@@ -1,5 +1,6 @@
 [
     {
+      "id": 0,
       "ISBN": 9789517179720,
       "title": "Seven brothers",
       "description": "A story about seven brothers and their life",
@@ -12,6 +13,7 @@
       "returnDate": null
     },
     {
+      "id": 1,
       "ISBN": 9789510430866,
       "title": "The Unknown Soldier",
       "description": "A legendary story from the WWII",
@@ -24,6 +26,7 @@
       "returnDate": null
     },
     {
+      "id": 2,
       "ISBN": 9789510425466,
       "title": "Under the North Star",
       "description": "Follow one family from the late 1800ies to the 1960ies",
