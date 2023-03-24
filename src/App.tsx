@@ -1,8 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { GoogleLogin } from '@react-oauth/google'
 
 import './App.css'
-import { decrement, increment } from './features/counter/counterSlice'
 import { AppDispatch, RootState } from './store'
 import {
   borrowBook,
@@ -22,7 +20,6 @@ import {
 } from './testData/testVariables'
 
 function App() {
-  const count = useSelector((state: RootState) => state.counter.value)
   const book = useSelector((state: RootState) => state.book.items)
   const author = useSelector((state: RootState) => state.author.items)
   const dispatch = useDispatch<AppDispatch>()
@@ -30,7 +27,7 @@ function App() {
   const deleteBookHandler: (e: number) => void = (e) => {
     dispatch(deleteBook(e))
   }
-  const updateBookHandler: (e: number) => void = (e) => {
+  const updateBookHandler: () => void = () => {
     if (book !== null) {
       dispatch(updateBook(updatedBook))
     }
@@ -44,48 +41,49 @@ function App() {
   const deleteAuthorHandler: (e: number) => void = (e) => {
     dispatch(deleteAuthor(e))
   }
-  const updateAuthorHandler: (e: number) => void = (e) => {
+  const updateAuthorHandler: () => void = () => {
     dispatch(updateAuthor(updatedAuthor))
   }
   return (
     <div className="App">
-      <h1>Vite + React + Toolkit + Tailwind</h1>
-      <h2>Library will be build here</h2>
+      <h1>Library app will be build here</h1>
+      <p>Buttons below are to test Redux. You can remove author or book by clicking on it.</p>
       <div className="card">
-        <button onClick={() => dispatch(increment())}>Increment</button>
-        <span className="px-10">{count}</span>
-        <button onClick={() => dispatch(decrement())}>Decrement</button>
-        <GoogleLogin
-          onSuccess={(credentialResponse) => {
-            console.log(credentialResponse)
-          }}
-          onError={() => {
-            console.log('Login Failed')
-          }}
-        />
-        <button onClick={() => dispatch(fetchBooks('http://localhost:5173/books.json'))}>
-          Fetch books
-        </button>
-        <button onClick={() => dispatch(fetchAuthors('http://localhost:5173/authors.json'))}>
-          Fetch authors
-        </button>
-        <button onClick={() => dispatch(addBook(newBook))}>
-          Add Juhani Aho`&apos;`s book to the list.
-        </button>
-        <button onClick={() => updateBookHandler(0)}>
-          Update Seven brothers to `&rdquo;`Seitsemän veljestä`&rdquo;`
-        </button>
-        {book !== null && !book[0].isBorrowed ? (
-          <button onClick={() => borrowBookHandler()}>Borrow Seven brothers</button>
-        ) : (
-          <button onClick={() => returnBookHandler()}>Return Seven brothers</button>
-        )}
+        <div>
+          <button onClick={() => dispatch(fetchBooks('http://localhost:5173/books.json'))}>
+            Fetch books
+          </button>
+          <button onClick={() => dispatch(fetchAuthors('http://localhost:5173/authors.json'))}>
+            Fetch authors
+          </button>
+        </div>
+        {book ? (
+          <div>
+            <button onClick={() => dispatch(addBook(newBook))}>
+              Add Juhani Aho`&apos;`s book to the list.
+            </button>
+            <button onClick={() => updateBookHandler()}>
+              Update Seven brothers to `&rdquo;`Seitsemän veljestä`&rdquo;`
+            </button>{' '}
+          </div>
+        ) : null}
+        {book !== null ? (
+          <div>
+            {!book[0].isBorrowed ? (
+              <button onClick={() => borrowBookHandler()}>Borrow Seven brothers</button>
+            ) : null}
+            {book[0].isBorrowed ? (
+              <button onClick={() => returnBookHandler()}>Return Seven brothers</button>
+            ) : null}
+          </div>
+        ) : null}
+
         <ul>
           {book !== null
             ? book.map((item) => {
                 return (
                   <li onClick={() => deleteBookHandler(item.id)} key={item.ISBN}>
-                    {item.title}: {item.ISBN} {item.isBorrowed ? 'Borrowed' : 'Free'} Returned:
+                    {item.title}: {item.ISBN} {item.isBorrowed ? 'Borrowed. Return date: ' : 'Free'}
                     {item.isBorrowed && item.returnDate !== null
                       ? new Date(item.returnDate).toDateString()
                       : null}
@@ -105,10 +103,16 @@ function App() {
               })
             : null}
         </ul>
-        <button onClick={() => dispatch(addAuthor(newAuthor))}>
-          Add Juhani Aho on the author-list
-        </button>
-        <button onClick={() => updateAuthorHandler(0)}>Make Väinö Linna a legend!</button>
+        {author ? (
+          <div>
+            <button onClick={() => dispatch(addAuthor(newAuthor))}>
+              Add Mark Twain on the author-list
+            </button>
+            <button onClick={() => updateAuthorHandler()}>
+              Make Väinö Linnas description to be a legend!
+            </button>
+          </div>
+        ) : null}
       </div>
     </div>
   )

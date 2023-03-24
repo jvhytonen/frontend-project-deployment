@@ -48,8 +48,8 @@ export type BorrowTest = {
 
 export const newAuthor: Author = {
   id: 3,
-  name: 'Juhani Aho',
-  description: 'Known for his many remarkable novels'
+  name: 'Mark Twain',
+  description: 'Wrore about life along Mississippi river'
 }
 
 export const updatedAuthor: Author = {
