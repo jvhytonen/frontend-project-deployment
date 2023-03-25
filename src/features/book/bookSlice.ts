@@ -29,8 +29,9 @@ export type Book = {
   returnDate: number | null
 }
 
-export const fetchBooks = createAsyncThunk('books/fetch', async (url: string) => {
-  const response = fetchData(url)
+export const fetchBooks = createAsyncThunk('books/fetch', async () => {
+  const URL = 'http://localhost:5173/books.json'
+  const response = fetchData(URL)
   return response
 })
 

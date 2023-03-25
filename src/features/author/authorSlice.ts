@@ -20,8 +20,9 @@ export type Author = {
   description: string
 }
 
-export const fetchAuthors = createAsyncThunk('authors/fetch', async (url: string) => {
-  const response = fetchData(url)
+export const fetchAuthors = createAsyncThunk('authors/fetch', async () => {
+  const URL = 'http://localhost:5173/authors.json'
+  const response = fetchData(URL)
   return response
 })
 
