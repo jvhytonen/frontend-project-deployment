@@ -20,7 +20,14 @@ export const authorSlice = createSlice({
   initialState,
   reducers: {
     addAuthor: (state, action) => {
-      state.items?.push(action.payload)
+      // In real project the id will be created in the backend, but now we create id by getting the length of the array so we automatically
+      // have unique value in this small example
+      const id = state.items ? state.items.length : null
+      const newAuthor = {
+        ...action.payload,
+        id: id
+      }
+      state.items?.push(newAuthor)
     },
     updateAuthor: (state, action) => {
       // We update the whole data of the author even only one field e.g description changes.

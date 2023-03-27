@@ -23,6 +23,9 @@ function Button({ label, type, handleClick }: Button) {
     case 'delete':
       style = 'text-red-700'
       break
+    case 'add':
+      style = 'text-green-500'
+      break
     default:
       style = ''
   }

@@ -17,10 +17,6 @@ function AuthorCard({ id, name, description }: Author) {
     // This will be implemented once there is form to use for this purpose.
     console.log('Editing author here')
   }
-  const addAuthorHandler: HandleClick = () => {
-    // This will be implemented once there is form to use for this purpose.
-    console.log('Adding a new author')
-  }
   return (
     <div className="border border-black bg-green-300 h-[100px] w-2/5">
       <h2>{name}</h2>
