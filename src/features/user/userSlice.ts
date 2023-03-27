@@ -36,6 +36,7 @@ export const userSlice = createSlice({
       state.name = action.payload.name
       state.userType = isOnTheWhitelist(action.payload.email) ? 'admin' : 'user'
       state.email = action.payload.email
+      state.id = action.payload.id
     }
   }
 })

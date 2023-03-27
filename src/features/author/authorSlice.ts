@@ -1,23 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
-
-type AuthorState = {
-  items: Author[] | null
-  isLoading: boolean
-  error: null | string
-}
+import { AuthorState, Author } from '../types/types'
 
 const initialState: AuthorState = {
   items: null,
   isLoading: false,
   error: null
-}
-
-export type Author = {
-  id: number
-  name: string
-  description: string
 }
 
 export const fetchAuthors = createAsyncThunk('authors/fetch', async () => {

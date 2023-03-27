@@ -13,13 +13,15 @@ function Books() {
         ? book.map((item) => {
             return (
               <BookCard
-                key={item.ISBN}
+                key={item.id}
+                id={item.id}
                 ISBN={item.ISBN}
                 title={item.title}
                 description={item.description}
                 publisher={item.publisher}
                 authors={item.authors}
                 isBorrowed={item.isBorrowed}
+                borrowerId={item.borrowerId}
                 published={item.published}
                 returnDate={item.returnDate}
               />
