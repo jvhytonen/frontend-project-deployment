@@ -29,7 +29,7 @@ const initialState: UserState = {
 }
 
 export const userSlice = createSlice({
-  name: 'books',
+  name: 'user',
   initialState,
   reducers: {
     loginSuccess: (state, action: PayloadAction<LoginSuccessType>) => {
@@ -37,10 +37,16 @@ export const userSlice = createSlice({
       state.userType = isOnTheWhitelist(action.payload.email) ? 'admin' : 'user'
       state.email = action.payload.email
       state.id = action.payload.id
+    },
+    logUserOut: (state) => {
+      state.name = null
+      state.userType = null
+      state.email = null
+      state.id = null
     }
   }
 })
 
-export const { loginSuccess } = userSlice.actions
+export const { loginSuccess, logUserOut } = userSlice.actions
 
 export default userSlice.reducer

@@ -4,12 +4,11 @@ type Button = {
   label: string
   type: string
   handleClick: MouseEventHandler<HTMLButtonElement>
-  borrowerId?: number
 }
 
 export type HandleClick = () => void
 
-function Button({ label, type, handleClick, borrowerId }: Button) {
+function Button({ label, type, handleClick }: Button) {
   let style
   switch (type) {
     case 'borrow':
