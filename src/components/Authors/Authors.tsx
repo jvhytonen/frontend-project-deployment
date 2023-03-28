@@ -5,12 +5,12 @@ import { RootState } from '../../store'
 import AuthorCard from '../AuthorCard/AuthorCard'
 
 function Authors() {
-  const author = useSelector((state: RootState) => state.author.items)
+  const { items, error } = useSelector((state: RootState) => state.author)
   return (
     <div className="flex flex-col justify-center items-center">
       <h2>Authors </h2>
-      {author !== null
-        ? author.map((item) => {
+      {items !== null
+        ? items.map((item) => {
             return (
               <AuthorCard
                 key={item.id}
@@ -21,6 +21,7 @@ function Authors() {
             )
           })
         : null}
+      {error ? <p className="text-red-600">{error}</p> : null}
     </div>
   )
 }

@@ -5,12 +5,12 @@ import { RootState } from '../../store'
 import BookCard from '../BookCard/BookCard'
 
 function Books() {
-  const book = useSelector((state: RootState) => state.book.items)
+  const { items, error } = useSelector((state: RootState) => state.book)
   return (
     <div className="flex flex-col justify-center items-center">
       <h2>Our books: </h2>
-      {book !== null
-        ? book.map((item) => {
+      {items !== null
+        ? items.map((item) => {
             return (
               <BookCard
                 key={item.id}
@@ -28,6 +28,7 @@ function Books() {
             )
           })
         : null}
+      {error ? <p className="text-red-600">{error}</p> : null}
     </div>
   )
 }

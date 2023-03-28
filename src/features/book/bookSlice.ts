@@ -2,7 +2,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
 import { Book, BookState } from '../types/types'
-import { BorrowBook, ReturnBook } from '../types/types'
+import { BorrowBook, ReturnBook, AddBookType } from '../types/types'
 
 const initialState: BookState = {
   items: null,
@@ -44,8 +44,20 @@ export const bookSlice = createSlice({
         }
       }
     },
-    addBook: (state, action: PayloadAction<Book>) => {
-      state.items?.push(action.payload)
+    addBook: (state, action: PayloadAction<AddBookType>) => {
+      // In real project the id will be created in the backend, but now we create id by getting the length of the array so we automatically
+      // have unique value in this small example
+      // If there are no any books stored, then the id is 0
+      const id = state.items ? state.items.length : 0
+      const newBook: Book = {
+        ...action.payload,
+        id: id,
+        isBorrowed: false,
+        borrowerId: null,
+        borrowDate: null,
+        returnDate: null
+      }
+      state.items?.push(newBook)
     },
     updateBook: (state, action: PayloadAction<Book>) => {
       // We update the whole data of the book even only one field e.g description changes.

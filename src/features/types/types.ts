@@ -29,6 +29,8 @@ export type AuthorState = {
   error: null | string
 }
 
+export type AddAuthorType = Omit<Author, 'id'>
+
 export type BorrowBook = {
   bookId: number
   borrowerId: number
@@ -37,3 +39,8 @@ export type BorrowBook = {
 export type ReturnBook = {
   bookId: number
 }
+
+export type AddBookType = Omit<
+  Book,
+  'id' | 'isBorrowed' | 'borrowerId' | 'borrowDate' | 'returnDate'
+>

@@ -2,11 +2,9 @@ import React, { ChangeEvent, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import Button from '../Button/Button'
-import { Author } from '../../features/types/types'
+import { AddAuthorType } from '../../features/types/types'
 import { AppDispatch } from '../../store'
 import { addAuthor } from '../../features/author/authorSlice'
-
-type AddAuthorType = Omit<Author, 'id'>
 
 function AuthorForm() {
   const [authorName, setAuthorName] = useState<string | null>(null)

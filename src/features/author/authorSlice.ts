@@ -1,7 +1,7 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
-import { AuthorState, Author } from '../types/types'
+import { AuthorState, Author, AddAuthorType } from '../types/types'
 
 const initialState: AuthorState = {
   items: null,
@@ -19,17 +19,17 @@ export const authorSlice = createSlice({
   name: 'authors',
   initialState,
   reducers: {
-    addAuthor: (state, action) => {
+    addAuthor: (state, action: PayloadAction<AddAuthorType>) => {
       // In real project the id will be created in the backend, but now we create id by getting the length of the array so we automatically
       // have unique value in this small example
-      const id = state.items ? state.items.length : null
-      const newAuthor = {
+      const id = state.items ? state.items.length : 0
+      const newAuthor: Author = {
         ...action.payload,
         id: id
       }
       state.items?.push(newAuthor)
     },
-    updateAuthor: (state, action) => {
+    updateAuthor: (state, action: PayloadAction<Author>) => {
       // We update the whole data of the author even only one field e.g description changes.
       // Find index of the object needing the update.
       const objIndex = state.items?.findIndex((obj) => obj.id === action.payload.id)
@@ -38,7 +38,7 @@ export const authorSlice = createSlice({
         state.items[objIndex] = action.payload
       }
     },
-    deleteAuthor: (state, action) => {
+    deleteAuthor: (state, action: PayloadAction<number>) => {
       state.items = state.items?.filter((item) => action.payload !== item.id) as Author[]
     }
   },
@@ -49,7 +49,7 @@ export const authorSlice = createSlice({
     })
     builder.addCase(fetchAuthors.rejected, (state) => {
       state.isLoading = false
-      console.log('An error occurred')
+      state.error = 'An error occured'
     })
     builder.addCase(fetchAuthors.pending, (state) => {
       state.isLoading = true

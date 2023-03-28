@@ -6,6 +6,7 @@ import Authors from '../Authors/Authors'
 import Logout from '../Logout/Logout'
 import Home from '../Home/Home'
 import AuthorForm from '../AuthorForm/AuthorForm'
+import BookForm from '../BookForm/BookForm'
 
 export function Content() {
   return (
@@ -16,6 +17,7 @@ export function Content() {
       <Route path="/authors" element={<Authors />} />
       <Route path="/books" element={<Books />} />
       <Route path="author-form" element={<AuthorForm />} />
+      <Route path="book-form" element={<BookForm />} />
     </Routes>
   )
 }
