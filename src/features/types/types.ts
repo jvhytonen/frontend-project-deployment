@@ -8,7 +8,7 @@ export type Book = {
   isBorrowed: boolean
   borrowerId: number | null
   published: number
-  borrowDate: string | null
+  borrowDate: number | null
   returnDate: number | null
 }
 export type BookState = {
@@ -32,6 +32,8 @@ export type AuthorState = {
 export type AddAuthorType = Omit<Author, 'id'>
 
 export type BorrowBook = {
+  borrowDate: number
+  returnDate: number
   bookId: number
   borrowerId: number
 }

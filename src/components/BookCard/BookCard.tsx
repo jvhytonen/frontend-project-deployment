@@ -36,7 +36,12 @@ function BookCard({
     console.log('Adding a new book')
   }
   const borrowBookHandler: HandleClick = () => {
+    const today = new Date()
+    const borrowDay = today.getTime()
+    const returnDay = today.setDate(today.getDate() + 30)
     const borrowBookData: BorrowBook = {
+      borrowDate: borrowDay,
+      returnDate: returnDay,
       borrowerId: user.id as number,
       bookId: id
     }
