@@ -3,11 +3,11 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
 import { RootState, AppDispatch } from '../../store'
-import { Book, BorrowBook } from '../../features/types/types'
+import { BorrowBook } from '../../features/types/types'
 import Button, { HandleClick } from '../Button/Button'
-import { deleteBook, updateBook, borrowBook, returnBook } from '../../features/book/bookSlice'
+import { deleteBook, borrowBook, returnBook } from '../../features/book/bookSlice'
 
-function BookCard() {
+function BookDetails() {
   const user = useSelector((state: RootState) => state.user)
   const book = useSelector((state: RootState) => state.book)
   const dispatch = useDispatch<AppDispatch>()
@@ -90,4 +90,4 @@ function BookCard() {
   )
 }
 
-export default BookCard
+export default BookDetails

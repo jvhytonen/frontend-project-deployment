@@ -6,7 +6,7 @@ import { AppDispatch } from '../../store'
 import { AddBookType } from '../../features/types/types'
 import { addBook } from '../../features/book/bookSlice'
 
-function BookForm() {
+function AddBook() {
   const [ISBN, setISBN] = useState<number>()
   const [title, setTitle] = useState<string>('')
   const [description, setDescription] = useState<string>('')
@@ -173,4 +173,4 @@ function BookForm() {
   )
 }
 
-export default BookForm
+export default AddBook
