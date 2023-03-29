@@ -12,13 +12,14 @@ function Books() {
       {items !== null
         ? items.map((item) => {
             return (
-              <>
+              <div key={item.ISBN}>
                 <h3>{item.title}</h3>
                 <p>{item.description}</p>
                 <p>
                   <Link to={`${item.id}`}>Read more</Link>
                 </p>
-              </>
+                <Link to={`/edit/${item.ISBN}`}>Edit</Link>
+              </div>
             )
           })
         : null}
