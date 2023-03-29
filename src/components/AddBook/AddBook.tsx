@@ -3,81 +3,49 @@ import { useDispatch } from 'react-redux'
 
 import Button from '../Button/Button'
 import { AppDispatch } from '../../store'
-import { AddBookType } from '../../features/types/types'
+import { AddNewBookType } from '../../features/types/types'
 import { addBook } from '../../features/book/bookSlice'
 
 function AddBook() {
-  const [ISBN, setISBN] = useState<number>()
-  const [title, setTitle] = useState<string>('')
-  const [description, setDescription] = useState<string>('')
-  const [publisher, setPublisher] = useState<string>('')
-  const [authors, setAuthors] = useState<string>('')
-  const [published, setPublished] = useState<number | undefined>()
+  const [newBook, setNewBook] = useState<AddNewBookType | null>(null)
 
   const [validationError, setValidationError] = useState<boolean>(false)
 
   const dispatch = useDispatch<AppDispatch>()
   const handleChange: (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void = (e) => {
-    if (e.target.id === 'title') {
-      setTitle(e.target.value)
-    }
-    if (e.target.id === 'description') {
-      setDescription(e.target.value)
-    }
-    if (e.target.id === 'authors') {
-      setAuthors(e.target.value)
-    }
-    if (e.target.id === 'isbn') {
-      setISBN(Number(e.target.value))
-    }
-
-    if (e.target.id === 'publisher') {
-      setPublisher(e.target.value)
-    }
-
-    if (e.target.id === 'published') {
-      setPublished(Number(e.target.value))
-    }
+    const { value, name } = e.target
+    setNewBook((prevState) => ({
+      ...(prevState as AddNewBookType),
+      [name]: value
+    }))
   }
-  const validateForm = (formInputs: AddBookType) => {
+  const validateForm = (formInputs: AddNewBookType) => {
+    // Validation still in progress with number values (ISBN && published)
     if (
-      formInputs.title &&
-      formInputs.description &&
-      formInputs.authors &&
-      typeof formInputs.ISBN === 'number' &&
-      formInputs.publisher &&
-      typeof formInputs.published === 'number'
+      formInputs.title.length > 1 &&
+      formInputs.authors.length > 1 &&
+      formInputs.description.length > 1 &&
+      formInputs.publisher.length > 1
     ) {
       return true
-    } else return false
+    } else {
+      return false
+    }
   }
 
-  const resetValues = () => {
-    setTitle('')
-    setISBN(undefined)
-    setDescription('')
-    setPublisher('')
-    setAuthors('')
-    setPublished(undefined)
-  }
   const handleSubmit: () => void = () => {
     if (validationError) {
       setValidationError(false)
     }
-    const newBook: AddBookType = {
-      ISBN: ISBN as number,
-      title: title as string,
-      description: description as string,
-      publisher: publisher as string,
-      authors: authors as string,
-      published: published as number
-    }
-    validateForm(newBook)
-    if (validateForm(newBook)) {
-      dispatch(addBook(newBook))
-      resetValues()
-    } else {
-      setValidationError(true)
+    if (newBook) {
+      const isGood = validateForm(newBook)
+      console.log(isGood)
+      if (validateForm(newBook)) {
+        dispatch(addBook(newBook))
+        setNewBook(null)
+      } else {
+        setValidationError(true)
+      }
     }
   }
   return (
@@ -87,7 +55,7 @@ function AddBook() {
           Please make sure you have filled all fields!{' '}
         </p>
       ) : null}
-      <h2>Book edit here:</h2>
+      <h2>Add new book:</h2>
       <div className="w-full m-3">
         <label htmlFor="title">Title </label>
       </div>
@@ -96,7 +64,7 @@ function AddBook() {
           onChange={(event) => handleChange(event)}
           className="w-full"
           id="title"
-          value={title}
+          name="title"
           type="text"
           placeholder="Title"
         />
@@ -109,7 +77,7 @@ function AddBook() {
           onChange={(event) => handleChange(event)}
           className="w-full"
           id="authors"
-          value={authors}
+          name="authors"
           type="text"
           placeholder="Authors"
         />
@@ -122,7 +90,7 @@ function AddBook() {
           onChange={(event) => handleChange(event)}
           cols={50}
           rows={4}
-          value={description}
+          name="description"
           id="description"
           placeholder="Write a short description about the author"
         />
@@ -134,7 +102,7 @@ function AddBook() {
         <input
           onChange={(event) => handleChange(event)}
           className="w-full"
-          value={publisher}
+          name="publisher"
           id="publisher"
           type="text"
           placeholder="Publisher"
@@ -147,27 +115,27 @@ function AddBook() {
         <input
           onChange={(event) => handleChange(event)}
           className="w-full"
-          value={published}
+          name="published"
           id="published"
           type="number"
           placeholder="Published"
         />
       </div>
       <div className="w-full m-3">
-        <label htmlFor="isbn">ISBN </label>
+        <label htmlFor="ISBN">ISBN </label>
       </div>
       <div className="w-full border-2 border-black">
         <input
           onChange={(event) => handleChange(event)}
           className="w-full"
-          value={ISBN}
-          id="isbn"
+          name="ISBN"
+          id="ISBN"
           type="number"
           placeholder="ISBN"
         />
       </div>
       <div>
-        <Button label="Add author to the list" type="add" handleClick={handleSubmit} />
+        <Button label="Add book to the list" type="add" handleClick={handleSubmit} />
       </div>
     </div>
   )

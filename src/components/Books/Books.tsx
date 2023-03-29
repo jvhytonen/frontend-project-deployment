@@ -1,8 +1,8 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
 
 import { RootState } from '../../store'
+import BookIntro from '../BookIntro/BookIntro'
 
 function Books() {
   const { items, error } = useSelector((state: RootState) => state.book)
@@ -12,14 +12,13 @@ function Books() {
       {items !== null
         ? items.map((item) => {
             return (
-              <div key={item.ISBN}>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-                <p>
-                  <Link to={`${item.id}`}>Read more</Link>
-                </p>
-                <Link to={`/edit/${item.ISBN}`}>Edit</Link>
-              </div>
+              <BookIntro
+                key={item.id}
+                ISBN={item.ISBN}
+                title={item.title}
+                description={item.description}
+                id={item.id}
+              />
             )
           })
         : null}

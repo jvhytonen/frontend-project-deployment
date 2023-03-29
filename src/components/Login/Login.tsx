@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { AppDispatch } from '../../store'
 import { LoginCredentialType, loginSuccess } from '../../features/user/userSlice'
+import { isOnTheWhitelist } from '../../features/whitelist/whitelist'
 
 function Login() {
   const dispatch = useDispatch<AppDispatch>()
@@ -19,6 +20,7 @@ function Login() {
             console.log(decodedCredentials.sub)
             const credentials = {
               name: decodedCredentials.name,
+              isAdmin: isOnTheWhitelist(decodedCredentials.email),
               email: decodedCredentials.email,
               id: Number(decodedCredentials.sub)
             }

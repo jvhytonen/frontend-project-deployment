@@ -1,30 +1,30 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-import { isOnTheWhitelist } from '../whitelist/whitelist'
-
 export type LoginCredentialType = {
   name: string
   email: string
+  isAdmin: boolean
   sub: string
 }
 
 export type LoginSuccessType = {
   name: string
   email: string
+  isAdmin: boolean
   id: number
 }
 
 type UserState = {
   name: string | null
   email: string | null
-  userType: 'admin' | 'user' | null
+  isAdmin: boolean
   id: null | number
 }
 
 const initialState: UserState = {
   name: null,
   email: null,
-  userType: null,
+  isAdmin: false,
   id: null
 }
 
@@ -34,13 +34,13 @@ export const userSlice = createSlice({
   reducers: {
     loginSuccess: (state, action: PayloadAction<LoginSuccessType>) => {
       state.name = action.payload.name
-      state.userType = isOnTheWhitelist(action.payload.email) ? 'admin' : 'user'
+      state.isAdmin = action.payload.isAdmin
       state.email = action.payload.email
       state.id = action.payload.id
     },
     logUserOut: (state) => {
       state.name = null
-      state.userType = null
+      state.isAdmin = false
       state.email = null
       state.id = null
     }

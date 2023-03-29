@@ -12,11 +12,12 @@ import Books from './components/Books/Books'
 import Authors from './components/Authors/Authors'
 import Logout from './components/Logout/Logout'
 import Home from './components/Home/Home'
-import AuthorForm from './components/AuthorForm/AuthorForm'
+import AddAuthor from './components/AddAuthor/AddAuthor'
 import BookForm from './components/AddBook/AddBook'
 import BookDetails from './components/BookDetails/BookDetails'
 import AuthorDetails from './components/AuthorDetails/AuthorDetails'
 import EditBook from './components/EditBook/EditBook'
+import AddBook from './components/AddBook/AddBook'
 
 function App() {
   const dispatch = useDispatch<AppDispatch>()
@@ -35,9 +36,10 @@ function App() {
         <Route path="/logout" element={<Logout />} />
         <Route path="/authors" element={<Authors />} />
         <Route path="/books" element={<Books />} />
-        <Route path="author-form" element={<AuthorForm />} />
+        <Route path="author-form" element={<AddAuthor />} />
         <Route path="book-form" element={<BookForm />} />
         <Route path="books/:id" element={<BookDetails />} />
+        <Route path="books/add" element={<AddBook />} />
         <Route path="authors/:id" element={<AuthorDetails />} />
         <Route path="edit/:isbn" element={<EditBook />} />
       </Routes>

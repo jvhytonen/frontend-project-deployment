@@ -12,13 +12,13 @@ function Authors() {
       {items !== null
         ? items.map((item) => {
             return (
-              <>
+              <div key={item.id}>
                 <h3>{item.name}</h3>
                 <p>{item.description}</p>
                 <p>
                   <Link to={`${item.id}`}>Read more</Link>
                 </p>
-              </>
+              </div>
             )
           })
         : null}

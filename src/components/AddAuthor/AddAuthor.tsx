@@ -6,26 +6,28 @@ import { AddAuthorType } from '../../features/types/types'
 import { AppDispatch } from '../../store'
 import { addAuthor } from '../../features/author/authorSlice'
 
-function AuthorForm() {
-  const [authorName, setAuthorName] = useState<string | null>(null)
-  const [authorDescr, setauthorDescr] = useState<string | null>(null)
+function AddAuthor() {
+  const [newAuthor, setNewAuthor] = useState<AddAuthorType | null>(null)
   const dispatch = useDispatch<AppDispatch>()
   const handleChange: (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void = (e) => {
-    if (e.target.id === 'author-name') {
-      setAuthorName(e.target.value)
-    }
-    if (e.target.id === 'author-description') {
-      setauthorDescr(e.target.value)
+    const { value, name } = e.target
+    setNewAuthor((prevState) => ({
+      ...(prevState as AddAuthorType),
+      [name]: value
+    }))
+  }
+  const validateForm = (formInput: AddAuthorType) => {
+    if (formInput.name.length > 1 && formInput.description.length > 1) {
+      return true
     }
   }
   const handleSubmit: () => void = () => {
-    const newAuthor: AddAuthorType = {
-      name: authorName as string,
-      description: authorDescr as string
+    if (newAuthor) {
+      if (validateForm(newAuthor)) {
+        dispatch(addAuthor(newAuthor))
+      }
     }
-    dispatch(addAuthor(newAuthor))
-    setAuthorName(null)
-    setauthorDescr(null)
+    setNewAuthor(null)
   }
   return (
     <div className="flex flex-col justify-center items-center w-1/2">
@@ -37,20 +39,22 @@ function AuthorForm() {
         <input
           onChange={(event) => handleChange(event)}
           className="w-full"
-          id="author-name"
+          id="name"
+          name="name"
           type="text"
           placeholder="name"
         />
       </div>
       <div className="w-full m-3">
-        <label htmlFor="author-description">Description about the author </label>
+        <label htmlFor="description">Description about the author </label>
       </div>
       <div className="w-full border-2 border-black">
         <textarea
           onChange={(event) => handleChange(event)}
           cols={50}
           rows={4}
-          id="author-description"
+          id="description"
+          name="description"
           placeholder="Write a short description about the author"
         />
       </div>
@@ -61,4 +65,4 @@ function AuthorForm() {
   )
 }
 
-export default AuthorForm
+export default AddAuthor

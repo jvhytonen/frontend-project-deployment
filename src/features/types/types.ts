@@ -42,7 +42,8 @@ export type ReturnBook = {
   bookId: number
 }
 
-export type AddBookType = Omit<
+export type AddNewBookType = Omit<
   Book,
   'id' | 'isBorrowed' | 'borrowerId' | 'borrowDate' | 'returnDate'
 >
+export type BookIntroType = Partial<Book>

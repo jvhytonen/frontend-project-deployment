@@ -23,6 +23,9 @@ function Header() {
           <Link to="/author-form">Author form</Link>
         </li>
         <li>
+          <Link to="/books/add">Add book</Link>
+        </li>
+        <li>
           {user.name !== null ? <Link to="/logout"> Logout</Link> : <Link to="/login">Login</Link>}
         </li>
       </ul>
