@@ -1,16 +1,12 @@
-import React, { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React from 'react'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import { AppDispatch, RootState } from '../../store'
-import { fetchAuthors } from '../../features/author/authorSlice'
+import { RootState } from '../../store'
 
 function Authors() {
   const { items, error } = useSelector((state: RootState) => state.author)
-  /*   const dispatch = useDispatch<AppDispatch>()
-  useEffect(() => {
-    dispatch(fetchAuthors())
-  }, []) */
+  const user = useSelector((state: RootState) => state.user)
   return (
     <div className="flex flex-col justify-center items-center">
       <h2>Our books: </h2>
@@ -23,6 +19,11 @@ function Authors() {
                 <p>
                   <Link to={`${item.id}`}>Read more</Link>
                 </p>
+                {user.isAdmin ? (
+                  <p>
+                    <Link to={`edit/${item.id}`}>Edit author</Link>
+                  </p>
+                ) : null}
               </div>
             )
           })

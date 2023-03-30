@@ -2,7 +2,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
 import { Book, BookState } from '../types/types'
-import { BorrowBook, ReturnBook, AddBookType } from '../types/types'
+import { BorrowBook, ReturnBook, AddNewBookType } from '../types/types'
 
 const initialState: BookState = {
   items: null,
@@ -43,7 +43,7 @@ export const bookSlice = createSlice({
         }
       }
     },
-    addBook: (state, action: PayloadAction<AddBookType>) => {
+    addBook: (state, action: PayloadAction<AddNewBookType>) => {
       // In real project the id will be created in the backend, but now we create id by getting the length of the array so we automatically
       // have unique value in this small example
       // If there are no any books stored, then the id is 0

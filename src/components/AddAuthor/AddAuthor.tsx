@@ -5,6 +5,7 @@ import Button from '../Button/Button'
 import { AddAuthorType } from '../../features/types/types'
 import { AppDispatch } from '../../store'
 import { addAuthor } from '../../features/author/authorSlice'
+import { validateAuthorData } from '../../features/validation/validate'
 
 function AddAuthor() {
   const [newAuthor, setNewAuthor] = useState<AddAuthorType | null>(null)
@@ -16,14 +17,9 @@ function AddAuthor() {
       [name]: value
     }))
   }
-  const validateForm = (formInput: AddAuthorType) => {
-    if (formInput.name.length > 1 && formInput.description.length > 1) {
-      return true
-    }
-  }
   const handleSubmit: () => void = () => {
     if (newAuthor) {
-      if (validateForm(newAuthor)) {
+      if (validateAuthorData(newAuthor)) {
         dispatch(addAuthor(newAuthor))
       }
     }
@@ -59,7 +55,7 @@ function AddAuthor() {
         />
       </div>
       <div>
-        <Button label="Add author to the list" type="add" handleClick={handleSubmit} />
+        <Button label="Add author to the list" styleType="add" handleClick={handleSubmit} />
       </div>
     </div>
   )

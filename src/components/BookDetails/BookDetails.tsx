@@ -63,11 +63,15 @@ function BookDetails() {
             <li>
               {/* If the book is not borrowed, user can borrow it by clicking */}
               {user !== null && user.isAdmin && !bookItem.isBorrowed ? (
-                <Button label="Click to borrow" type="borrow" handleClick={borrowBookHandler} />
+                <Button
+                  label="Click to borrow"
+                  styleType="borrow"
+                  handleClick={borrowBookHandler}
+                />
               ) : null}
               {/* If the book is borrowed by the user, the user can return it clicking */}
               {user !== null && user.isAdmin && bookItem.borrowerId === user.id ? (
-                <Button label="Return book" type="return" handleClick={returnBookHandler} />
+                <Button label="Return book" styleType="return" handleClick={returnBookHandler} />
               ) : null}
               {/* Admin can edit the details by clicking*/}
               {user !== null && user.isAdmin ? (
@@ -75,7 +79,7 @@ function BookDetails() {
               ) : null}
               {/*Admin can delete book */}
               {user !== null && user.isAdmin ? (
-                <Button label="Delete" type="delete" handleClick={deleteBookHandler} />
+                <Button label="Delete" styleType="delete" handleClick={deleteBookHandler} />
               ) : null}
             </li>
           </ul>

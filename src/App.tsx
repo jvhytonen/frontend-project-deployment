@@ -18,6 +18,7 @@ import AuthorDetails from './components/AuthorDetails/AuthorDetails'
 import EditBook from './components/EditBook/EditBook'
 import AddBook from './components/AddBook/AddBook'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
+import EditAuthor from './components/EditAuthor/EditAuthor'
 
 function App() {
   const dispatch = useDispatch<AppDispatch>()
@@ -40,6 +41,7 @@ function App() {
         <Route path="books/:isbn" element={<BookDetails />} />
         <Route path="authors/:id" element={<AuthorDetails />} />
         <Route path="authors/add" element={<ProtectedRoute component={AddAuthor} />} />
+        <Route path="authors/edit/:id" element={<ProtectedRoute component={EditAuthor} />} />
         <Route path="books/add" element={<ProtectedRoute component={AddBook} />} />
         <Route path="edit/:isbn" element={<ProtectedRoute component={EditBook} />} />
       </Routes>

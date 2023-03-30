@@ -1,15 +1,20 @@
 import React, { ChangeEvent, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 import { Book } from '../../features/types/types'
-import { RootState } from '../../store'
+import { AppDispatch, RootState } from '../../store'
+import Button from '../Button/Button'
+import { updateBook } from '../../features/book/bookSlice'
+import { validateBookData } from '../../features/validation/validate'
 
 function EditBook() {
   const params = useParams()
+  const dispatch = useDispatch<AppDispatch>()
   const book = useSelector((state: RootState) => state.book)
   const item = book.items ? book.items?.find((book) => Number(params.isbn) === book.ISBN) : null
   const [bookToEdit, setBookToEdit] = useState<Book | null | undefined>(item)
+  const [validationError, setValidationError] = useState<boolean>(false)
 
   const handleChange: (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void = (e) => {
     const { value, name } = e.target
@@ -20,8 +25,24 @@ function EditBook() {
       }))
     }
   }
+  const handleSubmit = () => {
+    if (validationError) {
+      setValidationError(false)
+    }
+    if (bookToEdit) {
+      if (validateBookData(bookToEdit)) {
+        dispatch(updateBook(bookToEdit))
+        setBookToEdit(null)
+      } else {
+        setValidationError(true)
+      }
+    }
+  }
   return (
     <div>
+      {validationError ? (
+        <p className="text-lg bg-red-800 underline">Do not leave any field empty!</p>
+      ) : null}
       {bookToEdit ? (
         <>
           <h2>Edit book:</h2>
@@ -111,6 +132,7 @@ function EditBook() {
           </div>
         </>
       ) : null}
+      <Button label="Save" styleType="save" handleClick={handleSubmit}></Button>
     </div>
   )
 }

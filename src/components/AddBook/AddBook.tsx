@@ -5,6 +5,7 @@ import Button from '../Button/Button'
 import { AppDispatch } from '../../store'
 import { AddNewBookType } from '../../features/types/types'
 import { addBook } from '../../features/book/bookSlice'
+import { validateBookData } from '../../features/validation/validate'
 
 function AddBook() {
   const [newBook, setNewBook] = useState<AddNewBookType | null>(null)
@@ -19,28 +20,12 @@ function AddBook() {
       [name]: value
     }))
   }
-  const validateForm = (formInputs: AddNewBookType) => {
-    // Validation still in progress with number values (ISBN && published)
-    if (
-      formInputs.title.length > 1 &&
-      formInputs.authors.length > 1 &&
-      formInputs.description.length > 1 &&
-      formInputs.publisher.length > 1
-    ) {
-      return true
-    } else {
-      return false
-    }
-  }
-
   const handleSubmit: () => void = () => {
     if (validationError) {
       setValidationError(false)
     }
     if (newBook) {
-      const isGood = validateForm(newBook)
-      console.log(isGood)
-      if (validateForm(newBook)) {
+      if (validateBookData(newBook)) {
         dispatch(addBook(newBook))
         setNewBook(null)
       } else {
@@ -135,7 +120,7 @@ function AddBook() {
         />
       </div>
       <div>
-        <Button label="Add book to the list" type="add" handleClick={handleSubmit} />
+        <Button label="Add book to the list" styleType="add" handleClick={handleSubmit} />
       </div>
     </div>
   )

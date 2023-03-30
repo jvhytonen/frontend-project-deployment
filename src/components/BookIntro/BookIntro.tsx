@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import { BookIntroType } from '../../features/types/types'
 
-function BookIntro({ ISBN, title, description, id }: BookIntroType) {
+function BookIntro({ ISBN, title, description }: BookIntroType) {
   return (
     <div>
       <h3>{title}</h3>

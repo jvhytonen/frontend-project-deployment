@@ -2,15 +2,15 @@ import React, { MouseEventHandler } from 'react'
 
 type Button = {
   label: string
-  type: string
+  styleType: string
   handleClick: MouseEventHandler<HTMLButtonElement>
 }
 
 export type HandleClick = () => void
 
-function Button({ label, type, handleClick }: Button) {
+function Button({ label, styleType, handleClick }: Button) {
   let style
-  switch (type) {
+  switch (styleType) {
     case 'borrow':
       style = 'text-green-700'
       break
