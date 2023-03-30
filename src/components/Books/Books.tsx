@@ -1,12 +1,18 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 
-import { RootState } from '../../store'
+import { AppDispatch, RootState } from '../../store'
 import BookIntro from '../BookIntro/BookIntro'
 import Search from '../Search/Search'
+import { fetchBooks } from '../../features/book/bookSlice'
 
 function Books() {
   const { items, error } = useSelector((state: RootState) => state.book)
+  /*   const dispatch = useDispatch<AppDispatch>()
+  useEffect(() => {
+    dispatch(fetchBooks())
+  }, []) */
+
   return (
     <div className="flex flex-col justify-center items-center">
       <h2>Our books: </h2>

@@ -12,7 +12,7 @@ function BookDetails() {
   const book = useSelector((state: RootState) => state.book)
   const dispatch = useDispatch<AppDispatch>()
   const params = useParams()
-  const filteredBook = book.items?.filter((item) => Number(params.id) === item.id)
+  const filteredBook = book.items?.filter((item) => Number(params.isbn) === item.ISBN)
   const bookItem = filteredBook ? filteredBook[0] : null
   const deleteBookHandler: HandleClick = () => {
     if (bookItem !== null) {

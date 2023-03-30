@@ -9,7 +9,7 @@ function BookIntro({ ISBN, title, description, id }: BookIntroType) {
       <h3>{title}</h3>
       <p>{description}</p>
       <p>
-        <Link to={`${id}`}>Read more</Link>
+        <Link to={`${ISBN}`}>Read more</Link>
       </p>
       <Link to={`/edit/${ISBN}`}>Edit</Link>
     </div>

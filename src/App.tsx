@@ -23,6 +23,7 @@ function App() {
   const dispatch = useDispatch<AppDispatch>()
 
   useEffect(() => {
+    console.log('UseEffect running...')
     dispatch(fetchBooks())
     dispatch(fetchAuthors())
   }, [])
@@ -36,12 +37,11 @@ function App() {
         <Route path="/logout" element={<Logout />} />
         <Route path="/authors" element={<Authors />} />
         <Route path="/books" element={<Books />} />
-        <Route path="books/:id" element={<BookDetails />} />
-        <Route path="author-form" element={<ProtectedRoute component={AddAuthor} />} />
-        <Route path="books/add" element={<ProtectedRoute component={AddBook} />} />
-        {/* <Route path="books/add" element={<AddBook />} /> */}
+        <Route path="books/:isbn" element={<BookDetails />} />
         <Route path="authors/:id" element={<AuthorDetails />} />
-        <Route path="edit/:isbn" element={<EditBook />} />
+        <Route path="authors/add" element={<ProtectedRoute component={AddAuthor} />} />
+        <Route path="books/add" element={<ProtectedRoute component={AddBook} />} />
+        <Route path="edit/:isbn" element={<ProtectedRoute component={EditBook} />} />
       </Routes>
     </div>
   )

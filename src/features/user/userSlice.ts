@@ -38,7 +38,7 @@ export const userSlice = createSlice({
       state.email = action.payload.email
       state.id = action.payload.id
     },
-    logUserOut: (state) => {
+    logUserOut: (state, action) => {
       state.name = null
       state.isAdmin = false
       state.email = null

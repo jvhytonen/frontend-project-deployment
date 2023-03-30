@@ -1,7 +1,7 @@
 import React from 'react'
 import { GoogleLogin } from '@react-oauth/google'
 import jwt_decode from 'jwt-decode'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import { AppDispatch } from '../../store'
 import { LoginCredentialType, loginSuccess } from '../../features/user/userSlice'
