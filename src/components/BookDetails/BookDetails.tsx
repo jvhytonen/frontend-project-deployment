@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 
 import { RootState, AppDispatch } from '../../store'
 import { BorrowBook } from '../../features/types/types'
@@ -18,10 +18,6 @@ function BookDetails() {
     if (bookItem !== null) {
       dispatch(deleteBook(bookItem.id))
     }
-  }
-  const editBookHandler: HandleClick = () => {
-    // This will be implemented once there is form to use
-    console.log('Editing Book here')
   }
   const borrowBookHandler: HandleClick = () => {
     if (bookItem !== null) {
@@ -45,7 +41,6 @@ function BookDetails() {
       dispatch(returnBook(returnBookData))
     }
   }
-
   return (
     <div className="border border-gray-100 bg-blue-300 w-2/5">
       {bookItem ? (
@@ -67,19 +62,19 @@ function BookDetails() {
             ) : null}
             <li>
               {/* If the book is not borrowed, user can borrow it by clicking */}
-              {user !== null && user.userType === 'user' && !bookItem.isBorrowed ? (
+              {user !== null && user.isAdmin && !bookItem.isBorrowed ? (
                 <Button label="Click to borrow" type="borrow" handleClick={borrowBookHandler} />
               ) : null}
               {/* If the book is borrowed by the user, the user can return it clicking */}
-              {user !== null && user.userType === 'user' && bookItem.borrowerId === user.id ? (
+              {user !== null && user.isAdmin && bookItem.borrowerId === user.id ? (
                 <Button label="Return book" type="return" handleClick={returnBookHandler} />
               ) : null}
               {/* Admin can edit the details by clicking*/}
-              {user !== null && user.userType === 'admin' ? (
-                <Button label="Edit" type="edit" handleClick={editBookHandler} />
+              {user !== null && user.isAdmin ? (
+                <Link to={`/edit/${bookItem.ISBN}`}>Edit</Link>
               ) : null}
               {/*Admin can delete book */}
-              {user !== null && user.userType === 'admin' ? (
+              {user !== null && user.isAdmin ? (
                 <Button label="Delete" type="delete" handleClick={deleteBookHandler} />
               ) : null}
             </li>

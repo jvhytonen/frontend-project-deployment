@@ -3,12 +3,14 @@ import { useSelector } from 'react-redux'
 
 import { RootState } from '../../store'
 import BookIntro from '../BookIntro/BookIntro'
+import Search from '../Search/Search'
 
 function Books() {
   const { items, error } = useSelector((state: RootState) => state.book)
   return (
     <div className="flex flex-col justify-center items-center">
       <h2>Our books: </h2>
+      <Search />
       {items !== null
         ? items.map((item) => {
             return (
