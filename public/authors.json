@@ -13,5 +13,40 @@
       "id": 2,
       "name": "Sofi Oksanen",
       "description": "The most famous modern novelist in Finland"
+    }, 
+    {
+      "id": 3,
+      "name": "Volter Kilpi",
+      "description": "Known of difficult and slow writing style"
+    }, 
+    {
+      "id": 4,
+      "name": "Kalle Päätalo",
+      "description": "The most popular Finnish novelist ever."
+    }, 
+    {
+      "id": 5,
+      "name": "Stephen King",
+      "description": "Known for his lovely horror novels."
+    }, 
+    {
+      "id": 6,
+      "name": "Mats Traat",
+      "description": "Legendary Estonian novellist."
+    }, 
+    {
+      "id": 7,
+      "name": "Rosa Liksom",
+      "description": "Very popular modern novellist in Finland"
+    }, 
+    {
+      "id": 8,
+      "name": "Henrik Ibsen",
+      "description": "Norwegian screenwriter from 1840'ies."
+    }, 
+    {
+      "id": 9,
+      "name": "August Strindberg",
+      "description": "Legendary Swedish naturalistic and expressionistic writer."
     }
   ]

@@ -24,7 +24,6 @@ function App() {
   const dispatch = useDispatch<AppDispatch>()
 
   useEffect(() => {
-    console.log('UseEffect running...')
     dispatch(fetchBooks())
     dispatch(fetchAuthors())
   }, [])

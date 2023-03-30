@@ -30,10 +30,10 @@ function AuthorDetails() {
           <h2>{authorItem.name}</h2>
           <p>{authorItem.description}</p>
           {user !== null && user.isAdmin ? (
-            <Button label="Edit" type="edit" handleClick={updateAuthorHandler} />
+            <Button label="Edit" styleType="edit" handleClick={updateAuthorHandler} />
           ) : null}
           {user !== null && user.isAdmin ? (
-            <Button label="Delete" type="delete" handleClick={deleteAuthorHandler} />
+            <Button label="Delete" styleType="delete" handleClick={deleteAuthorHandler} />
           ) : null}
         </>
       ) : null}
