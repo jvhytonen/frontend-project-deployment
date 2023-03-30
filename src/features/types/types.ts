@@ -9,8 +9,8 @@ export type Book = {
   isBorrowed: boolean
   borrowerId: number | null
   published: number
-  borrowDate: number | null
-  returnDate: number | null
+  borrowDate: Date | null
+  returnDate: Date | null
 }
 export type BookState = {
   items: Book[] | null
@@ -32,12 +32,10 @@ export type AuthorState = {
 
 export type AddAuthorType = Omit<Author, 'id'>
 
-export type BorrowBook = {
-  borrowDate: number
-  returnDate: number
-  bookId: number
-  borrowerId: number
-}
+export type BorrowBook = Omit<
+  Book,
+  'ISBN' | 'title' | 'url' | 'description' | 'publisher' | 'authors' | 'published' | 'isBorrowed'
+>
 
 export type ReturnBook = {
   bookId: number

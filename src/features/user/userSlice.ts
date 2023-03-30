@@ -10,6 +10,7 @@ export type LoginCredentialType = {
 export type LoginSuccessType = {
   name: string
   email: string
+  isLoggedIn: boolean
   isAdmin: boolean
   id: number
 }
@@ -17,6 +18,7 @@ export type LoginSuccessType = {
 type UserState = {
   name: string | null
   email: string | null
+  isLoggedIn: boolean
   isAdmin: boolean
   id: null | number
 }
@@ -24,6 +26,7 @@ type UserState = {
 const initialState: UserState = {
   name: null,
   email: null,
+  isLoggedIn: false,
   isAdmin: false,
   id: null
 }
@@ -35,12 +38,14 @@ export const userSlice = createSlice({
     loginSuccess: (state, action: PayloadAction<LoginSuccessType>) => {
       state.name = action.payload.name
       state.isAdmin = action.payload.isAdmin
+      state.isLoggedIn = action.payload.isLoggedIn
       state.email = action.payload.email
       state.id = action.payload.id
     },
     logUserOut: (state, action) => {
       state.name = null
       state.isAdmin = false
+      state.isLoggedIn = false
       state.email = null
       state.id = null
     }

@@ -17,10 +17,10 @@ function Login() {
             const decodedCredentials: LoginCredentialType = jwt_decode(
               credentialResponse.credential
             )
-            console.log(decodedCredentials.sub)
             const credentials = {
               name: decodedCredentials.name,
               isAdmin: isOnTheWhitelist(decodedCredentials.email),
+              isLoggedIn: true,
               email: decodedCredentials.email,
               id: Number(decodedCredentials.sub)
             }

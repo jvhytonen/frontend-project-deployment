@@ -22,7 +22,7 @@ export const bookSlice = createSlice({
   reducers: {
     borrowBook: (state, action: PayloadAction<BorrowBook>) => {
       // The return date will be 30 days after the borrowing.
-      const objIndex = state.items?.findIndex((obj) => obj.id === action.payload.bookId)
+      const objIndex = state.items?.findIndex((obj) => obj.id === action.payload.id)
       if (state.items !== null && objIndex !== undefined) {
         state.items[objIndex] = {
           ...state.items[objIndex],
@@ -39,6 +39,8 @@ export const bookSlice = createSlice({
         state.items[objIndex] = {
           ...state.items[objIndex],
           isBorrowed: false,
+          borrowDate: null,
+          borrowerId: null,
           returnDate: null
         }
       }
