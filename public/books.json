@@ -36,7 +36,7 @@
       "publisher": "WSOY",
       "authors": "Väinö Linna",
       "isBorrowed": true,
-      "borrowerId": 111988161131780587949,
+      "borrowerId": 111988161131780590000,
       "published": 1959,
       "borrowDate": "Thu Mar 30 2023 23:21:18 GMT+0300 (Itä-Euroopan kesäaika)",
       "returnDate": "Thu Mar 29 2023 23:21:18 GMT+0300 (Itä-Euroopan kesäaika)"
@@ -147,10 +147,10 @@
       "description": "A story from 1930'ies written by the most popular novelist in Finland",
       "publisher": "Gummerrus",
       "authors": "Kalle Päätalo",
-      "isBorrowed": false,
-      "borrowerId": null,
+      "isBorrowed": true,
+      "borrowerId": 3485739457349,
       "published": 1960,
-      "borrowDate": null,
-      "returnDate": null
+      "borrowDate": "Wed Mar 1 2023 23:21:18 GMT+0300 (Itä-Euroopan kesäaika)",
+      "returnDate": "Wed Mar 29 2023 23:21:18 GMT+0300 (Itä-Euroopan kesäaika)"
     }
   ]

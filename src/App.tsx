@@ -4,7 +4,6 @@ import { Routes, Route } from 'react-router-dom'
 
 import './App.css'
 import { AppDispatch } from './store'
-import Header from './components/Header/Header'
 import { fetchBooks } from './features/book/bookSlice'
 import { fetchAuthors } from './features/author/authorSlice'
 import Login from './components/Login/Login'
@@ -14,11 +13,11 @@ import Logout from './components/Logout/Logout'
 import Home from './components/Home/Home'
 import AddAuthor from './components/AddAuthor/AddAuthor'
 import BookDetails from './components/BookDetails/BookDetails'
-import AuthorDetails from './components/AuthorDetails/AuthorDetails'
 import EditBook from './components/EditBook/EditBook'
 import AddBook from './components/AddBook/AddBook'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
 import EditAuthor from './components/EditAuthor/EditAuthor'
+import Navbar from './components/Navbar/Navbar'
 
 function App() {
   const dispatch = useDispatch<AppDispatch>()
@@ -30,7 +29,7 @@ function App() {
 
   return (
     <div className="App w-full">
-      <Header />
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -38,7 +37,6 @@ function App() {
         <Route path="/authors" element={<Authors />} />
         <Route path="/books" element={<Books />} />
         <Route path="books/:isbn" element={<BookDetails />} />
-        <Route path="authors/:id" element={<AuthorDetails />} />
         <Route path="authors/add" element={<ProtectedRoute component={AddAuthor} />} />
         <Route path="authors/edit/:id" element={<ProtectedRoute component={EditAuthor} />} />
         <Route path="books/add" element={<ProtectedRoute component={AddBook} />} />

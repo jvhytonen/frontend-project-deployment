@@ -4,8 +4,7 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../store'
 
 function Logout() {
-  const dispatch = useDispatch<AppDispatch>()
-  return <div>You have been logged out.</div>
+  return <div className="mt-[200px]">You have been logged out.</div>
 }
 
 export default Logout

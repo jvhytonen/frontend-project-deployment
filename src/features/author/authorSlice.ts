@@ -10,7 +10,7 @@ const initialState: AuthorState = {
 }
 
 export const fetchAuthors = createAsyncThunk('authors/fetch', async () => {
-  const URL = 'http://localhost:5173/authors.json'
+  const URL = 'authors.json'
   const response = fetchData(URL)
   return response
 })

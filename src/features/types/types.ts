@@ -1,3 +1,5 @@
+import { MouseEventHandler } from 'react'
+
 export type Book = {
   id: number
   ISBN: number
@@ -46,3 +48,11 @@ export type AddNewBookType = Omit<
   'id' | 'isBorrowed' | 'borrowerId' | 'borrowDate' | 'returnDate'
 >
 export type BookIntroType = Partial<Book>
+
+export type HandleClick = () => void
+export type HandleAuthorClick = (id: number) => void
+
+export type ButtonType = {
+  label: string
+  handleClick: MouseEventHandler<HTMLButtonElement>
+}

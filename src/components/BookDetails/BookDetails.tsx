@@ -1,23 +1,32 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 import { RootState, AppDispatch } from '../../store'
 import { BorrowBook } from '../../features/types/types'
 import Button, { HandleClick } from '../Button/Button'
 import { deleteBook, borrowBook, returnBook } from '../../features/book/bookSlice'
+import AdminActionIcons from '../AdminActionIcons/AdminActionIcons'
 
 function BookDetails() {
   const user = useSelector((state: RootState) => state.user)
   const book = useSelector((state: RootState) => state.book)
   const dispatch = useDispatch<AppDispatch>()
+  const navigate = useNavigate()
   const params = useParams()
   const filteredBook = book.items?.filter((item) => Number(params.isbn) === item.ISBN)
   const bookItem = filteredBook ? filteredBook[0] : null
 
   const deleteBookHandler: HandleClick = () => {
     if (bookItem !== null) {
-      dispatch(deleteBook(bookItem.id))
+      dispatch(deleteBook(bookItem.ISBN))
+      navigate('/books')
+    }
+  }
+
+  const editBookHandler = () => {
+    if (bookItem !== null) {
+      navigate(`/edit/${bookItem.ISBN}`)
     }
   }
 
@@ -44,9 +53,14 @@ function BookDetails() {
     }
   }
   return (
-    <div className="flex justify-center h-[50%]">
+    <div className="flex justify-center h-[50%] mt-[100px]">
       {bookItem ? (
         <div className="block w-[30%] my-8 rounded-lg bg-white shadow-lg dark:bg-neutral-700">
+          {user.isAdmin ? (
+            <div className="w-1/6 mr-0 ml-auto">
+              <AdminActionIcons editItem={editBookHandler} deleteItem={deleteBookHandler} />
+            </div>
+          ) : null}
           {/* <img className="rounded-t-lg" src={`../${bookItem.url}`} alt="" /> */}
           <div className="p-6">
             <h5 className="mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50">
@@ -63,20 +77,22 @@ function BookDetails() {
             </p>
             <p>
               Availability:
-              {bookItem.isBorrowed && bookItem.returnDate && bookItem.borrowerId !== user.id
+              {bookItem.isBorrowed && bookItem.returnDate
                 ? ' Borrowed, return date: ' + bookItem.returnDate.toString()
                 : ' Free'}
             </p>
             {user.isLoggedIn && !user.isAdmin && !bookItem.isBorrowed ? (
-              <Button label="Click to borrow" styleType="borrow" handleClick={borrowBookHandler} />
+              <Button label="Click to borrow" handleClick={borrowBookHandler} />
             ) : null}
             {user.isLoggedIn &&
             !user.isAdmin &&
             bookItem.isBorrowed &&
             bookItem.borrowerId === user.id ? (
-              <div className="flex">
-                <p>You have borrowed the book. Return day: {bookItem.returnDate?.toString()}</p>
-                <Button label="Return book" styleType="return" handleClick={returnBookHandler} />
+              <div className="flex flex-col">
+                <p className="text-blue-400">
+                  You have borrowed the book. Return day: {bookItem.returnDate?.toString()}
+                </p>
+                <Button label="Return book" handleClick={returnBookHandler} />
               </div>
             ) : null}
           </div>
@@ -87,44 +103,3 @@ function BookDetails() {
 }
 
 export default BookDetails
-/* 
-<div className="border border-gray-100 bg-blue-300 w-2/5">
-{bookItem ? (
-  <>
-    <h3>{bookItem.title}</h3>
-    <ul>
-      <li>{bookItem.description}</li>
-      <li>{bookItem.publisher}</li>
-      <li>{bookItem.authors}</li>
-      <li>{bookItem.published}</li>
-      <li>{bookItem.ISBN}</li>
-      {bookItem.isBorrowed && bookItem.borrowerId !== user.id ? (
-        <li className="text-red-200">Borrowed: return date: {bookItem.returnDate}</li>
-      ) : null}
-      {bookItem.isBorrowed && bookItem.borrowerId === user.id ? (
-        <li className="text-red-600">
-          You have borrowed the book. Return day: {bookItem.returnDate}
-        </li>
-      ) : null}
-      <li>
-/*         {user !== null && user.isAdmin && !bookItem.isBorrowed ? (
-          <Button
-            label="Click to borrow"
-            styleType="borrow"
-            handleClick={borrowBookHandler}
-          />
-        ) : null} 
-         {user !== null && user.isAdmin && bookItem.borrowerId === user.id ? (
-          <Button label="Return book" styleType="return" handleClick={returnBookHandler} />
-        ) : null} 
-         {user !== null && user.isAdmin ? (
-          <Link to={`/edit/${bookItem.ISBN}`}>Edit</Link>
-        ) : null} 
-        {user !== null && user.isAdmin ? (
-          <Button label="Delete" styleType="delete" handleClick={deleteBookHandler} />
-        ) : null}
-      </li>
-    </ul>
-  </>
-) : null}
-</div> */

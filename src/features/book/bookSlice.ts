@@ -11,7 +11,7 @@ const initialState: BookState = {
 }
 
 export const fetchBooks = createAsyncThunk('books/fetch', async () => {
-  const URL = 'http://localhost:5173/books.json'
+  const URL = 'books.json'
   const response = fetchData(URL)
   return response
 })
@@ -70,7 +70,7 @@ export const bookSlice = createSlice({
       }
     },
     deleteBook: (state, action: PayloadAction<number>) => {
-      state.items = state.items?.filter((item) => action.payload !== item.id) as Book[]
+      state.items = state.items?.filter((item) => action.payload !== item.ISBN) as Book[]
     }
   },
   extraReducers: (builder) => {
