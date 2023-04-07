@@ -8,7 +8,7 @@ function Authors() {
   const { items, error } = useSelector((state: RootState) => state.author)
 
   return (
-    <div className="flex flex-col justify-center items-center mt-[100px]">
+    <div className="flex flex-col justify-center items-center">
       <h2 className="text-4xl font-bold">Authors: </h2>
       <div className="w-full mx-8 my-8 flex items-center justify-center">
         <div className="grid grid-cols-3 gap-20 w-[80%]">

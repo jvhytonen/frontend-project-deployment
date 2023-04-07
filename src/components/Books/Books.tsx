@@ -9,10 +9,10 @@ function Books() {
   const { items, error } = useSelector((state: RootState) => state.book)
 
   return (
-    <div className="flex flex-col justify-center items-center mt-[100px]">
+    <div className="flex flex-col justify-center items-center">
       <h2 className="text-center text-4xl font-bold">Our books</h2>
       <div className="w-full mx-8 my-8 flex items-center justify-center">
-        <div className="grid grid-cols-3 gap-20 w-[80%]">
+        <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-10 w-[80%]">
           {/* <Search /> */}
           {items !== null
             ? items.map((item) => {
@@ -21,7 +21,7 @@ function Books() {
                     key={item.id}
                     ISBN={item.ISBN}
                     title={item.title}
-                    description={item.description}
+                    authors={item.authors}
                     url={item.url}
                   />
                 )

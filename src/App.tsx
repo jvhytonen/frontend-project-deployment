@@ -30,18 +30,20 @@ function App() {
   return (
     <div className="App w-full">
       <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/logout" element={<Logout />} />
-        <Route path="/authors" element={<Authors />} />
-        <Route path="/books" element={<Books />} />
-        <Route path="books/:isbn" element={<BookDetails />} />
-        <Route path="authors/add" element={<ProtectedRoute component={AddAuthor} />} />
-        <Route path="authors/edit/:id" element={<ProtectedRoute component={EditAuthor} />} />
-        <Route path="books/add" element={<ProtectedRoute component={AddBook} />} />
-        <Route path="edit/:isbn" element={<ProtectedRoute component={EditBook} />} />
-      </Routes>
+      <div className="mt-20">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/logout" element={<Logout />} />
+          <Route path="/authors" element={<Authors />} />
+          <Route path="/books" element={<Books />} />
+          <Route path="books/:isbn" element={<BookDetails />} />
+          <Route path="authors/add" element={<ProtectedRoute component={AddAuthor} />} />
+          <Route path="authors/edit/:id" element={<ProtectedRoute component={EditAuthor} />} />
+          <Route path="books/add" element={<ProtectedRoute component={AddBook} />} />
+          <Route path="edit/:isbn" element={<ProtectedRoute component={EditBook} />} />
+        </Routes>
+      </div>
     </div>
   )
 }

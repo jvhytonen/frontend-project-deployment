@@ -33,7 +33,7 @@ function Login() {
     }
   }
   return (
-    <div className="flex justify-center items-center mt-[100px]">
+    <div className="flex justify-center items-center">
       <div className="w-[40%] bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col">
         <div className="mb-4">
           <label className="block text-grey-darker text-sm font-bold mb-2" htmlFor="username">

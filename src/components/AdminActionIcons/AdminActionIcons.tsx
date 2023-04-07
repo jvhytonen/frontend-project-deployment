@@ -11,9 +11,15 @@ type AdminActionIcons = {
 
 function AdminActionIcons({ editItem, deleteItem }: AdminActionIcons) {
   return (
-    <div className="flex justify-between">
-      <AiFillDelete onClick={deleteItem} className="cursor-pointer" />{' '}
-      <GrEdit onClick={editItem} className="cursor-pointer" />
+    <div className="flex justify-between text-lg">
+      <div onClick={deleteItem}>
+        <span className="sr-only">Delete item</span>
+        <AiFillDelete className="cursor-pointer" />
+      </div>
+      <div onClick={editItem}>
+        <span className="sr-only">Edit item</span>
+        <GrEdit className="cursor-pointer" />
+      </div>
     </div>
   )
 }
