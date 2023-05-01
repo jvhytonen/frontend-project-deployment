@@ -13,9 +13,11 @@ import { store } from './store'
 import App from './App'
 import './index.css'
 
+const clientId = process.env.VITE_OAUTH
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <GoogleOAuthProvider clientId={process.env.VITE_OAUTH}>
+    <GoogleOAuthProvider clientId={clientId ? clientId : ''}>
       <Provider store={store}>
         <BrowserRouter>
           <App />
