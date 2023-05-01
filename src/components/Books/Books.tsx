@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux'
 
 import { RootState } from '../../store'
 import BookIntro from '../BookIntro/BookIntro'
-import Search from '../Search/Search'
 import FilterAuthors from '../FilterAuthors/FilterAuthors'
 import { Book } from '../../features/types/types'
 
