@@ -1,4 +1,6 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { fetchData } from '../fetchAPI/fetchAPI'
+import { User } from '../types/types'
 
 export type LoginCredentialType = {
   name: string
@@ -7,51 +9,53 @@ export type LoginCredentialType = {
   sub: string
 }
 
-export type LoginSuccessType = {
-  name: string
-  email: string
-  isLoggedIn: boolean
-  isAdmin: boolean
-  id: number
+export type LoginTry = {
+  id: string
 }
 
 type UserState = {
-  name: string | null
-  email: string | null
-  isLoggedIn: boolean
-  isAdmin: boolean
-  id: null | number
+  items: User | null
+  isLoading: boolean
+  error: null | string
 }
 
 const initialState: UserState = {
-  name: null,
-  email: null,
-  isLoggedIn: false,
-  isAdmin: false,
-  id: null
+  items: null,
+  isLoading: false,
+  error: null
 }
+
+export const getUser = createAsyncThunk('users/fetch', async (id: string) => {
+  const URL = 'http://localhost:8081/api/v1/users/' + id
+  const response = fetchData(URL)
+  return response
+})
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    loginSuccess: (state, action: PayloadAction<LoginSuccessType>) => {
-      state.name = action.payload.name
-      state.isAdmin = action.payload.isAdmin
-      state.isLoggedIn = action.payload.isLoggedIn
-      state.email = action.payload.email
-      state.id = action.payload.id
+    logUserIn: (state, action: PayloadAction<LoginTry>) => {
+      console.log('Login')
     },
     logUserOut: (state) => {
-      state.name = null
-      state.isAdmin = false
-      state.isLoggedIn = false
-      state.email = null
-      state.id = null
+      console.log('logout')
     }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getUser.fulfilled, (state, action) => {
+      state.isLoading = false
+      state.items = action.payload
+    })
+    builder.addCase(getUser.pending, (state) => {
+      state.isLoading = true
+    })
+    builder.addCase(getUser.rejected, (state) => {
+      state.error = 'An error occurred! Try again later'
+    })
   }
 })
 
-export const { loginSuccess, logUserOut } = userSlice.actions
+export const { logUserIn, logUserOut } = userSlice.actions
 
 export default userSlice.reducer

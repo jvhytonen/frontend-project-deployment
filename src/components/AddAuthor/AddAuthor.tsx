@@ -5,8 +5,9 @@ import { useNavigate } from 'react-router-dom'
 import Button from '../Button/Button'
 import { AddAuthorType } from '../../features/types/types'
 import { AppDispatch } from '../../store'
-import { addAuthor } from '../../features/author/authorSlice'
+import { addNewAuthor } from '../../features/author/authorSlice'
 import { validateAuthorData } from '../../features/validation/validate'
+import Modal from '../Modal/Modal'
 
 function AddAuthor() {
   const [newAuthor, setNewAuthor] = useState<AddAuthorType | null>(null)
@@ -23,7 +24,7 @@ function AddAuthor() {
     event?.preventDefault()
     if (newAuthor) {
       if (validateAuthorData(newAuthor)) {
-        dispatch(addAuthor(newAuthor))
+        dispatch(addNewAuthor(newAuthor))
       }
     }
     setNewAuthor(null)
@@ -66,6 +67,7 @@ function AddAuthor() {
           <Button label="Add author to the list" handleClick={handleSubmit} />
         </div>
       </form>
+      {/* <Modal heading={'This is headin'} text={'This is text'} close={closeModal} /> */}
     </div>
   )
 }

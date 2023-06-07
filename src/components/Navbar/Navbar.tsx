@@ -4,15 +4,16 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { AppDispatch, RootState } from '../../store'
 import { logUserOut } from '../../features/user/userSlice'
+import NavbarLink from '../NavbarLink/NavbarLink'
 
 function Navbar() {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState<boolean>(false)
-  const user = useSelector((state: RootState) => state.user)
+  const user = useSelector((state: RootState) => state.user.items)
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
 
   const handleLoginLogOut = () => {
-    if (user.isLoggedIn) {
+    if (user) {
       dispatch(logUserOut())
       navigate('/logout')
     } else {
@@ -23,11 +24,7 @@ function Navbar() {
   return (
     <nav className="bg-white fixed w-full z-20 top-0 left-0 border-b border-gray-200">
       <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
-        {user.isLoggedIn ? (
-          <p>
-            Welcome {user.name} {user.isAdmin ? 'as ADMIN ' : null}
-          </p>
-        ) : null}
+        {user ? <p>Welcome {user.name}</p> : null}
         <div className="flex justify-between w-full md:w-auto md:order-2">
           {/*   Hamburger icon */}
           <button
@@ -54,7 +51,7 @@ function Navbar() {
             type="button"
             onClick={handleLoginLogOut}
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4  focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0">
-            {user.isLoggedIn ? 'Logout' : 'Login'}
+            {user ? 'Logout' : 'Login'}
           </button>
         </div>
         <div
@@ -64,21 +61,15 @@ function Navbar() {
             <li className="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0">
               <Link to="/">Home</Link>
             </li>
-            <li className="block py-2 pl-3 pr-4 text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">
-              <Link to="/books">Books</Link>
-            </li>
-            <li className="block py-2 pl-3 pr-4 text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">
-              <Link to="/authors">Authors</Link>
-            </li>
-            {user.isAdmin ? (
-              <li className="block py-2 pl-3 pr-4 text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">
-                <Link to="/authors/add">Add new author</Link>
-              </li>
-            ) : null}
-            {user.isAdmin ? (
-              <li className="block py-2 pl-3 pr-4 text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">
-                <Link to="/books/add">Add new book</Link>
-              </li>
+            <NavbarLink link="/books" label="Books" />
+            <NavbarLink link="/authors" label="Authors" />
+            <NavbarLink link="/categories" label="Categories" />
+            {user && user.role === 'ADMIN' ? (
+              <>
+                <NavbarLink link="/books/add" label="Add new book" />
+                <NavbarLink link="/authors/add" label="Add new author" />
+                <NavbarLink link="/categories/add" label="Add new category" />
+              </>
             ) : null}
           </ul>
         </div>
@@ -96,14 +87,14 @@ function Navbar() {
             <li className="py-2 pl-3 pr-4 text-gray-900" onClick={() => setIsMobileNavOpen(false)}>
               <Link to="/authors">Authors</Link>
             </li>
-            {user.isAdmin ? (
+            {user && user.role === 'ADMIN' ? (
               <li
                 className="py-2 pl-3 pr-4 text-gray-900"
                 onClick={() => setIsMobileNavOpen(false)}>
                 <Link to="/authors/add">Add new author</Link>
               </li>
             ) : null}
-            {user.isAdmin ? (
+            {user && user.role === 'ADMIN' ? (
               <li
                 className="py-2 pl-3 pr-4 text-gray-900"
                 onClick={() => setIsMobileNavOpen((isMobileNavOpen) => !isMobileNavOpen)}>

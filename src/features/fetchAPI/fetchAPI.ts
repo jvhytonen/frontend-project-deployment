@@ -4,8 +4,8 @@ export const fetchData = async (url: string) => {
     if (!response.ok) {
       throw new Error('An error occurred')
     }
-    const books = response.json()
-    return books
+    const data = await response.json()
+    return data
   } catch (err) {
     console.log(err)
   }

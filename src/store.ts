@@ -3,12 +3,16 @@ import { configureStore } from '@reduxjs/toolkit'
 import bookReducer from './features/book/bookSlice'
 import authorSlice from './features/author/authorSlice'
 import userSlice from './features/user/userSlice'
+import copySlice from './features/copy/copySlice'
+import categorySlice from './features/category/categorySlice'
 
 export const store = configureStore({
   reducer: {
     book: bookReducer,
     author: authorSlice,
-    user: userSlice
+    user: userSlice,
+    copy: copySlice,
+    category: categorySlice
   }
 })
 

@@ -1,11 +1,17 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 
-import { RootState } from '../../store'
+import { RootState, AppDispatch } from '../../store'
 import AuthorDetails from '../AuthorDetails/AuthorDetails'
+import { fetchAuthors } from '../../features/author/authorSlice'
 
 function Authors() {
+  const dispatch = useDispatch<AppDispatch>()
   const { items, error } = useSelector((state: RootState) => state.author)
+
+  useEffect(() => {
+    dispatch(fetchAuthors())
+  }, [items])
 
   return (
     <div className="flex flex-col justify-center items-center">

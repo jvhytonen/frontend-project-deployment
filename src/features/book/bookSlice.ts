@@ -2,7 +2,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
 import { Book, BookState } from '../types/types'
-import { BorrowBook, ReturnBook, AddNewBookType } from '../types/types'
+import { Checkout, AddNewBookType } from '../types/types'
 
 const initialState: BookState = {
   items: null,
@@ -10,83 +10,84 @@ const initialState: BookState = {
   error: null
 }
 
-export const fetchBooks = createAsyncThunk('books/fetch', async () => {
-  const URL = 'books.json'
+export const getAllBooks = createAsyncThunk('books/getAll', async () => {
+  const URL = 'http://localhost:8081/api/v1/books/'
   const response = fetchData(URL)
   return response
 })
 
+export const addNewBook = createAsyncThunk('books/add', async (newBook: AddNewBookType) => {
+  const URL = 'http://localhost:8081/api/v1/books/'
+  const response = await fetch(URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(newBook)
+  })
+  if (!response.ok) {
+    throw new Error('Adding a book failed!')
+  }
+  const data = await response.json()
+  return data
+})
+export const deleteBook = createAsyncThunk('books/delete', async (bookId: string) => {
+  const URL = 'http://localhost:8081/api/v1/books/' + bookId
+  const response = await fetch(URL, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  if (!response.ok) {
+    throw new Error('Error when deleting author')
+  }
+  const data = await response.json()
+  return data
+})
 export const bookSlice = createSlice({
   name: 'books',
   initialState,
   reducers: {
-    borrowBook: (state, action: PayloadAction<BorrowBook>) => {
-      // The return date will be 30 days after the borrowing.
-      const objIndex = state.items?.findIndex((obj) => obj.id === action.payload.id)
-      if (state.items !== null && objIndex !== undefined) {
-        state.items[objIndex] = {
-          ...state.items[objIndex],
-          borrowerId: action.payload.borrowerId,
-          isBorrowed: true,
-          borrowDate: action.payload.borrowDate,
-          returnDate: action.payload.returnDate
-        }
-      }
-    },
-    returnBook: (state, action: PayloadAction<ReturnBook>) => {
-      const objIndex = state.items?.findIndex((obj) => obj.id === action.payload.bookId)
-      if (state.items !== null && objIndex !== undefined) {
-        state.items[objIndex] = {
-          ...state.items[objIndex],
-          isBorrowed: false,
-          borrowDate: null,
-          borrowerId: null,
-          returnDate: null
-        }
-      }
-    },
     addBook: (state, action: PayloadAction<AddNewBookType>) => {
-      // In real project the id will be created in the backend, but now we create id by getting the length of the array so we automatically
-      // have unique value in this small example
-      // If there are no any books stored, then the id is 0
-      const id = state.items ? state.items.length : 0
-      const newBook: Book = {
-        ...action.payload,
-        id: id,
-        isBorrowed: false,
-        borrowerId: null,
-        borrowDate: null,
-        returnDate: null
-      }
-      state.items?.push(newBook)
+      console.log('Add')
     },
     updateBook: (state, action: PayloadAction<Book>) => {
-      // We update the whole data of the book even only one field e.g description changes.
-      // Find index of the object needing the update.
-      const objIndex = state.items?.findIndex((obj) => obj.id === action.payload.id)
-      // Assing the payload to that index.
-      if (state.items !== null && objIndex !== undefined) {
-        state.items[objIndex] = action.payload
-      }
+      console.log('Updating')
     },
-    deleteBook: (state, action: PayloadAction<number>) => {
-      state.items = state.items?.filter((item) => action.payload !== item.ISBN) as Book[]
+    removeBook: (state, action: PayloadAction<number>) => {
+      console.log('Deleting')
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchBooks.fulfilled, (state, action) => {
+    builder.addCase(getAllBooks.fulfilled, (state, action) => {
       state.isLoading = false
       state.items = action.payload
     })
-    builder.addCase(fetchBooks.pending, (state) => {
+    builder.addCase(getAllBooks.pending, (state) => {
       state.isLoading = true
     })
-    builder.addCase(fetchBooks.rejected, (state) => {
+    builder.addCase(getAllBooks.rejected, (state) => {
       state.error = 'An error occurred! Try again later'
+    })
+    builder.addCase(addNewBook.fulfilled, (state, action) => {
+      state.isLoading = false
+      if (state.items !== null) {
+        state.items = [...state.items, action.payload]
+      } else {
+        state.items = [action.payload]
+      }
+    })
+    builder.addCase(addNewBook.pending, (state) => {
+      console.log('Loading')
+    })
+
+    builder.addCase(addNewBook.rejected, (state) => {
+      state.error = 'Failed to add book'
     })
   }
 })
 
-export const { borrowBook, returnBook, addBook, updateBook, deleteBook } = bookSlice.actions
+export const { addBook, updateBook, removeBook } = bookSlice.actions
 
 export default bookSlice.reducer

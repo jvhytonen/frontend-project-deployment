@@ -1,7 +1,25 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+
+const urlBook = 'http://localhost:8081/api/v1/books/'
+const urlAuthor = 'http://localhost:8081/api/v1/authors/'
+const urlCategory = 'http://localhost:8081/api/v1/categories/'
 
 function Home() {
+  const closeModal = () => {
+    alert('Closed')
+  }
+  const testDataFlow = async () => {
+    try {
+      const response = await fetch(urlBook)
+      if (!response.ok) {
+        throw new Error('An error occurred')
+      }
+      const books = await response.json()
+      console.log(books)
+    } catch (err) {
+      console.log(err)
+    }
+  }
   return (
     <div className="flex justify-center items-center w-full">
       <div className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">

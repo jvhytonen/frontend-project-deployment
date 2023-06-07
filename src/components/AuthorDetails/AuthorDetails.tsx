@@ -10,7 +10,7 @@ import { Author } from '../../features/types/types'
 function AuthorDetails({ id, name, description }: Author) {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
-  const user = useSelector((state: RootState) => state.user)
+  const user = useSelector((state: RootState) => state.user.items)
 
   const editAuthorHandler = () => {
     navigate(`/authors/edit/${id}`)
@@ -24,8 +24,10 @@ function AuthorDetails({ id, name, description }: Author) {
     <div
       key={id}
       className="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-      {user.isAdmin ? (
-        <AdminActionIcons editItem={editAuthorHandler} deleteItem={deleteAuthorHandler} />
+      {user !== null && user.role === 'ADMIN' ? (
+        <p className="underline cursor-pointer" onClick={deleteAuthorHandler}>
+          Delete
+        </p>
       ) : null}
       <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
         {name}

@@ -1,11 +1,6 @@
-import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
 import { Routes, Route } from 'react-router-dom'
 
 import './App.css'
-import { AppDispatch } from './store'
-import { fetchBooks } from './features/book/bookSlice'
-import { fetchAuthors } from './features/author/authorSlice'
 import Login from './components/Login/Login'
 import Books from './components/Books/Books'
 import Authors from './components/Authors/Authors'
@@ -18,15 +13,9 @@ import AddBook from './components/AddBook/AddBook'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
 import EditAuthor from './components/EditAuthor/EditAuthor'
 import Navbar from './components/Navbar/Navbar'
+import AddCategory from './components/AddCategory/AddCategory'
 
 function App() {
-  const dispatch = useDispatch<AppDispatch>()
-
-  useEffect(() => {
-    dispatch(fetchBooks())
-    dispatch(fetchAuthors())
-  }, [])
-
   return (
     <div className="App w-full">
       <Navbar />
@@ -37,8 +26,9 @@ function App() {
           <Route path="/logout" element={<Logout />} />
           <Route path="/authors" element={<Authors />} />
           <Route path="/books" element={<Books />} />
-          <Route path="books/:isbn" element={<BookDetails />} />
+          <Route path="books/:id" element={<BookDetails />} />
           <Route path="authors/add" element={<ProtectedRoute component={AddAuthor} />} />
+          <Route path="categories/add" element={<ProtectedRoute component={AddCategory} />} />
           <Route path="authors/edit/:id" element={<ProtectedRoute component={EditAuthor} />} />
           <Route path="books/add" element={<ProtectedRoute component={AddBook} />} />
           <Route path="edit/:isbn" element={<ProtectedRoute component={EditBook} />} />
