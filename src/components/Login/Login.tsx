@@ -4,30 +4,31 @@ import jwt_decode from 'jwt-decode'
 import { useDispatch } from 'react-redux'
 
 import { AppDispatch } from '../../store'
-import { LoginCredentialType, getUser } from '../../features/user/userSlice'
-import { isOnTheWhitelist } from '../../features/whitelist/whitelist'
+import { LoginCredentialType, getUser, login } from '../../features/slices/userSlice'
 import PasswordField from '../PasswordField/PasswordField'
 import UsernameField from '../UsernameField/UsernameField'
 
 function Login() {
   const dispatch = useDispatch<AppDispatch>()
-  const [email, setEmail] = useState<string | null>(null)
-  const [password, setPassword] = useState<string | null>(null)
+  const [userName, setUserName] = useState<string | null>(null)
+  const [passWord, setPassWord] = useState<string | null>(null)
 
   const handlePassword = (pword: string) => {
-    setPassword(pword)
+    setPassWord(pword)
   }
 
   const handleUserName = (uname: string) => {
-    setEmail(uname)
+    setUserName(uname)
   }
 
   const handleSubmit = () => {
-    if (email && password) {
+    if (userName && passWord) {
+      console.log('HandleSubmit')
       const credentials = {
-        id: 'ad3e0c62-ada2-41d6-8fe8-39bd8faec6dd'
+        username: userName,
+        password: passWord
       }
-      dispatch(getUser(credentials.id))
+      dispatch(login(credentials))
     }
   }
   return (

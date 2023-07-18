@@ -4,12 +4,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import Button from '../Button/Button'
 import { AppDispatch, RootState } from '../../store'
 import { AddNewBookType } from '../../features/types/types'
-import { addBook, addNewBook } from '../../features/book/bookSlice'
+import { addBook, addNewBook, getAllBooks } from '../../features/slices/bookSlice'
 import { validateNewBookData } from '../../features/validation/validate'
 import { useNavigate } from 'react-router-dom'
 import InputItem from '../InputItem/InputItem'
-import { getAllCategories } from '../../features/category/categorySlice'
-import { fetchAuthors } from '../../features/author/authorSlice'
+import { getAllCategories } from '../../features/slices/categorySlice'
+import { fetchAuthors } from '../../features/slices/authorSlice'
 
 function AddBook() {
   const [newBook, setNewBook] = useState<AddNewBookType | null>(null)
@@ -18,6 +18,10 @@ function AddBook() {
   const navigate = useNavigate()
   const authors = useSelector((state: RootState) => state.author.items)
   const categories = useSelector((state: RootState) => state.category.items)
+
+  useEffect(() => {
+    dispatch(getAllCategories())
+  }, [])
 
   const handleChange: (
     e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>
@@ -34,7 +38,6 @@ function AddBook() {
       setValidationError(false)
     }
     if (newBook) {
-      console.log(newBook)
       if (validateNewBookData(newBook)) {
         dispatch(addNewBook(newBook))
         setNewBook(null)

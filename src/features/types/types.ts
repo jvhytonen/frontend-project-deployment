@@ -37,7 +37,7 @@ export type AuthorState = {
 }
 
 export type AddAuthorType = Omit<Author, 'id'>
-export type AddCategoryType = Omit<Author, 'id'>
+export type NewCategory = Omit<Category, 'id'>
 
 export type Borrow = {
   userId: string
@@ -67,9 +67,13 @@ export type ButtonType = {
 export type User = {
   id: string
   username: string
-  name: string
-  email: string
-  role: 'USER' | 'ADMIN'
+  role: 'USER' | 'ADMIN' | null
+}
+
+export type NewUser = Omit<User, 'id'>
+export type Credentials = {
+  username: string
+  password: string
 }
 
 export type Checkout = {
@@ -98,9 +102,6 @@ export type NewCopy = {
 export type CheckoutHandler = {
   copyId: string
   userId: string
-}
-export type NewCategory = {
-  name: string
 }
 export type CategoryState = {
   items: Category[] | null
@@ -142,4 +143,14 @@ export type ValidateBookType = {
   yearPublished: string
   description: string
   publisher: string
+}
+
+export type Token = string
+export type PostRequestData = NewCategory
+
+// Types when sending data to server
+
+export interface PostRequest {
+  token: Token
+  data: PostRequestData
 }

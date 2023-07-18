@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { RootState, AppDispatch } from '../../store'
 import AuthorDetails from '../AuthorDetails/AuthorDetails'
-import { fetchAuthors } from '../../features/author/authorSlice'
+import { fetchAuthors } from '../../features/slices/authorSlice'
 
 function Authors() {
   const dispatch = useDispatch<AppDispatch>()

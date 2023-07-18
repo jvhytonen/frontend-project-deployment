@@ -6,7 +6,7 @@ import { Author } from '../../features/types/types'
 import { AppDispatch, RootState } from '../../store'
 import Button from '../Button/Button'
 import { validateAuthorData } from '../../features/validation/validate'
-import { updateAuthor } from '../../features/author/authorSlice'
+import { updateAuthor } from '../../features/slices/authorSlice'
 
 function EditAuthor() {
   const params = useParams()

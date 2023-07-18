@@ -1,17 +1,18 @@
 import React, { ChangeEvent, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { AddCategoryType } from '../../features/types/types'
+import { NewCategory, PostRequest } from '../../features/types/types'
 import InputItem from '../InputItem/InputItem'
 import Button from '../Button/Button'
-import { AppDispatch } from '../../store'
-import { addNewAuthor } from '../../features/author/authorSlice'
+import { AppDispatch, RootState } from '../../store'
+import { addNewAuthor } from '../../features/slices/authorSlice'
 import { validateAuthorData } from '../../features/validation/validate'
-import { addNewCategory } from '../../features/category/categorySlice'
+import { addNewCategory } from '../../features/slices/categorySlice'
 
 function AddCategory() {
-  const [newCategory, setNewCategory] = useState<AddCategoryType | null>(null)
+  const token = useSelector((state: RootState) => state.user.token)
+  const [newCategory, setNewCategory] = useState<NewCategory | null>(null)
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
   const handleChange: (
@@ -19,17 +20,23 @@ function AddCategory() {
   ) => void = (e) => {
     const { value, name } = e.target
     setNewCategory((prevState) => ({
-      ...(prevState as AddCategoryType),
+      ...prevState,
       [name]: value
     }))
   }
   const handleSubmit: () => void = () => {
-    event?.preventDefault()
-    if (newCategory) {
-      dispatch(addNewCategory(newCategory))
+    if (token !== null && newCategory !== null) {
+      event?.preventDefault()
+      const categoryData: PostRequest = {
+        data: newCategory,
+        token: token
+      }
+      if (newCategory) {
+        dispatch(addNewCategory(categoryData))
+      }
+      setNewCategory(null)
+      navigate('/categories')
     }
-    setNewCategory(null)
-    navigate('/categories')
   }
   return (
     <div className="flex flex-col justify-center items-center w-full mt-[200px]">

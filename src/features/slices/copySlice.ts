@@ -1,9 +1,8 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
-import { CheckoutHandler, Copy, CopyState, NewCopy } from '../types/types'
-import { Checkout, AddNewBookType } from '../types/types'
-import { Certificate } from 'crypto'
+import { CheckoutHandler, CopyState, NewCopy } from '../types/types'
+import { Checkout } from '../types/types'
 
 const initialState: CopyState = {
   items: null,

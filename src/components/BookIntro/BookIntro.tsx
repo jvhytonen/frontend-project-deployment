@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 import { BookIntroType } from '../../features/types/types'
 import { AppDispatch, RootState } from '../../store'
 import { useSelector } from 'react-redux'
-import { deleteBook } from '../../features/book/bookSlice'
+import { deleteBook } from '../../features/slices/bookSlice'
 //import { deleteBook } from '../../features/book/bookSlice'
 
 function BookIntro({ isbn, title, id, author, description, imageUrl }: BookIntroType) {

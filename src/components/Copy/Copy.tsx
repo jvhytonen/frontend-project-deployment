@@ -5,7 +5,7 @@ import { formatDate } from '../../features/utils/helpers'
 import Button from '../Button/Button'
 import { AppDispatch, RootState } from '../../store'
 import { useDispatch, useSelector } from 'react-redux'
-import { handleBorrow, handleReturn } from '../../features/copy/copySlice'
+import { handleBorrow, handleReturn } from '../../features/slices/copySlice'
 
 interface CopyProps {
   latestCheckout: Checkout | null

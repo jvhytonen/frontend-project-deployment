@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 
 import { RootState, AppDispatch } from '../../store'
 import Button, { HandleClick } from '../Button/Button'
-import { getCopies } from '../../features/copy/copySlice'
+import { getCopies } from '../../features/slices/copySlice'
 import Copy from '../Copy/Copy'
 
 function BookDetails() {

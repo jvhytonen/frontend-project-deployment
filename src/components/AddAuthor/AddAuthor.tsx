@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import Button from '../Button/Button'
 import { AddAuthorType } from '../../features/types/types'
 import { AppDispatch } from '../../store'
-import { addNewAuthor } from '../../features/author/authorSlice'
+import { addNewAuthor } from '../../features/slices/authorSlice'
 import { validateAuthorData } from '../../features/validation/validate'
 import Modal from '../Modal/Modal'
 

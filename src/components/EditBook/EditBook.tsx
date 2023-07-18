@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Book } from '../../features/types/types'
 import { AppDispatch, RootState } from '../../store'
 import Button from '../Button/Button'
-import { updateBook } from '../../features/book/bookSlice'
+import { updateBook } from '../../features/slices/bookSlice'
 import { validateUpdatedBookData } from '../../features/validation/validate'
 import InputItem from '../InputItem/InputItem'
 

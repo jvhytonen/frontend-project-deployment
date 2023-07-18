@@ -3,17 +3,17 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { AppDispatch, RootState } from '../../store'
-import { logUserOut } from '../../features/user/userSlice'
+import { logUserOut } from '../../features/slices/userSlice'
 import NavbarLink from '../NavbarLink/NavbarLink'
 
 function Navbar() {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState<boolean>(false)
-  const user = useSelector((state: RootState) => state.user.items)
+  const user = useSelector((state: RootState) => state.user)
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
 
   const handleLoginLogOut = () => {
-    if (user) {
+    if (user.token) {
       dispatch(logUserOut())
       navigate('/logout')
     } else {
@@ -24,7 +24,7 @@ function Navbar() {
   return (
     <nav className="bg-white fixed w-full z-20 top-0 left-0 border-b border-gray-200">
       <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
-        {user ? <p>Welcome {user.name}</p> : null}
+        {user ? <p>Welcome {user.items.username}</p> : null}
         <div className="flex justify-between w-full md:w-auto md:order-2">
           {/*   Hamburger icon */}
           <button
@@ -51,7 +51,7 @@ function Navbar() {
             type="button"
             onClick={handleLoginLogOut}
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4  focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0">
-            {user ? 'Logout' : 'Login'}
+            {user.items.username !== '' ? 'Logout' : 'Login'}
           </button>
           {!user ? (
             <button
@@ -71,8 +71,7 @@ function Navbar() {
             </li>
             <NavbarLink link="/books" label="Books" />
             <NavbarLink link="/authors" label="Authors" />
-            <NavbarLink link="/categories" label="Categories" />
-            {user && user.role === 'ADMIN' ? (
+            {user && user.items.role === 'ADMIN' ? (
               <>
                 <NavbarLink link="/books/add" label="Add new book" />
                 <NavbarLink link="/authors/add" label="Add new author" />
@@ -96,14 +95,14 @@ function Navbar() {
             <li className="py-2 pl-3 pr-4 text-gray-900" onClick={() => setIsMobileNavOpen(false)}>
               <Link to="/authors">Authors</Link>
             </li>
-            {user && user.role === 'ADMIN' ? (
+            {user && user.items.role === 'ADMIN' ? (
               <li
                 className="py-2 pl-3 pr-4 text-gray-900"
                 onClick={() => setIsMobileNavOpen(false)}>
                 <Link to="/authors/add">Add new author</Link>
               </li>
             ) : null}
-            {user && user.role === 'ADMIN' ? (
+            {user && user.items.role === 'ADMIN' ? (
               <li
                 className="py-2 pl-3 pr-4 text-gray-900"
                 onClick={() => setIsMobileNavOpen((isMobileNavOpen) => !isMobileNavOpen)}>
