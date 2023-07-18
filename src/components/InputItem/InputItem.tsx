@@ -1,7 +1,14 @@
 import React from 'react'
 import { InputItemType } from '../../features/types/types'
 
-function InputItem({ fieldName, type, placeholder, labelText, handleChange }: InputItemType) {
+function InputItem({
+  fieldName,
+  type,
+  placeholder,
+  labelText,
+  value,
+  handleChange
+}: InputItemType) {
   return (
     <div className="mb-4">
       <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={fieldName}>
@@ -12,6 +19,7 @@ function InputItem({ fieldName, type, placeholder, labelText, handleChange }: In
         onChange={(event) => handleChange(event)}
         id={fieldName}
         name={fieldName}
+        value={value}
         type={type}
         placeholder={placeholder}
       />

@@ -1,13 +1,15 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Button from '../Button/Button'
 import { AppDispatch, RootState } from '../../store'
 import { AddNewBookType } from '../../features/types/types'
 import { addBook, addNewBook } from '../../features/book/bookSlice'
-import { validateBookData } from '../../features/validation/validate'
+import { validateNewBookData } from '../../features/validation/validate'
 import { useNavigate } from 'react-router-dom'
 import InputItem from '../InputItem/InputItem'
+import { getAllCategories } from '../../features/category/categorySlice'
+import { fetchAuthors } from '../../features/author/authorSlice'
 
 function AddBook() {
   const [newBook, setNewBook] = useState<AddNewBookType | null>(null)
@@ -33,10 +35,8 @@ function AddBook() {
     }
     if (newBook) {
       console.log(newBook)
-      newBook.categoryId = '504b0f47-5046-4704-9c07-1aa8ce948d74'
-      if (validateBookData(newBook)) {
-        dispatch(addBook(newBook))
-        console.log(newBook)
+      if (validateNewBookData(newBook)) {
+        dispatch(addNewBook(newBook))
         setNewBook(null)
         navigate('/books')
       } else {
@@ -44,6 +44,11 @@ function AddBook() {
       }
     }
   }
+
+  useEffect(() => {
+    dispatch(getAllCategories())
+    dispatch(fetchAuthors())
+  }, [])
   return (
     <div className="flex flex-col justify-center items-center w-1/2">
       {validationError ? (
@@ -76,6 +81,23 @@ function AddBook() {
                 {Object.entries(authors).map(([id, author]) => (
                   <option key={id} value={author.id}>
                     {author.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="category">
+                Category
+              </label>
+              <select
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="categoryId"
+                name="categoryId">
+                <option value="">Select category</option>
+                {Object.entries(categories).map(([id, category]) => (
+                  <option key={id} value={category.id}>
+                    {category.name}
                   </option>
                 ))}
               </select>

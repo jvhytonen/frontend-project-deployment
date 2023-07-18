@@ -6,11 +6,11 @@ export type Book = {
   title: string
   url: string
   imageUrl: string
-  author: Author[]
-  category: Category[]
+  author: Author
+  category: Category
   description: string
   publisher: string
-  yearPublished: number
+  yearPublished: string
 }
 export type BookState = {
   items: Book[] | null
@@ -120,6 +120,7 @@ export type InputItemType = {
   type: string
   placeholder: string
   labelText: string
+  value?: string
   handleChange: (
     event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>
   ) => void
@@ -127,4 +128,18 @@ export type InputItemType = {
 export type NavbarLinkType = {
   link: string
   label: string
+}
+
+export type TableHeadingType = {
+  label: string
+}
+
+export type ValidateBookType = {
+  title: string
+  authorId: string
+  categoryId: string
+  isbn: string
+  yearPublished: string
+  description: string
+  publisher: string
 }

@@ -4,6 +4,8 @@ import { fetchData } from '../fetchAPI/fetchAPI'
 import { Book, BookState } from '../types/types'
 import { Checkout, AddNewBookType } from '../types/types'
 
+const APIURL = 'http://localhost:8081/api/v1/books/'
+
 const initialState: BookState = {
   items: null,
   isLoading: false,
@@ -12,13 +14,13 @@ const initialState: BookState = {
 
 export const getAllBooks = createAsyncThunk('books/getAll', async () => {
   const URL = 'http://localhost:8081/api/v1/books/'
-  const response = fetchData(URL)
+  const response = fetchData(APIURL)
   return response
 })
 
 export const addNewBook = createAsyncThunk('books/add', async (newBook: AddNewBookType) => {
   const URL = 'http://localhost:8081/api/v1/books/'
-  const response = await fetch(URL, {
+  const response = await fetch(APIURL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -31,6 +33,23 @@ export const addNewBook = createAsyncThunk('books/add', async (newBook: AddNewBo
   const data = await response.json()
   return data
 })
+
+export const updateBook = createAsyncThunk('books/update', async (updatedBook: Book) => {
+  const URL = APIURL + updatedBook.id
+  const response = await fetch(URL, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(updatedBook)
+  })
+  if (!response.ok) {
+    throw new Error('Adding a book failed!')
+  }
+  const data = await response.json()
+  return data
+})
+
 export const deleteBook = createAsyncThunk('books/delete', async (bookId: string) => {
   const URL = 'http://localhost:8081/api/v1/books/' + bookId
   const response = await fetch(URL, {
@@ -52,7 +71,7 @@ export const bookSlice = createSlice({
     addBook: (state, action: PayloadAction<AddNewBookType>) => {
       console.log('Add')
     },
-    updateBook: (state, action: PayloadAction<Book>) => {
+    updatesBook: (state, action: PayloadAction<Book>) => {
       console.log('Updating')
     },
     removeBook: (state, action: PayloadAction<number>) => {
@@ -88,6 +107,6 @@ export const bookSlice = createSlice({
   }
 })
 
-export const { addBook, updateBook, removeBook } = bookSlice.actions
+export const { addBook, updatesBook, removeBook } = bookSlice.actions
 
 export default bookSlice.reducer

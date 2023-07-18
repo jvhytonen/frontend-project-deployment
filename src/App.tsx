@@ -14,6 +14,8 @@ import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
 import EditAuthor from './components/EditAuthor/EditAuthor'
 import Navbar from './components/Navbar/Navbar'
 import AddCategory from './components/AddCategory/AddCategory'
+import AdminDashboard from './components/AdminDashboard/AdminDashboard'
+import Signup from './components/Signup/Signup'
 
 function App() {
   return (
@@ -24,14 +26,19 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/authors" element={<Authors />} />
           <Route path="/books" element={<Books />} />
           <Route path="books/:id" element={<BookDetails />} />
           <Route path="authors/add" element={<ProtectedRoute component={AddAuthor} />} />
+          <Route path="admin/dashboard" element={<ProtectedRoute component={AdminDashboard} />} />
           <Route path="categories/add" element={<ProtectedRoute component={AddCategory} />} />
           <Route path="authors/edit/:id" element={<ProtectedRoute component={EditAuthor} />} />
           <Route path="books/add" element={<ProtectedRoute component={AddBook} />} />
-          <Route path="edit/:isbn" element={<ProtectedRoute component={EditBook} />} />
+          <Route
+            path="/admin/dashboard/books/edit/:id"
+            element={<ProtectedRoute component={EditBook} />}
+          />
         </Routes>
       </div>
     </div>

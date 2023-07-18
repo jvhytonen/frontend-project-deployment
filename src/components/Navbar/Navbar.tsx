@@ -53,6 +53,14 @@ function Navbar() {
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4  focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0">
             {user ? 'Logout' : 'Login'}
           </button>
+          {!user ? (
+            <button
+              type="button"
+              onClick={() => navigate('/signup')}
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4  focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mx-3 md:mr-0">
+              Signup
+            </button>
+          ) : null}
         </div>
         <div
           className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
@@ -69,6 +77,7 @@ function Navbar() {
                 <NavbarLink link="/books/add" label="Add new book" />
                 <NavbarLink link="/authors/add" label="Add new author" />
                 <NavbarLink link="/categories/add" label="Add new category" />
+                <NavbarLink link="/admin/dashboard" label="Admins" />
               </>
             ) : null}
           </ul>

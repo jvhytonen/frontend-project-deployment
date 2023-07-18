@@ -26,9 +26,7 @@ function AddCategory() {
   const handleSubmit: () => void = () => {
     event?.preventDefault()
     if (newCategory) {
-      if (validateAuthorData(newCategory)) {
-        dispatch(addNewCategory(newCategory))
-      }
+      dispatch(addNewCategory(newCategory))
     }
     setNewCategory(null)
     navigate('/categories')

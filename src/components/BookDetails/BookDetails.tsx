@@ -3,10 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useParams, useNavigate } from 'react-router-dom'
 
 import { RootState, AppDispatch } from '../../store'
-//import { BorrowBook } from '../../features/types/types'
 import Button, { HandleClick } from '../Button/Button'
-//import { deleteBook, borrowBook, returnBook } from '../../features/book/bookSlice'
-import AdminActionIcons from '../AdminActionIcons/AdminActionIcons'
 import { getCopies } from '../../features/copy/copySlice'
 import Copy from '../Copy/Copy'
 
@@ -15,46 +12,9 @@ function BookDetails() {
   const book = useSelector((state: RootState) => state.book)
   const copies = useSelector((state: RootState) => state.copy)
   const dispatch = useDispatch<AppDispatch>()
-  const navigate = useNavigate()
   const params = useParams()
   const filteredBook = book.items?.filter((item) => params.id === item.id)
   const bookItem = filteredBook ? filteredBook[0] : null
-
-  /*   const deleteBookHandler: HandleClick = () => {
-    if (bookItem !== null) {
-      dispatch(deleteBook(bookItem.id))
-      navigate('/books')
-    }
-  }
-
-  const editBookHandler = () => {
-    if (bookItem !== null) {
-      navigate(`/edit/${bookItem.ISBN}`)
-    }
-  } */
-
-  /*   const borrowBookHandler: HandleClick = () => {
-    if (bookItem !== null) {
-      const today = new Date()
-      const returnMoment = today.setDate(today.getDate() + 30)
-      const returnDay = new Date(returnMoment)
-      const borrowBookData: BorrowBook = {
-        borrowDate: today,
-        returnDate: returnDay,
-        borrowerId: user.id as number,
-        id: bookItem.id
-      }
-      dispatch(borrowBook(borrowBookData))
-    }
-  }
-  const returnBookHandler: HandleClick = () => {
-    if (bookItem !== null) {
-      const returnBookData = {
-        bookId: bookItem.id
-      }
-      dispatch(returnBook(returnBookData))
-    }
-  } */
 
   useEffect(() => {
     if (params.id) {
