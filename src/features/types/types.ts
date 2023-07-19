@@ -25,7 +25,7 @@ export type Category = {
 }
 
 export type Author = {
-  id: string
+  id?: string
   name: string
   description: string
 }
@@ -153,11 +153,15 @@ export type Token = string
 
 // Types when sending data to server
 
-export interface PostRequest {
+export interface CategoryPostRequest {
   token: Token
   data: NewCategory
 }
-export interface UpdateBookRequest {
+export interface AuthorPostRequest {
+  token: Token
+  data: Author
+}
+export interface BookPostRequest {
   token: Token
   data: Book
 }

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
-import { AuthorState, Author, AddAuthorType } from '../types/types'
+import { AuthorState, Author, AddAuthorType, AuthorPostRequest } from '../types/types'
 import { useDispatch } from 'react-redux'
 
 const initialState: AuthorState = {
@@ -17,21 +17,26 @@ export const fetchAuthors = createAsyncThunk('authors/fetch', async () => {
   return response
 })
 
-export const addNewAuthor = createAsyncThunk('authors/add', async (newAuthor: AddAuthorType) => {
-  const URL = 'http://localhost:8081/api/v1/authors/'
-  const response = await fetch(URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(newAuthor)
-  })
-  if (!response.ok) {
-    throw new Error('Error when borrowing book')
+export const addNewAuthor = createAsyncThunk(
+  'authors/add',
+  async (newAuthorReq: AuthorPostRequest) => {
+    const URL = 'http://localhost:8081/api/v1/authors/'
+    const response = await fetch(URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // eslint-disable-next-line prettier/prettier
+        'Authorization': `Bearer ${newAuthorReq.token}`
+      },
+      body: JSON.stringify(newAuthorReq.data)
+    })
+    if (!response.ok) {
+      throw new Error('Error when borrowing book')
+    }
+    const data = await response.json()
+    return data
   }
-  const data = await response.json()
-  return data
-})
+)
 
 export const deleteAuthor = createAsyncThunk('authors/delete', async (authorId: string) => {
   const URL = 'http://localhost:8081/api/v1/authors/' + authorId

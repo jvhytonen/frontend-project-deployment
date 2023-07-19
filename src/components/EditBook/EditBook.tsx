@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { Book, PostRequest, UpdateBookRequest } from '../../features/types/types'
+import { Book, BookPostRequest } from '../../features/types/types'
 import { AppDispatch, RootState } from '../../store'
 import Button from '../Button/Button'
 import { updateBook } from '../../features/slices/bookSlice'
@@ -38,9 +38,11 @@ function EditBook() {
       setValidationError(false)
     }
     if (token !== null && bookToEdit) {
+      //categoryId and authorId must be added to object before sending data to backend.
       bookToEdit.authorId = bookToEdit.author.id
       bookToEdit.categoryId = bookToEdit.category.id
-      const updatedBookReq: UpdateBookRequest = {
+      //All data needed in redux slice to send the request: token and body.
+      const updatedBookReq: BookPostRequest = {
         data: bookToEdit,
         token: token
       }

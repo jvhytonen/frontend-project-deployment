@@ -1,7 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
-import { Book, BookState, PostRequest, UpdateBookRequest } from '../types/types'
+import { Book, BookState, BookPostRequest } from '../types/types'
 import { Checkout } from '../types/types'
 
 const APIURL = 'http://localhost:8081/api/v1/books/'
@@ -18,14 +18,16 @@ export const getAllBooks = createAsyncThunk('books/getAll', async () => {
   return response
 })
 
-export const addNewBook = createAsyncThunk('books/add', async (newBook: Book) => {
+export const addNewBook = createAsyncThunk('books/add', async (newBookReq: BookPostRequest) => {
   const URL = 'http://localhost:8081/api/v1/books/'
   const response = await fetch(APIURL, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      // eslint-disable-next-line prettier/prettier
+      'Authorization': `Bearer ${newBookReq.token}`
     },
-    body: JSON.stringify(newBook)
+    body: JSON.stringify(newBookReq.data)
   })
   if (!response.ok) {
     throw new Error('Adding a book failed!')
@@ -34,26 +36,23 @@ export const addNewBook = createAsyncThunk('books/add', async (newBook: Book) =>
   return data
 })
 
-export const updateBook = createAsyncThunk(
-  'books/update',
-  async (uppdateReq: UpdateBookRequest) => {
-    const URL = APIURL + uppdateReq.data.id
-    const response = await fetch(URL, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        // eslint-disable-next-line prettier/prettier
+export const updateBook = createAsyncThunk('books/update', async (uppdateReq: BookPostRequest) => {
+  const URL = APIURL + uppdateReq.data.id
+  const response = await fetch(URL, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      // eslint-disable-next-line prettier/prettier
       'Authorization': `Bearer ${uppdateReq.token}`
-      },
-      body: JSON.stringify(uppdateReq.data)
-    })
-    if (!response.ok) {
-      throw new Error('Adding a book failed!')
-    }
-    const data = await response.json()
-    return data
+    },
+    body: JSON.stringify(uppdateReq.data)
+  })
+  if (!response.ok) {
+    throw new Error('Adding a book failed!')
   }
-)
+  const data = await response.json()
+  return data
+})
 
 export const deleteBook = createAsyncThunk('books/delete', async (bookId: string) => {
   const URL = 'http://localhost:8081/api/v1/books/' + bookId

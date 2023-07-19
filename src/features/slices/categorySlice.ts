@@ -1,8 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
-import { Category, CategoryState, NewCategory, PostRequest } from '../types/types'
-import { RootState } from '../../store'
+import { Category, CategoryState, NewCategory, CategoryPostRequest } from '../types/types'
 
 const initialState: CategoryState = {
   items: null,
@@ -18,7 +17,7 @@ export const getAllCategories = createAsyncThunk('categories/getAll', async () =
 
 export const addNewCategory = createAsyncThunk(
   'categories/add',
-  async (categoryData: PostRequest) => {
+  async (categoryData: CategoryPostRequest) => {
     const URL = 'http://localhost:8081/api/v1/categories/'
     const response = await fetch(URL, {
       method: 'POST',

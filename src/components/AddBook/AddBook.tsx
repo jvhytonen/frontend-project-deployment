@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import Button from '../Button/Button'
 import { AppDispatch, RootState } from '../../store'
-import { Book } from '../../features/types/types'
+import { Book, BookPostRequest } from '../../features/types/types'
 import { addBook, addNewBook, getAllBooks } from '../../features/slices/bookSlice'
 import { validateNewBookData } from '../../features/validation/validate'
 import { useNavigate } from 'react-router-dom'
@@ -12,6 +12,7 @@ import { getAllCategories } from '../../features/slices/categorySlice'
 import { fetchAuthors } from '../../features/slices/authorSlice'
 
 function AddBook() {
+  const token = useSelector((state: RootState) => state.user.token)
   const [newBook, setNewBook] = useState<Book | null>(null)
   const [validationError, setValidationError] = useState<boolean>(false)
   const dispatch = useDispatch<AppDispatch>()
@@ -33,21 +34,26 @@ function AddBook() {
     }))
   }
   const handleSubmit: () => void = () => {
-    event?.preventDefault()
-    if (validationError) {
-      setValidationError(false)
-    }
-    if (newBook) {
-      if (validateNewBookData(newBook)) {
-        dispatch(addNewBook(newBook))
-        setNewBook(null)
-        navigate('/books')
-      } else {
-        setValidationError(true)
+    if (token !== null && newBook !== null) {
+      // All data needed in redux slice to send the request: token and body.
+      const newBookReq: BookPostRequest = {
+        data: newBook,
+        token: token
+      }
+      if (validationError) {
+        setValidationError(false)
+      }
+      if (newBook) {
+        if (validateNewBookData(newBook)) {
+          dispatch(addNewBook(newBookReq))
+          setNewBook(null)
+          navigate('/books')
+        } else {
+          setValidationError(true)
+        }
       }
     }
   }
-
   useEffect(() => {
     dispatch(getAllCategories())
     dispatch(fetchAuthors())

@@ -1,15 +1,16 @@
 import React, { ChangeEvent, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import Button from '../Button/Button'
-import { AddAuthorType } from '../../features/types/types'
-import { AppDispatch } from '../../store'
+import { AddAuthorType, AuthorPostRequest } from '../../features/types/types'
+import { AppDispatch, RootState } from '../../store'
 import { addNewAuthor } from '../../features/slices/authorSlice'
 import { validateAuthorData } from '../../features/validation/validate'
 import Modal from '../Modal/Modal'
 
 function AddAuthor() {
+  const token = useSelector((state: RootState) => state.user.token)
   const [newAuthor, setNewAuthor] = useState<AddAuthorType | null>(null)
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
@@ -21,15 +22,22 @@ function AddAuthor() {
     }))
   }
   const handleSubmit: () => void = () => {
-    event?.preventDefault()
-    if (newAuthor) {
-      if (validateAuthorData(newAuthor)) {
-        dispatch(addNewAuthor(newAuthor))
+    if (token !== null && newAuthor !== null) {
+      // All data needed in redux slice to send the request: token and body.
+      const authorData: AuthorPostRequest = {
+        data: newAuthor,
+        token: token
       }
+      if (newAuthor) {
+        if (validateAuthorData(newAuthor)) {
+          dispatch(addNewAuthor(authorData))
+        }
+      }
+      setNewAuthor(null)
+      navigate('/authors')
     }
-    setNewAuthor(null)
-    navigate('/authors')
   }
+
   return (
     <div className="flex flex-col justify-center items-center w-full mt-[200px]">
       <h2 className="font-bold text-2xl">Author edit here:</h2>

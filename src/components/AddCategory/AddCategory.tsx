@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { NewCategory, PostRequest } from '../../features/types/types'
+import { CategoryPostRequest, NewCategory } from '../../features/types/types'
 import InputItem from '../InputItem/InputItem'
 import Button from '../Button/Button'
 import { AppDispatch, RootState } from '../../store'
@@ -26,8 +26,8 @@ function AddCategory() {
   }
   const handleSubmit: () => void = () => {
     if (token !== null && newCategory !== null) {
-      event?.preventDefault()
-      const categoryData: PostRequest = {
+      // All data needed in redux slice to send the request: token and body.
+      const categoryData: CategoryPostRequest = {
         data: newCategory,
         token: token
       }
