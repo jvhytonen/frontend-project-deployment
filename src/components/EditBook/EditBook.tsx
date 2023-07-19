@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { Book } from '../../features/types/types'
+import { Book, PostRequest, UpdateBookRequest } from '../../features/types/types'
 import { AppDispatch, RootState } from '../../store'
 import Button from '../Button/Button'
 import { updateBook } from '../../features/slices/bookSlice'
@@ -13,6 +13,7 @@ function EditBook() {
   const params = useParams()
   const dispatch = useDispatch<AppDispatch>()
   const book = useSelector((state: RootState) => state.book)
+  const token = useSelector((state: RootState) => state.user.token)
   const authors = useSelector((state: RootState) => state.author.items)
   const categories = useSelector((state: RootState) => state.category.items)
   const item = book.items ? book.items?.find((book) => params.id === book.id) : null
@@ -23,7 +24,6 @@ function EditBook() {
     e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>
   ) => void = (e) => {
     const { value, name } = e.target
-    console.log(value)
     if (bookToEdit !== null) {
       setBookToEdit((prevState) => ({
         ...(prevState as Book),
@@ -31,19 +31,29 @@ function EditBook() {
       }))
     }
   }
-  const handleSubmit = () => {
+
+  const handleSubmit: () => void = () => {
+    // If the user has previously tried to update data that has validation error, it must be set to false.
     if (validationError) {
       setValidationError(false)
     }
-    if (bookToEdit) {
+    if (token !== null && bookToEdit) {
+      bookToEdit.authorId = bookToEdit.author.id
+      bookToEdit.categoryId = bookToEdit.category.id
+      const updatedBookReq: UpdateBookRequest = {
+        data: bookToEdit,
+        token: token
+      }
+      console.log(JSON.stringify(updatedBookReq.data))
       if (validateUpdatedBookData(bookToEdit)) {
-        dispatch(updateBook(bookToEdit))
+        dispatch(updateBook(updatedBookReq))
         setBookToEdit(null)
       } else {
         setValidationError(true)
       }
     }
   }
+
   return (
     <>
       {validationError ? (

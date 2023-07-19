@@ -47,7 +47,6 @@ export const login = createAsyncThunk('users/login', async (credentials: Credent
     throw new Error('Error with signup!')
   }
   const data = await response.text()
-  console.log(data)
   return data
 })
 export const decodeToken = (token: string) => {
@@ -84,6 +83,7 @@ export const userSlice = createSlice({
     builder.addCase(login.fulfilled, (state, action) => {
       state.isLoading = false
       state.token = action.payload
+      console.log(state.token)
       // Adding data to the user object from the token.
       const userData = decodeToken(action.payload)
       if (userData) {

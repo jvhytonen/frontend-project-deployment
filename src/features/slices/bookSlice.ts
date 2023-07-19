@@ -1,8 +1,8 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
-import { Book, BookState } from '../types/types'
-import { Checkout, AddNewBookType } from '../types/types'
+import { Book, BookState, PostRequest, UpdateBookRequest } from '../types/types'
+import { Checkout } from '../types/types'
 
 const APIURL = 'http://localhost:8081/api/v1/books/'
 
@@ -18,7 +18,7 @@ export const getAllBooks = createAsyncThunk('books/getAll', async () => {
   return response
 })
 
-export const addNewBook = createAsyncThunk('books/add', async (newBook: AddNewBookType) => {
+export const addNewBook = createAsyncThunk('books/add', async (newBook: Book) => {
   const URL = 'http://localhost:8081/api/v1/books/'
   const response = await fetch(APIURL, {
     method: 'POST',
@@ -34,21 +34,26 @@ export const addNewBook = createAsyncThunk('books/add', async (newBook: AddNewBo
   return data
 })
 
-export const updateBook = createAsyncThunk('books/update', async (updatedBook: Book) => {
-  const URL = APIURL + updatedBook.id
-  const response = await fetch(URL, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(updatedBook)
-  })
-  if (!response.ok) {
-    throw new Error('Adding a book failed!')
+export const updateBook = createAsyncThunk(
+  'books/update',
+  async (uppdateReq: UpdateBookRequest) => {
+    const URL = APIURL + uppdateReq.data.id
+    const response = await fetch(URL, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        // eslint-disable-next-line prettier/prettier
+      'Authorization': `Bearer ${uppdateReq.token}`
+      },
+      body: JSON.stringify(uppdateReq.data)
+    })
+    if (!response.ok) {
+      throw new Error('Adding a book failed!')
+    }
+    const data = await response.json()
+    return data
   }
-  const data = await response.json()
-  return data
-})
+)
 
 export const deleteBook = createAsyncThunk('books/delete', async (bookId: string) => {
   const URL = 'http://localhost:8081/api/v1/books/' + bookId
@@ -68,7 +73,7 @@ export const bookSlice = createSlice({
   name: 'books',
   initialState,
   reducers: {
-    addBook: (state, action: PayloadAction<AddNewBookType>) => {
+    addBook: (state, action: PayloadAction<Book>) => {
       console.log('Add')
     },
     updatesBook: (state, action: PayloadAction<Book>) => {

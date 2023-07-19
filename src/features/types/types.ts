@@ -1,13 +1,14 @@
 import { ChangeEvent, MouseEventHandler } from 'react'
 
 export type Book = {
-  id: string
+  id?: string
   isbn: string
   title: string
-  url: string
   imageUrl: string
   author: Author
+  authorId?: string
   category: Category
+  categoryId?: string
   description: string
   publisher: string
   yearPublished: string
@@ -44,16 +45,19 @@ export type Borrow = {
   copyId: string
 }
 
-export type AddNewBookType = {
+/* export type AddEditBook = {
+  id?: string
   categoryId: string
   authorId: string
+  category: Category
+  author: Author
   isbn: string
   imageUrl: string
   title: string
   yearPublished: number
   description: string
   publisher: string
-}
+} */
 export type BookIntroType = Partial<Book>
 
 export type HandleClick = () => void
@@ -146,11 +150,14 @@ export type ValidateBookType = {
 }
 
 export type Token = string
-export type PostRequestData = NewCategory
 
 // Types when sending data to server
 
 export interface PostRequest {
   token: Token
-  data: PostRequestData
+  data: NewCategory
+}
+export interface UpdateBookRequest {
+  token: Token
+  data: Book
 }

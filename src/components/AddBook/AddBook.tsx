@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import Button from '../Button/Button'
 import { AppDispatch, RootState } from '../../store'
-import { AddNewBookType } from '../../features/types/types'
+import { Book } from '../../features/types/types'
 import { addBook, addNewBook, getAllBooks } from '../../features/slices/bookSlice'
 import { validateNewBookData } from '../../features/validation/validate'
 import { useNavigate } from 'react-router-dom'
@@ -12,7 +12,7 @@ import { getAllCategories } from '../../features/slices/categorySlice'
 import { fetchAuthors } from '../../features/slices/authorSlice'
 
 function AddBook() {
-  const [newBook, setNewBook] = useState<AddNewBookType | null>(null)
+  const [newBook, setNewBook] = useState<Book | null>(null)
   const [validationError, setValidationError] = useState<boolean>(false)
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
@@ -28,7 +28,7 @@ function AddBook() {
   ) => void = (e) => {
     const { value, name } = e.target
     setNewBook((prevState) => ({
-      ...(prevState as AddNewBookType),
+      ...(prevState as Book),
       [name]: value
     }))
   }
