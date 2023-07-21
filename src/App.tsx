@@ -16,6 +16,7 @@ import Navbar from './components/Navbar/Navbar'
 import AddCategory from './components/AddCategory/AddCategory'
 import AdminDashboard from './components/AdminDashboard/AdminDashboard'
 import Signup from './components/Signup/Signup'
+import EditCopy from './components/EditCopy/EditCopy'
 
 function App() {
   return (
@@ -34,6 +35,10 @@ function App() {
           <Route path="admin/dashboard" element={<ProtectedRoute component={AdminDashboard} />} />
           <Route path="categories/add" element={<ProtectedRoute component={AddCategory} />} />
           <Route path="authors/edit/:id" element={<ProtectedRoute component={EditAuthor} />} />
+          <Route
+            path="/admin/dashboard/copies/edit/:id"
+            element={<ProtectedRoute component={EditCopy} />}
+          />
           <Route path="books/add" element={<ProtectedRoute component={AddBook} />} />
           <Route
             path="/admin/dashboard/books/edit/:id"

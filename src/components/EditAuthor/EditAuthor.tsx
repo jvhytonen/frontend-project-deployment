@@ -12,12 +12,9 @@ function EditAuthor() {
   const params = useParams()
   const dispatch = useDispatch<AppDispatch>()
   const authors = useSelector((state: RootState) => state.author)
-  const item = authors.items
-    ? authors.items?.find((author) => Number(params.id) === author.id)
-    : null
+  const item = authors.items ? authors.items?.find((author) => params.id === author.id) : null
   const [authorToEdit, setAuthorToEdit] = useState<Author | null | undefined>(item)
   const [validationError, setValidationError] = useState<boolean>(false)
-  console.log(authorToEdit)
   const handleChange: (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void = (e) => {
     const { value, name } = e.target
     if (authorToEdit !== null) {

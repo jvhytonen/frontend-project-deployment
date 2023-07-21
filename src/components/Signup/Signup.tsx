@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import UsernameField from '../UsernameField/UsernameField'
-import PasswordField from '../PasswordField/PasswordField'
+import UsernameField from '../FormControls/UsernameField/UsernameField'
+import PasswordField from '../FormControls/PasswordField/PasswordField'
 import { validateSignUp } from '../../features/validation/validate'
 
 function Signup() {

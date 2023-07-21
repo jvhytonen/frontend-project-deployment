@@ -7,12 +7,13 @@ import { Book, BookPostRequest } from '../../features/types/types'
 import { addBook, addNewBook, getAllBooks } from '../../features/slices/bookSlice'
 import { validateNewBookData } from '../../features/validation/validate'
 import { useNavigate } from 'react-router-dom'
-import InputItem from '../InputItem/InputItem'
+import InputItem from '../FormControls/InputItem/InputItem'
 import { getAllCategories } from '../../features/slices/categorySlice'
 import { fetchAuthors } from '../../features/slices/authorSlice'
+import OptionItem from '../FormControls/OptionItem/OptionItem'
 
 function AddBook() {
-  const token = useSelector((state: RootState) => state.user.token)
+  const token = useSelector((state: RootState) => state.auth.token)
   const [newBook, setNewBook] = useState<Book | null>(null)
   const [validationError, setValidationError] = useState<boolean>(false)
   const dispatch = useDispatch<AppDispatch>()
@@ -77,40 +78,20 @@ function AddBook() {
               type="text"
               handleChange={handleChange}
             />
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="author">
-                Author
-              </label>
-              <select
-                onChange={handleChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="authorId"
-                name="authorId">
-                <option value="">Select an author</option>
-                {Object.entries(authors).map(([id, author]) => (
-                  <option key={id} value={author.id}>
-                    {author.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="category">
-                Category
-              </label>
-              <select
-                onChange={handleChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="categoryId"
-                name="categoryId">
-                <option value="">Select category</option>
-                {Object.entries(categories).map(([id, category]) => (
-                  <option key={id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <OptionItem
+              fieldName="Author"
+              placeholder="Select an author"
+              name="authorId"
+              items={authors}
+              onChange={handleChange}
+            />
+            <OptionItem
+              fieldName="Category"
+              placeholder="Select a category"
+              name="categoryId"
+              items={categories}
+              onChange={handleChange}
+            />
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
                 Description about the book

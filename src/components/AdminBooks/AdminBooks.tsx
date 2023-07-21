@@ -27,11 +27,9 @@ function AdminBooks() {
       <thead className="bg-gray-50">
         <tr>
           <TableHeading label="Author" />
-          <TableHeading label="Category" />
           <TableHeading label="Title" />
-          <TableHeading label="ISBN" />
-          <TableHeading label="Publish year" />
-          <TableHeading label="Publisher" />
+          <TableHeading label="Category" />
+          <TableHeading label="Copies" />
           <TableHeading label="Actions" />
         </tr>
       </thead>
@@ -41,16 +39,19 @@ function AdminBooks() {
             return (
               <tr key={book.id}>
                 <td className="py-4 px-6 whitespace-nowrap">{book.author.name}</td>
-                <td className="py-4 px-6 whitespace-nowrap">{book.category.name}</td>
                 <td className="py-4 px-6 whitespace-nowrap">{book.title}</td>
-                <td className="py-4 px-6 whitespace-nowrap">{book.isbn}</td>
-                <td className="py-4 px-6 whitespace-nowrap">{book.yearPublished}</td>
-                <td className="py-4 px-6 whitespace-nowrap">{book.publisher}</td>
+                <td className="py-4 px-6 whitespace-nowrap">{book.category.name}</td>
+                <td className="py-4 px-6 whitespace-nowrap">0</td>
                 <td className="py-4 px-6 whitespace-nowrap">
                   <button
                     className="text-blue-500 hover:text-blue-700"
                     onClick={() => navigate(`books/edit/${book.id}`)}>
-                    Edit
+                    Edit book
+                  </button>
+                  <button
+                    className="text-blue-500 hover:text-blue-700"
+                    onClick={() => navigate(`copies/edit/${book.id}`)}>
+                    Edit copies
                   </button>
                 </td>
               </tr>

@@ -3,12 +3,12 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { AppDispatch, RootState } from '../../store'
-import { logUserOut } from '../../features/slices/userSlice'
+import { logUserOut } from '../../features/slices/authSlice'
 import NavbarLink from '../NavbarLink/NavbarLink'
 
 function Navbar() {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState<boolean>(false)
-  const user = useSelector((state: RootState) => state.user)
+  const user = useSelector((state: RootState) => state.auth)
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
 

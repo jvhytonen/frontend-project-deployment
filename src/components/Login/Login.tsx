@@ -4,9 +4,9 @@ import jwt_decode from 'jwt-decode'
 import { useDispatch } from 'react-redux'
 
 import { AppDispatch } from '../../store'
-import { LoginCredentialType, getUser, login } from '../../features/slices/userSlice'
-import PasswordField from '../PasswordField/PasswordField'
-import UsernameField from '../UsernameField/UsernameField'
+import { login } from '../../features/slices/authSlice'
+import PasswordField from '../FormControls/PasswordField/PasswordField'
+import UsernameField from '../FormControls/UsernameField/UsernameField'
 
 function Login() {
   const dispatch = useDispatch<AppDispatch>()

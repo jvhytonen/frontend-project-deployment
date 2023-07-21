@@ -19,6 +19,21 @@ export type BookState = {
   error: null | string
 }
 
+export type UserState = {
+  token: string | null
+  items: User
+  isLoading: boolean
+  error: null | string
+}
+
+export type PartialPersistedState = Partial<{
+  book: BookState
+  author: AuthorState
+  user: UserState
+  copy: CopyState
+  category: CategoryState
+}>
+
 export type Category = {
   id: string
   name: string
@@ -129,6 +144,15 @@ export type InputItemType = {
   handleChange: (
     event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>
   ) => void
+}
+
+export type OptionItemType = {
+  fieldName: string
+  placeholder: string
+  name: string
+  defaultValue?: string
+  items: Author[] | Category[]
+  onChange: (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>) => void
 }
 export type NavbarLinkType = {
   link: string

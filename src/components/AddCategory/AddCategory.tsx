@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { CategoryPostRequest, NewCategory } from '../../features/types/types'
-import InputItem from '../InputItem/InputItem'
+import InputItem from '../FormControls/InputItem/InputItem'
 import Button from '../Button/Button'
 import { AppDispatch, RootState } from '../../store'
 import { addNewAuthor } from '../../features/slices/authorSlice'
@@ -11,7 +11,7 @@ import { validateAuthorData } from '../../features/validation/validate'
 import { addNewCategory } from '../../features/slices/categorySlice'
 
 function AddCategory() {
-  const token = useSelector((state: RootState) => state.user.token)
+  const token = useSelector((state: RootState) => state.auth.token)
   const [newCategory, setNewCategory] = useState<NewCategory | null>(null)
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()

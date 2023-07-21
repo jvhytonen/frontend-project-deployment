@@ -8,7 +8,7 @@ type ProtectedRouteProps = {
 }
 
 const ProtectedRoute: FC<ProtectedRouteProps> = ({ component: Component }) => {
-  const isAdmin = useSelector((state: RootState) => state.user.items?.role)
+  const isAdmin = useSelector((state: RootState) => state.auth.items?.role)
   if (isAdmin === 'ADMIN') {
     return <Component />
   }

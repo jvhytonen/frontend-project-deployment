@@ -10,7 +10,7 @@ import { validateAuthorData } from '../../features/validation/validate'
 import Modal from '../Modal/Modal'
 
 function AddAuthor() {
-  const token = useSelector((state: RootState) => state.user.token)
+  const token = useSelector((state: RootState) => state.auth.token)
   const [newAuthor, setNewAuthor] = useState<AddAuthorType | null>(null)
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
