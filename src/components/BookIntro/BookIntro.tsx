@@ -32,7 +32,7 @@ function BookIntro({ isbn, title, id, author, description, imageUrl }: BookIntro
       ) : null}
       <div>
         <img
-          src="https://tubular-unicorn-f30c80.netlify.app/seven_brothers.jpg"
+          src={imageUrl ? imageUrl : 'defaultCover.jpg'}
           className="rounded-t h-72 w-full object-contain"
         />
         <div className="p-4">

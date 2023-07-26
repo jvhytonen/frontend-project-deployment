@@ -10,3 +10,17 @@ export const fetchData = async (url: string) => {
     console.log(err)
   }
 }
+
+export const uploadImage = async (file: File) => {
+  const formData = new FormData()
+  formData.append('image', file)
+  const URL =
+    'https://erfv9p79ya.execute-api.eu-central-1.amazonaws.com/dev/upload-image-s3-jvh/' + file.name
+  const res = await fetch(URL, {
+    method: 'POST',
+    body: formData
+  })
+  const response = res.json()
+  console.log(response)
+  return response
+}

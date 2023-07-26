@@ -4,7 +4,7 @@ export type Book = {
   id?: string
   isbn: string
   title: string
-  imageUrl: string
+  imageUrl: string | null
   author: Author
   authorId?: string
   category: Category
@@ -60,19 +60,6 @@ export type Borrow = {
   copyId: string
 }
 
-/* export type AddEditBook = {
-  id?: string
-  categoryId: string
-  authorId: string
-  category: Category
-  author: Author
-  isbn: string
-  imageUrl: string
-  title: string
-  yearPublished: number
-  description: string
-  publisher: string
-} */
 export type BookIntroType = Partial<Book>
 
 export type HandleClick = () => void
@@ -141,9 +128,7 @@ export type InputItemType = {
   placeholder: string
   labelText: string
   value?: string
-  handleChange: (
-    event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>
-  ) => void
+  handleChange: (event: ChangeEvent<FormElement>) => void
 }
 
 export type OptionItemType = {
@@ -152,8 +137,23 @@ export type OptionItemType = {
   name: string
   defaultValue?: string
   items: Author[] | Category[]
-  onChange: (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>) => void
+  onChange: (event: ChangeEvent<FormElement>) => void
 }
+
+export type TextAreaType = {
+  fieldName: string
+  labelText: string
+  defaultValue?: string
+  placeholder: string
+  handleChange: (event: ChangeEvent<FormElement>) => void
+}
+
+export type UploadImageType = {
+  onImageUpload: (file: File, fileName: string) => void
+}
+// All form elements neede to add or change data
+export type FormElement = HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement
+
 export type NavbarLinkType = {
   link: string
   label: string
@@ -188,4 +188,5 @@ export interface AuthorPostRequest {
 export interface BookPostRequest {
   token: Token
   data: Book
+  coverImage: File | null
 }

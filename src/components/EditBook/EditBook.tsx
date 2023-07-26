@@ -9,6 +9,7 @@ import { updateBook } from '../../features/slices/bookSlice'
 import { validateUpdatedBookData } from '../../features/validation/validate'
 import InputItem from '../FormControls/InputItem/InputItem'
 import OptionItem from '../FormControls/OptionItem/OptionItem'
+import TextArea from '../FormControls/TextArea/TextArea'
 
 function EditBook() {
   const params = useParams()
@@ -94,7 +95,14 @@ function EditBook() {
               onChange={handleChange}
             />
             {/* Description */}
-            <div className="mb-4">
+            <TextArea
+              fieldName="description"
+              labelText="Description about the book"
+              placeholder="Write a short description about the book"
+              handleChange={handleChange}
+              defaultValue={bookToEdit.description}
+            />
+            {/*  <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
                 Description about the book
               </label>
@@ -110,7 +118,7 @@ function EditBook() {
                 id="description"
                 placeholder="Write a short description about the author"
               />
-            </div>
+            </div> */}
             {/* Imageurl */}
             <InputItem
               fieldName="imageUrl"

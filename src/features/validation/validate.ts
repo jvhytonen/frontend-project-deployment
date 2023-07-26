@@ -1,6 +1,6 @@
-import { AddNewBookType, AddAuthorType, ValidateBookType, Book } from '../types/types'
+import { AddAuthorType, ValidateBookType, Book } from '../types/types'
 
-export const validateNewBookData = (formInputs: AddNewBookType) => {
+export const validateNewBookData = (formInputs: Book) => {
   if (
     formInputs.title.length > 1 &&
     formInputs.authorId &&

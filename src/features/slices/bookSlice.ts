@@ -18,7 +18,26 @@ export const getAllBooks = createAsyncThunk('books/getAll', async () => {
   return response
 })
 
+const uploadImage = async (file: File) => {
+  const formData = new FormData()
+  formData.append('image', file)
+  const URL =
+    'https://erfv9p79ya.execute-api.eu-central-1.amazonaws.com/dev/upload-image-s3-jvh/' + file.name
+  console.log(URL)
+  const res = await fetch(URL, {
+    method: 'PUT',
+    body: formData
+  })
+  const response = res.json()
+  return response
+}
+
 export const addNewBook = createAsyncThunk('books/add', async (newBookReq: BookPostRequest) => {
+
+  /*   if (newBookReq.coverImage) {
+    const imageUpload = await uploadImage(newBookReq.coverImage)
+    console.log(imageUpload)
+  } */
   const URL = 'http://localhost:8081/api/v1/books/'
   const response = await fetch(APIURL, {
     method: 'POST',
@@ -48,7 +67,7 @@ export const updateBook = createAsyncThunk('books/update', async (uppdateReq: Bo
     body: JSON.stringify(uppdateReq.data)
   })
   if (!response.ok) {
-    throw new Error('Adding a book failed!')
+    throw new Error('Updating book failed!')
   }
   const data = await response.json()
   return data

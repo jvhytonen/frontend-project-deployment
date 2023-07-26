@@ -11,10 +11,14 @@ import InputItem from '../FormControls/InputItem/InputItem'
 import { getAllCategories } from '../../features/slices/categorySlice'
 import { fetchAuthors } from '../../features/slices/authorSlice'
 import OptionItem from '../FormControls/OptionItem/OptionItem'
+import TextArea from '../FormControls/TextArea/TextArea'
+import UploadImage from '../FormControls/UploadImage/UploadImage'
+import { uploadImage } from '../../features/fetchAPI/fetchAPI'
 
 function AddBook() {
   const token = useSelector((state: RootState) => state.auth.token)
   const [newBook, setNewBook] = useState<Book | null>(null)
+  const [coverImage, setCoverImage] = useState<File | null>(null)
   const [validationError, setValidationError] = useState<boolean>(false)
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
@@ -34,13 +38,23 @@ function AddBook() {
       [name]: value
     }))
   }
+
+  const handleImage = (image: File, fileName: string) => {
+    setCoverImage(image)
+    setNewBook((prevState) => ({
+      ...(prevState as Book),
+      imageUrl: fileName
+    }))
+  }
   const handleSubmit: () => void = () => {
     if (token !== null && newBook !== null) {
       // All data needed in redux slice to send the request: token and body.
       const newBookReq: BookPostRequest = {
         data: newBook,
-        token: token
+        token: token,
+        coverImage: coverImage
       }
+      // In case the user has tried to add data that was not valid, we must set validation error back to false.
       if (validationError) {
         setValidationError(false)
       }
@@ -92,30 +106,21 @@ function AddBook() {
               items={categories}
               onChange={handleChange}
             />
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
-                Description about the book
-              </label>
-            </div>
-            <div className="mb-4">
-              <textarea
-                onChange={(event) => handleChange(event)}
-                cols={50}
-                rows={4}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                name="description"
-                id="description"
-                placeholder="Write a short description about the author"
-              />
-            </div>
-            <InputItem
+            <TextArea
+              fieldName="description"
+              labelText="Description about the book"
+              placeholder="Write a short description about the book"
+              handleChange={handleChange}
+            />
+            {/*         <InputItem
               fieldName="imageUrl"
               name="imageUrl"
               labelText="Image"
               placeholder="Add the URL of the book-cover here"
               type="text"
               handleChange={handleChange}
-            />
+            /> */}
+            <UploadImage onImageUpload={handleImage} />
             <InputItem
               fieldName="publisher"
               name="publisher"

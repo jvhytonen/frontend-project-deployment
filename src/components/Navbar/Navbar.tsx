@@ -66,9 +66,7 @@ function Navbar() {
           className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
           id="navbar-sticky">
           <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white">
-            <li className="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0">
-              <Link to="/">Home</Link>
-            </li>
+            <NavbarLink link="/" label="Home" />
             <NavbarLink link="/books" label="Books" />
             <NavbarLink link="/authors" label="Authors" />
             {user && user.items.role === 'ADMIN' ? (
