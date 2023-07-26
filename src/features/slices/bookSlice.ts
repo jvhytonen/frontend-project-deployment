@@ -2,7 +2,6 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
 import { Book, BookState, BookPostRequest } from '../types/types'
-import { Checkout } from '../types/types'
 
 const APIURL = 'http://localhost:8081/api/v1/books/'
 
@@ -33,7 +32,6 @@ const uploadImage = async (file: File) => {
 }
 
 export const addNewBook = createAsyncThunk('books/add', async (newBookReq: BookPostRequest) => {
-
   /*   if (newBookReq.coverImage) {
     const imageUpload = await uploadImage(newBookReq.coverImage)
     console.log(imageUpload)

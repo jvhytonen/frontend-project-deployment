@@ -1,10 +1,12 @@
 import React from 'react'
 import AdminBooks from '../AdminBooks/AdminBooks'
+import AdminAuthors from '../AdminAuthors/AdminAuthors'
 
 function AdminDashboard() {
   return (
-    <div className="max-w-full">
+    <div>
       <AdminBooks />
+      <AdminAuthors />
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react'
+import React from 'react'
 import { UploadImageType } from '../../../features/types/types'
 
 function UploadImage({ onImageUpload }: UploadImageType) {

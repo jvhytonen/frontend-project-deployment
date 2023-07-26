@@ -10,17 +10,23 @@ import { validateUpdatedBookData } from '../../features/validation/validate'
 import InputItem from '../FormControls/InputItem/InputItem'
 import OptionItem from '../FormControls/OptionItem/OptionItem'
 import TextArea from '../FormControls/TextArea/TextArea'
+import UploadImage from '../FormControls/UploadImage/UploadImage'
 
 function EditBook() {
   const params = useParams()
-  const dispatch = useDispatch<AppDispatch>()
+  // Variables from Redux
   const book = useSelector((state: RootState) => state.book)
   const token = useSelector((state: RootState) => state.auth.token)
   const authors = useSelector((state: RootState) => state.author.items)
   const categories = useSelector((state: RootState) => state.category.items)
+  // Item is the book to be edited.
   const item = book.items ? book.items?.find((book) => params.id === book.id) : null
+
   const [bookToEdit, setBookToEdit] = useState<Book | null | undefined>(item)
+  const [coverImage, setCoverImage] = useState<File | null>(null)
   const [validationError, setValidationError] = useState<boolean>(false)
+
+  const dispatch = useDispatch<AppDispatch>()
 
   const handleChange: (
     e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>
@@ -33,7 +39,14 @@ function EditBook() {
       }))
     }
   }
-
+  // Sets cover image to it's own state and the filename to a state where everything else resides.
+  const handleImage = (image: File, fileName: string) => {
+    setCoverImage(image)
+    setBookToEdit((prevState) => ({
+      ...(prevState as Book),
+      imageUrl: fileName
+    }))
+  }
   const handleSubmit: () => void = () => {
     // If the user has previously tried to update data that has validation error, it must be set to false.
     if (validationError) {
@@ -44,9 +57,11 @@ function EditBook() {
       bookToEdit.authorId = bookToEdit.author.id
       bookToEdit.categoryId = bookToEdit.category.id
       //All data needed in redux slice to send the request: token and body.
+      // All data needed in redux slice to send the request: token and body.
       const updatedBookReq: BookPostRequest = {
         data: bookToEdit,
-        token: token
+        token: token,
+        coverImage: coverImage
       }
       if (validateUpdatedBookData(bookToEdit)) {
         dispatch(updateBook(updatedBookReq))
@@ -102,33 +117,14 @@ function EditBook() {
               handleChange={handleChange}
               defaultValue={bookToEdit.description}
             />
-            {/*  <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
-                Description about the book
-              </label>
-            </div>
-            <div className="mb-4">
-              <textarea
-                onChange={(event) => handleChange(event)}
-                cols={50}
-                rows={4}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                value={bookToEdit.description}
-                name="description"
-                id="description"
-                placeholder="Write a short description about the author"
+            {coverImage && (
+              <img
+                src={URL.createObjectURL(coverImage)}
+                alt="Selected Cover"
+                style={{ maxWidth: '300px', marginTop: '10px' }}
               />
-            </div> */}
-            {/* Imageurl */}
-            <InputItem
-              fieldName="imageUrl"
-              name="imageUrl"
-              labelText="Image"
-              value={bookToEdit.imageUrl}
-              placeholder="Add the URL of the book-cover here"
-              type="text"
-              handleChange={handleChange}
-            />
+            )}
+            <UploadImage onImageUpload={handleImage} />
             {/* Publisher */}
             <InputItem
               fieldName="publisher"

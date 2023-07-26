@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Button from '../Button/Button'
 import { AppDispatch, RootState } from '../../store'
 import { Book, BookPostRequest } from '../../features/types/types'
-import { addBook, addNewBook, getAllBooks } from '../../features/slices/bookSlice'
+import { addNewBook } from '../../features/slices/bookSlice'
 import { validateNewBookData } from '../../features/validation/validate'
 import { useNavigate } from 'react-router-dom'
 import InputItem from '../FormControls/InputItem/InputItem'
@@ -13,17 +13,19 @@ import { fetchAuthors } from '../../features/slices/authorSlice'
 import OptionItem from '../FormControls/OptionItem/OptionItem'
 import TextArea from '../FormControls/TextArea/TextArea'
 import UploadImage from '../FormControls/UploadImage/UploadImage'
-import { uploadImage } from '../../features/fetchAPI/fetchAPI'
 
 function AddBook() {
+  // Variables from Redux
   const token = useSelector((state: RootState) => state.auth.token)
+  const authors = useSelector((state: RootState) => state.author.items)
+  const categories = useSelector((state: RootState) => state.category.items)
+  // States
   const [newBook, setNewBook] = useState<Book | null>(null)
   const [coverImage, setCoverImage] = useState<File | null>(null)
   const [validationError, setValidationError] = useState<boolean>(false)
+  // Actions
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
-  const authors = useSelector((state: RootState) => state.author.items)
-  const categories = useSelector((state: RootState) => state.category.items)
 
   useEffect(() => {
     dispatch(getAllCategories())
@@ -38,7 +40,7 @@ function AddBook() {
       [name]: value
     }))
   }
-
+  // Sets cover image to it's own state and the filename to a state where everything else resides.
   const handleImage = (image: File, fileName: string) => {
     setCoverImage(image)
     setNewBook((prevState) => ({
@@ -112,14 +114,13 @@ function AddBook() {
               placeholder="Write a short description about the book"
               handleChange={handleChange}
             />
-            {/*         <InputItem
-              fieldName="imageUrl"
-              name="imageUrl"
-              labelText="Image"
-              placeholder="Add the URL of the book-cover here"
-              type="text"
-              handleChange={handleChange}
-            /> */}
+            {coverImage && (
+              <img
+                src={URL.createObjectURL(coverImage)}
+                alt="Selected Cover"
+                style={{ maxWidth: '300px', marginTop: '10px' }}
+              />
+            )}
             <UploadImage onImageUpload={handleImage} />
             <InputItem
               fieldName="publisher"

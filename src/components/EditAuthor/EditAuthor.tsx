@@ -2,11 +2,13 @@ import React, { ChangeEvent, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { Author } from '../../features/types/types'
+import { Author, FormElement } from '../../features/types/types'
 import { AppDispatch, RootState } from '../../store'
 import Button from '../Button/Button'
 import { validateAuthorData } from '../../features/validation/validate'
 import { updateAuthor } from '../../features/slices/authorSlice'
+import InputItem from '../FormControls/InputItem/InputItem'
+import TextArea from '../FormControls/TextArea/TextArea'
 
 function EditAuthor() {
   const params = useParams()
@@ -15,7 +17,7 @@ function EditAuthor() {
   const item = authors.items ? authors.items?.find((author) => params.id === author.id) : null
   const [authorToEdit, setAuthorToEdit] = useState<Author | null | undefined>(item)
   const [validationError, setValidationError] = useState<boolean>(false)
-  const handleChange: (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void = (e) => {
+  const handleChange: (e: ChangeEvent<FormElement>) => void = (e) => {
     const { value, name } = e.target
     if (authorToEdit !== null) {
       setAuthorToEdit((prevState) => ({
@@ -46,37 +48,22 @@ function EditAuthor() {
         <div className="flex flex-col justify-center items-center w-full mt-[200px]">
           <h2 className="font-bold text-2xl">Author edit here:</h2>
           <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                Name
-              </label>
-              <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                onChange={(event) => handleChange(event)}
-                id="name"
-                name="name"
-                value={authorToEdit.name}
-                type="text"
-                placeholder="Name"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
-                Description about the author
-              </label>
-            </div>
-            <div className="mb-4">
-              <textarea
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                onChange={(event) => handleChange(event)}
-                value={authorToEdit.description}
-                cols={50}
-                rows={4}
-                id="description"
-                name="description"
-                placeholder="Write a short description about the author"
-              />
-            </div>
+            <InputItem
+              fieldName="name"
+              name="name"
+              labelText="Name"
+              placeholder="Name of the category"
+              value={authorToEdit.name}
+              type="text"
+              handleChange={handleChange}
+            />
+            <TextArea
+              fieldName="description"
+              labelText="Description about the author"
+              placeholder="Write a short description about the author"
+              defaultValue={authorToEdit.description}
+              handleChange={handleChange}
+            />
             <div>
               <Button label="Save changes" handleClick={handleSubmit} />
             </div>

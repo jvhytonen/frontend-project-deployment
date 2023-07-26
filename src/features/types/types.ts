@@ -35,7 +35,7 @@ export type PartialPersistedState = Partial<{
 }>
 
 export type Category = {
-  id: string
+  id?: string
   name: string
 }
 
@@ -51,9 +51,6 @@ export type AuthorState = {
   error: null | string
   showSuccessModal: boolean
 }
-
-export type AddAuthorType = Omit<Author, 'id'>
-export type NewCategory = Omit<Category, 'id'>
 
 export type Borrow = {
   userId: string
@@ -179,7 +176,7 @@ export type Token = string
 
 export interface CategoryPostRequest {
   token: Token
-  data: NewCategory
+  data: Category
 }
 export interface AuthorPostRequest {
   token: Token

@@ -1,40 +1,46 @@
 import React, { ChangeEvent, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { Category, CategoryPostRequest } from '../../features/types/types'
 import InputItem from '../FormControls/InputItem/InputItem'
 import Button from '../Button/Button'
 import { AppDispatch, RootState } from '../../store'
-import { addNewAuthor } from '../../features/slices/authorSlice'
-import { validateAuthorData } from '../../features/validation/validate'
 import { addNewCategory } from '../../features/slices/categorySlice'
 
-function AddCategory() {
+function EditCategory() {
+  const params = useParams()
+  const [categoryData, setCategoryData] = useState<Category | null>(null)
+
   const token = useSelector((state: RootState) => state.auth.token)
-  const [newCategory, setNewCategory] = useState<Category | null>(null)
+  const categories = useSelector((state: RootState) => state.category)
+  const categoryToEdit = categories.items
+    ? categories.items?.find((category) => params.id === category.id)
+    : null
+
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
+
   const handleChange: (
     e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>
   ) => void = (e) => {
     const { value, name } = e.target
-    setNewCategory((prevState) => ({
+    setCategoryData((prevState) => ({
       ...prevState,
       [name]: value
     }))
   }
   const handleSubmit: () => void = () => {
-    if (token !== null && newCategory !== null) {
+    if (token !== null && categoryData !== null) {
       // All data needed in redux slice to send the request: token and body.
-      const categoryData: CategoryPostRequest = {
-        data: newCategory,
+      const categoryReq: CategoryPostRequest = {
+        data: categoryData,
         token: token
       }
-      if (newCategory) {
-        dispatch(addNewCategory(categoryData))
+      if (categoryData) {
+        dispatch(addNewCategory(categoryReq))
       }
-      setNewCategory(null)
+      setCategoryData(null)
       navigate('/categories')
     }
   }
@@ -47,6 +53,7 @@ function AddCategory() {
           name="name"
           labelText="Category name"
           placeholder="Add the name of the category here"
+          value={categoryToEdit?.name}
           type="text"
           handleChange={handleChange}
         />
@@ -57,4 +64,4 @@ function AddCategory() {
     </div>
   )
 }
-export default AddCategory
+export default EditCategory
