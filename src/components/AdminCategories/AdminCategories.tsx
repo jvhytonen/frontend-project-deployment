@@ -3,10 +3,10 @@ import TableHeading from '../TableHeading/TableHeading'
 import { AppDispatch, RootState } from '../../store'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { deleteAuthor } from '../../features/slices/authorSlice'
+import { deleteCategory } from '../../features/slices/categorySlice'
 
-function AdminAuthors() {
-  const authors = useSelector((state: RootState) => state.author)
+function AdminCategories() {
+  const categories = useSelector((state: RootState) => state.category)
   const token = useSelector((state: RootState) => state.auth.token)
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
@@ -17,7 +17,7 @@ function AdminAuthors() {
         id: id,
         token: token
       }
-      dispatch(deleteAuthor(deleteReq))
+      dispatch(deleteCategory(deleteReq))
     } else {
       return
     }
@@ -32,21 +32,21 @@ function AdminAuthors() {
         </tr>
       </thead>
       <tbody>
-        {authors.items !== null && authors.items.length > 0 ? (
-          authors.items.map((author) => {
+        {categories.items !== null && categories.items.length > 0 ? (
+          categories.items.map((category) => {
             return (
-              <tr key={author.id}>
-                <td className="py-4 px-6 whitespace-nowrap">{author.name}</td>
+              <tr key={category.id}>
+                <td className="py-4 px-6 whitespace-nowrap">{category.name}</td>
                 <td className="py-4 px-6 whitespace-nowrap space-x-2">
                   <button
                     className="text-blue-500 hover:text-blue-700"
-                    onClick={() => navigate(`books/edit/${author.id}`)}>
-                    Edit book
+                    onClick={() => navigate(`books/edit/${category.id}`)}>
+                    Edit category
                   </button>
                   <button
                     className="text-blue-500 hover:text-blue-700"
-                    onClick={() => handleDelete(author.id)}>
-                    Delete author
+                    onClick={() => handleDelete(category.id)}>
+                    Delete category
                   </button>
                 </td>
               </tr>
@@ -55,7 +55,7 @@ function AdminAuthors() {
         ) : (
           <tr>
             <td className="py-4 px-6 whitespace-nowrap" colSpan={5}>
-              No authors found.
+              No categories found.
             </td>
           </tr>
         )}
@@ -64,4 +64,4 @@ function AdminAuthors() {
   )
 }
 
-export default AdminAuthors
+export default AdminCategories

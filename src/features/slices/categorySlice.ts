@@ -1,7 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
-import { Category, CategoryState, NewCategory, CategoryPostRequest } from '../types/types'
+import { Category, CategoryState, CategoryPostRequest, CategoryDeleteRequest } from '../types/types'
 
 const initialState: CategoryState = {
   items: null,
@@ -36,17 +36,38 @@ export const addNewCategory = createAsyncThunk(
   }
 )
 
+export const deleteCategory = createAsyncThunk(
+  'categories/delete',
+  async (deleteReq: CategoryDeleteRequest) => {
+    const URL = 'http://localhost:8081/api/v1/categories/' + deleteReq.id
+    const response = await fetch(URL, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        // eslint-disable-next-line prettier/prettier
+      'Authorization': `Bearer ${deleteReq.token}`
+      }
+    })
+    if (!response.ok) {
+      throw new Error('Updating book failed!')
+    }
+    const data = await response.json()
+    console.log(data)
+    return data
+  }
+)
+
 export const bookSlice = createSlice({
   name: 'categories',
   initialState,
   reducers: {
-    addCategory: (state, action: PayloadAction<NewCategory>) => {
+    addCategory: (state, action: PayloadAction<Category>) => {
       console.log('Add')
     },
     updateCategory: (state, action: PayloadAction<Category>) => {
       console.log('Updating')
     },
-    deleteCategory: (state, action: PayloadAction<string>) => {
+    removeCategory: (state, action: PayloadAction<string>) => {
       console.log('Deleting')
     }
   },
@@ -76,6 +97,6 @@ export const bookSlice = createSlice({
   }
 })
 
-export const { addCategory, updateCategory, deleteCategory } = bookSlice.actions
+export const { addCategory, updateCategory, removeCategory } = bookSlice.actions
 
 export default bookSlice.reducer

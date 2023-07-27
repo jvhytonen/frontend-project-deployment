@@ -53,16 +53,16 @@ export const addNewBook = createAsyncThunk('books/add', async (newBookReq: BookP
   return data
 })
 
-export const updateBook = createAsyncThunk('books/update', async (uppdateReq: BookPostRequest) => {
-  const URL = APIURL + uppdateReq.data.id
+export const updateBook = createAsyncThunk('books/update', async (updateReq: BookPostRequest) => {
+  const URL = APIURL + updateReq.data.id
   const response = await fetch(URL, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
       // eslint-disable-next-line prettier/prettier
-      'Authorization': `Bearer ${uppdateReq.token}`
+      'Authorization': `Bearer ${updateReq.token}`
     },
-    body: JSON.stringify(uppdateReq.data)
+    body: JSON.stringify(updateReq.data)
   })
   if (!response.ok) {
     throw new Error('Updating book failed!')

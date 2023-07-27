@@ -178,9 +178,17 @@ export interface CategoryPostRequest {
   token: Token
   data: Category
 }
+export interface CategoryDeleteRequest {
+  id: string
+  token: Token
+}
 export interface AuthorPostRequest {
   token: Token
   data: Author
+}
+export interface AuthorDeleteRequest {
+  id: string
+  token: Token
 }
 export interface BookPostRequest {
   token: Token

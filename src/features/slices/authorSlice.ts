@@ -1,8 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
-import { AuthorState, Author, AddAuthorType, AuthorPostRequest } from '../types/types'
-import { useDispatch } from 'react-redux'
+import { AuthorState, Author, AuthorPostRequest, AuthorDeleteRequest } from '../types/types'
 
 const initialState: AuthorState = {
   items: null,
@@ -38,20 +37,26 @@ export const addNewAuthor = createAsyncThunk(
   }
 )
 
-export const deleteAuthor = createAsyncThunk('authors/delete', async (authorId: string) => {
-  const URL = 'http://localhost:8081/api/v1/authors/' + authorId
-  const response = await fetch(URL, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json'
+export const deleteAuthor = createAsyncThunk(
+  'authors/delete',
+  async (deleteReq: AuthorDeleteRequest) => {
+    const URL = 'http://localhost:8081/api/v1/authors/' + deleteReq.id
+    const response = await fetch(URL, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        // eslint-disable-next-line prettier/prettier
+      'Authorization': `Bearer ${deleteReq.token}`
+      }
+    })
+    if (!response.ok) {
+      throw new Error('Updating book failed!')
     }
-  })
-  if (!response.ok) {
-    throw new Error('Error when deleting author')
+    const data = await response.json()
+    console.log(data)
+    return data
   }
-  const data = await response.json()
-  return data
-})
+)
 
 export const authorSlice = createSlice({
   name: 'authors',
