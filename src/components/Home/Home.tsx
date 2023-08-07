@@ -5,21 +5,6 @@ const urlAuthor = 'http://localhost:8081/api/v1/authors/'
 const urlCategory = 'http://localhost:8081/api/v1/categories/'
 
 function Home() {
-  const closeModal = () => {
-    alert('Closed')
-  }
-  const testDataFlow = async () => {
-    try {
-      const response = await fetch(urlBook)
-      if (!response.ok) {
-        throw new Error('An error occurred')
-      }
-      const books = await response.json()
-      console.log(books)
-    } catch (err) {
-      console.log(err)
-    }
-  }
   return (
     <div className="flex justify-center items-center w-full">
       <div className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
@@ -42,23 +27,3 @@ function Home() {
 }
 
 export default Home
-
-{
-  /* <div className="mt-[200px] flex justify-center items-center">
-<div className="flex flex-col">
-  <h2 className="text-3xl font-bold mb-3">Welcome!</h2>
-  <p className="mb-3">
-    Browse books&nbsp;
-    <span className="text-blue-800 underline">
-      <Link to="/books">here</Link>
-    </span>
-  </p>
-  <p className="mb-3">
-    If you want to borrow books, please&nbsp;
-    <span className="text-blue-800 underline">
-      <Link to="/login">sign in</Link>
-    </span>
-  </p>
-</div>
-</div> */
-}

@@ -6,6 +6,7 @@ import AdminCategories from '../AdminCategories/AdminCategories'
 function AdminDashboard() {
   return (
     <div>
+      <h2 className="font-bold text-2xl text-center">Books</h2>
       <AdminBooks />
       <div className="w-full flex my-2">
         <div className="w-1/2">

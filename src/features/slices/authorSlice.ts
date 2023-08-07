@@ -39,22 +39,28 @@ export const addNewAuthor = createAsyncThunk(
 
 export const deleteAuthor = createAsyncThunk(
   'authors/delete',
-  async (deleteReq: AuthorDeleteRequest) => {
-    const URL = 'http://localhost:8081/api/v1/authors/' + deleteReq.id
-    const response = await fetch(URL, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        // eslint-disable-next-line prettier/prettier
-      'Authorization': `Bearer ${deleteReq.token}`
+  async (deleteReq: AuthorDeleteRequest, { rejectWithValue }) => {
+    try {
+      const URL = 'http://localhost:8081/api/v1/authors/' + deleteReq.id
+      const response = await fetch(URL, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          // eslint-disable-next-line prettier/prettier
+        'Authorization': `Bearer ${deleteReq.token}`
+        }
+      })
+      if (!response.ok) {
+        const errorData = await response.json()
+        const errorMessage = errorData.error
+        return rejectWithValue(errorMessage)
       }
-    })
-    if (!response.ok) {
-      throw new Error('Updating book failed!')
+      const data = await response.json()
+      return data
+    } catch (error: any) {
+      // Error is temporarily 'any' as otherwise the reject value cannot be returned.
+      return rejectWithValue(error.message as string)
     }
-    const data = await response.json()
-    console.log(data)
-    return data
   }
 )
 
@@ -85,6 +91,9 @@ export const authorSlice = createSlice({
     },
     removeAuthor: (state, action: PayloadAction<string>) => {
       state.items = state.items?.filter((item) => action.payload !== item.id) as Author[]
+    },
+    nullifyAuthorError: (state) => {
+      state.error = null
     }
   },
   extraReducers: (builder) => {
@@ -117,6 +126,6 @@ export const authorSlice = createSlice({
   }
 })
 
-export const { addAuthor, updateAuthor, removeAuthor } = authorSlice.actions
+export const { addAuthor, updateAuthor, removeAuthor, nullifyAuthorError } = authorSlice.actions
 
 export default authorSlice.reducer

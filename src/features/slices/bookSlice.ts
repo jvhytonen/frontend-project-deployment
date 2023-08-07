@@ -1,7 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
-import { Book, BookState, BookPostRequest } from '../types/types'
+import { Book, BookState, BookPostRequest, BookDeleteRequest } from '../types/types'
 
 const APIURL = 'http://localhost:8081/api/v1/books/'
 
@@ -71,32 +71,36 @@ export const updateBook = createAsyncThunk('books/update', async (updateReq: Boo
   return data
 })
 
-export const deleteBook = createAsyncThunk('books/delete', async (bookId: string) => {
-  const URL = 'http://localhost:8081/api/v1/books/' + bookId
-  const response = await fetch(URL, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json'
+export const deleteBook = createAsyncThunk(
+  'books/delete',
+  async (deleteReq: BookDeleteRequest, { rejectWithValue }) => {
+    try {
+      const URL = 'http://localhost:8081/api/v1/books/' + deleteReq.id
+      const response = await fetch(URL, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      if (!response.ok) {
+        const errorData = await response.json()
+        const errorMessage = errorData.error
+        return rejectWithValue(errorMessage)
+      }
+      const data = await response.json()
+      return data
+    } catch (error: any) {
+      // Error is temporarily 'any' as otherwise the reject value cannot be returned.
+      return rejectWithValue(error.message as string)
     }
-  })
-  if (!response.ok) {
-    throw new Error('Error when deleting author')
   }
-  const data = await response.json()
-  return data
-})
+)
 export const bookSlice = createSlice({
   name: 'books',
   initialState,
   reducers: {
-    addBook: (state, action: PayloadAction<Book>) => {
-      console.log('Add')
-    },
-    updatesBook: (state, action: PayloadAction<Book>) => {
-      console.log('Updating')
-    },
-    removeBook: (state, action: PayloadAction<number>) => {
-      console.log('Deleting')
+    nullifyBookError: (state) => {
+      state.error = null
     }
   },
   extraReducers: (builder) => {
@@ -128,6 +132,6 @@ export const bookSlice = createSlice({
   }
 })
 
-export const { addBook, updatesBook, removeBook } = bookSlice.actions
+export const { nullifyBookError } = bookSlice.actions
 
 export default bookSlice.reducer

@@ -1,3 +1,5 @@
+import { ErrorState } from '../types/types'
+
 export const formatDate = (dateString: string) => {
   const date = new Date(dateString)
   const formattedDate = date.toLocaleDateString('fi-FI', {
@@ -6,4 +8,13 @@ export const formatDate = (dateString: string) => {
     year: 'numeric'
   })
   return formattedDate
+}
+
+export const findError = (errorStates: ErrorState[]) => {
+  for (const errorState of errorStates) {
+    if (errorState.error !== null) {
+      return errorState.error
+    }
+  }
+  return null
 }

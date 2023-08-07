@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { AppDispatch, RootState } from '../../store'
 import { logUserOut } from '../../features/slices/authSlice'
 import NavbarLink from '../NavbarLink/NavbarLink'
+import Button from '../Button/Button'
 
 function Navbar() {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState<boolean>(false)
@@ -47,20 +48,11 @@ function Navbar() {
                 clipRule="evenodd"></path>
             </svg>
           </button>
-          <button
-            type="button"
-            onClick={handleLoginLogOut}
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4  focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0">
-            {user.items.username !== '' ? 'Logout' : 'Login'}
-          </button>
-          {!user ? (
-            <button
-              type="button"
-              onClick={() => navigate('/signup')}
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4  focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mx-3 md:mr-0">
-              Signup
-            </button>
-          ) : null}
+          {/*   Login/logout-button */}
+          <Button
+            label={user.items.username !== '' ? 'Logout' : 'Login'}
+            handleClick={handleLoginLogOut}
+          />
         </div>
         <div
           className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
@@ -71,10 +63,7 @@ function Navbar() {
             <NavbarLink link="/authors" label="Authors" />
             {user && user.items.role === 'ADMIN' ? (
               <>
-                <NavbarLink link="/books/add" label="Add new book" />
-                <NavbarLink link="/authors/add" label="Add new author" />
-                <NavbarLink link="/categories/add" label="Add new category" />
-                <NavbarLink link="/admin/dashboard" label="Admins" />
+                <NavbarLink link="/admin/dashboard" label="Admin dashboard" />
               </>
             ) : null}
           </ul>

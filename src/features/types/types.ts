@@ -64,6 +64,7 @@ export type HandleAuthorClick = (id: number) => void
 
 export type ButtonType = {
   label: string
+  type: 'neutral' | 'confirm' | 'cancel' | 'delete' | 'edit'
   handleClick: MouseEventHandler<HTMLButtonElement>
 }
 
@@ -115,6 +116,7 @@ export type CategoryState = {
 export type ModalType = {
   heading: string
   text: string
+  type: 'error' | 'confirm'
   close: () => void
 }
 
@@ -194,4 +196,13 @@ export interface BookPostRequest {
   token: Token
   data: Book
   coverImage: File | null
+}
+
+export interface BookDeleteRequest {
+  id: string
+  token: Token
+}
+
+export interface ErrorState {
+  error: string | null
 }

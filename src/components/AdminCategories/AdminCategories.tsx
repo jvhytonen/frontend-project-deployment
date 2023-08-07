@@ -4,6 +4,7 @@ import { AppDispatch, RootState } from '../../store'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { deleteCategory } from '../../features/slices/categorySlice'
+import Button from '../Button/Button'
 
 function AdminCategories() {
   const categories = useSelector((state: RootState) => state.category)
@@ -11,7 +12,12 @@ function AdminCategories() {
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
 
+  const handleNavigation = () => {
+    navigate('../categories/add')
+  }
+
   const handleDelete = (id: string | undefined) => {
+    console.log(id)
     if (id !== undefined && token !== null) {
       const deleteReq = {
         id: id,
@@ -24,43 +30,48 @@ function AdminCategories() {
   }
 
   return (
-    <table className="max-w-[40%] divide-y divide-gray-200 w-full">
-      <thead className="bg-gray-50">
-        <tr>
-          <TableHeading label="Author" />
-          <TableHeading label="Actions" />
-        </tr>
-      </thead>
-      <tbody>
-        {categories.items !== null && categories.items.length > 0 ? (
-          categories.items.map((category) => {
-            return (
-              <tr key={category.id}>
-                <td className="py-4 px-6 whitespace-nowrap">{category.name}</td>
-                <td className="py-4 px-6 whitespace-nowrap space-x-2">
-                  <button
-                    className="text-blue-500 hover:text-blue-700"
-                    onClick={() => navigate(`books/edit/${category.id}`)}>
-                    Edit category
-                  </button>
-                  <button
-                    className="text-blue-500 hover:text-blue-700"
-                    onClick={() => handleDelete(category.id)}>
-                    Delete category
-                  </button>
-                </td>
-              </tr>
-            )
-          })
-        ) : (
+    <>
+      <table className="divide-y divide-gray-200 w-full">
+        <thead className="bg-gray-50">
           <tr>
-            <td className="py-4 px-6 whitespace-nowrap" colSpan={5}>
-              No categories found.
-            </td>
+            <TableHeading label="Name" />
+            <TableHeading label="Actions" />
           </tr>
-        )}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {categories.items !== null && categories.items.length > 0 ? (
+            categories.items.map((category) => {
+              return (
+                <tr key={category.id}>
+                  <td className="py-4 px-6 whitespace-nowrap">{category.name}</td>
+                  <td className="py-4 px-6 whitespace-nowrap space-x-2">
+                    <Button
+                      label="Edit category"
+                      handleClick={() => navigate(`books/edit/${category.id}`)}
+                      type="edit"
+                    />
+                    <Button
+                      label="Delete category"
+                      handleClick={() => handleDelete(category.id)}
+                      type="delete"
+                    />
+                  </td>
+                </tr>
+              )
+            })
+          ) : (
+            <tr>
+              <td className="py-4 px-6 whitespace-nowrap" colSpan={5}>
+                No categories found.
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+      <div className="flex justify-center">
+        <Button label="Add new author" handleClick={handleNavigation} type="neutral" />
+      </div>
+    </>
   )
 }
 

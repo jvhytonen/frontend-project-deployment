@@ -74,11 +74,8 @@ export const copySlice = createSlice({
   name: 'copies',
   initialState,
   reducers: {
-    borrowBook: (state, action: PayloadAction<Checkout>) => {
-      console.log('Borrow')
-    },
-    returnBook: (state, action: PayloadAction<Checkout>) => {
-      console.log('Return')
+    nullifyCopyError: (state) => {
+      state.error = null
     }
   },
   extraReducers: (builder) => {
@@ -108,6 +105,6 @@ export const copySlice = createSlice({
   }
 })
 
-export const { borrowBook, returnBook } = copySlice.actions
+export const { nullifyCopyError } = copySlice.actions
 
 export default copySlice.reducer

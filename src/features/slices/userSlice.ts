@@ -28,6 +28,9 @@ export const userSlice = createSlice({
   reducers: {
     getUser: (state, action: PayloadAction<User>) => {
       console.log('Login')
+    },
+    nullifyUserError: (state) => {
+      state.error = null
     }
   },
   extraReducers: (builder) => {
@@ -40,6 +43,6 @@ export const userSlice = createSlice({
   }
 })
 
-export const { getUser } = userSlice.actions
+export const { getUser, nullifyUserError } = userSlice.actions
 
 export default userSlice.reducer

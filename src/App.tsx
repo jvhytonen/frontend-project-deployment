@@ -17,8 +17,30 @@ import AddCategory from './components/AddCategory/AddCategory'
 import AdminDashboard from './components/AdminDashboard/AdminDashboard'
 import Signup from './components/Signup/Signup'
 import EditCopy from './components/EditCopy/EditCopy'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from './store'
+import Modal from './components/Modal/Modal'
+import { findError } from './features/utils/helpers'
+import { nullifyCategoryError } from './features/slices/categorySlice'
 
 function App() {
+  const dispatch = useDispatch<AppDispatch>()
+  // For the global error modal!
+  const categoryErr = useSelector((state: RootState) => state.category)
+  const bookErr = useSelector((state: RootState) => state.book)
+  const authorErr = useSelector((state: RootState) => state.author)
+  const copyErr = useSelector((state: RootState) => state.copy)
+  const userErr = useSelector((state: RootState) => state.user)
+  const authErr = useSelector((state: RootState) => state.auth)
+
+  const errorMessages = [categoryErr, bookErr, authorErr, copyErr, userErr, authErr]
+  // There can only be one error at the time. Function returns that error if it exists
+  const errorMessage = findError(errorMessages)
+
+  const closeModal = () => {
+    dispatch(nullifyCategoryError())
+  }
+
   return (
     <div className="App w-full">
       <Navbar />
@@ -46,6 +68,9 @@ function App() {
           />
         </Routes>
       </div>
+      {errorMessage && (
+        <Modal heading={'Error!'} text={errorMessage} type={'error'} close={closeModal} />
+      )}
     </div>
   )
 }

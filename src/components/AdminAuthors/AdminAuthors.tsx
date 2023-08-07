@@ -4,12 +4,17 @@ import { AppDispatch, RootState } from '../../store'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { deleteAuthor } from '../../features/slices/authorSlice'
+import Button from '../Button/Button'
 
 function AdminAuthors() {
   const authors = useSelector((state: RootState) => state.author)
   const token = useSelector((state: RootState) => state.auth.token)
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
+
+  const handleNavigation = () => {
+    navigate('../authors/add')
+  }
 
   const handleDelete = (id: string | undefined) => {
     if (id !== undefined && token !== null) {
@@ -24,43 +29,48 @@ function AdminAuthors() {
   }
 
   return (
-    <table className="max-w-[40%] divide-y divide-gray-200 w-full">
-      <thead className="bg-gray-50">
-        <tr>
-          <TableHeading label="Author" />
-          <TableHeading label="Actions" />
-        </tr>
-      </thead>
-      <tbody>
-        {authors.items !== null && authors.items.length > 0 ? (
-          authors.items.map((author) => {
-            return (
-              <tr key={author.id}>
-                <td className="py-4 px-6 whitespace-nowrap">{author.name}</td>
-                <td className="py-4 px-6 whitespace-nowrap space-x-2">
-                  <button
-                    className="text-blue-500 hover:text-blue-700"
-                    onClick={() => navigate(`books/edit/${author.id}`)}>
-                    Edit book
-                  </button>
-                  <button
-                    className="text-blue-500 hover:text-blue-700"
-                    onClick={() => handleDelete(author.id)}>
-                    Delete author
-                  </button>
-                </td>
-              </tr>
-            )
-          })
-        ) : (
+    <>
+      <table className="divide-y divide-gray-200 w-full">
+        <thead className="bg-gray-50">
           <tr>
-            <td className="py-4 px-6 whitespace-nowrap" colSpan={5}>
-              No authors found.
-            </td>
+            <TableHeading label="Name" />
+            <TableHeading label="Actions" />
           </tr>
-        )}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {authors.items !== null && authors.items.length > 0 ? (
+            authors.items.map((author) => {
+              return (
+                <tr key={author.id}>
+                  <td className="py-4 px-6 whitespace-nowrap">{author.name}</td>
+                  <td className="py-4 px-6 whitespace-nowrap space-x-2">
+                    <Button
+                      label="Edit author"
+                      handleClick={() => navigate(`books/edit/${author.id}`)}
+                      type="edit"
+                    />
+                    <Button
+                      label="Delete author"
+                      handleClick={() => handleDelete(author.id)}
+                      type="delete"
+                    />
+                  </td>
+                </tr>
+              )
+            })
+          ) : (
+            <tr>
+              <td className="py-4 px-6 whitespace-nowrap" colSpan={5}>
+                No authors found.
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+      <div className="flex justify-center">
+        <Button label="Add new author" handleClick={handleNavigation} type="neutral" />
+      </div>
+    </>
   )
 }
 
