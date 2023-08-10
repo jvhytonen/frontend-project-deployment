@@ -2,6 +2,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
 import { Book, BookState, BookPostRequest, BookDeleteRequest } from '../types/types'
+import { deleteItem } from '../utils/thunks'
 
 const APIURL = 'http://localhost:8081/api/v1/books/'
 
@@ -71,30 +72,15 @@ export const updateBook = createAsyncThunk('books/update', async (updateReq: Boo
   return data
 })
 
-export const deleteBook = createAsyncThunk(
-  'books/delete',
-  async (deleteReq: BookDeleteRequest, { rejectWithValue }) => {
-    try {
-      const URL = 'http://localhost:8081/api/v1/books/' + deleteReq.id
-      const response = await fetch(URL, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      if (!response.ok) {
-        const errorData = await response.json()
-        const errorMessage = errorData.error
-        return rejectWithValue(errorMessage)
-      }
-      const data = await response.json()
-      return data
-    } catch (error: any) {
-      // Error is temporarily 'any' as otherwise the reject value cannot be returned.
-      return rejectWithValue(error.message as string)
-    }
+export const deleteBook = createAsyncThunk('books/delete', async (request: BookDeleteRequest) => {
+  const URL = 'http://localhost:8081/api/v1/books/' + request.id
+  const req = {
+    url: URL,
+    token: request.token
   }
-)
+  const response = await deleteItem(req)
+  return response
+})
 export const bookSlice = createSlice({
   name: 'books',
   initialState,

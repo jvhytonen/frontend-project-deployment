@@ -164,10 +164,6 @@ export type NavbarLinkType = {
   label: string
 }
 
-export type TableHeadingType = {
-  label: string
-}
-
 export type ValidateBookType = {
   title: string
   authorId: string
@@ -224,4 +220,17 @@ export interface CopyDeleteRequest {
 
 export interface ErrorState {
   error: string | null
+}
+
+export interface TableProps {
+  children: React.ReactNode
+}
+
+export type TableHeadingType = {
+  label: string
+}
+
+export interface AdminTableProps {
+  headers: string[]
+  rows: React.ReactNode[]
 }

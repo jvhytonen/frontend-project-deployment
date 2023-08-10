@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom'
 import { addNewCopy, deleteCopy, getCopies } from '../../features/slices/copySlice'
 import Copy from '../Copy/Copy'
 import Button from '../Button/Button'
-import TableHeading from '../TableHeading/TableHeading'
+import { TableHeading } from '../TableItems/TableItems'
 
 function EditCopy() {
   const params = useParams()

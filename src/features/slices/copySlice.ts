@@ -11,6 +11,7 @@ import {
 } from '../types/types'
 import { Checkout } from '../types/types'
 import { apiErrorHandler } from '../utils/errors'
+import { deleteItem } from '../utils/thunks'
 
 const initialState: CopyState = {
   items: null,
@@ -47,19 +48,14 @@ export const addNewCopy = createAsyncThunk('book-copies/add', async (request: Co
 export const deleteCopy = createAsyncThunk(
   'book-copies/delete',
   async (request: CopyDeleteRequest) => {
+    console.log(request.id)
     const URL = 'http://localhost:8081/api/v1/book-copies/' + request.id
-    const response = await fetch(URL, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        // eslint-disable-next-line prettier/prettier
-       'Authorization': `Bearer ${request.token}`
-      },
-      body: JSON.stringify(request)
-    })
-    await apiErrorHandler(response)
-    const data = await response.json()
-    return data
+    const req = {
+      url: URL,
+      token: request.token
+    }
+    const response = await deleteItem(req)
+    return response
   }
 )
 
@@ -135,7 +131,8 @@ export const copySlice = createSlice({
     })
 
     builder.addCase(deleteCopy.fulfilled, (state, action) => {
-      state.items = state.items?.filter((item) => action.payload.id !== item.bookCopyId) as Copy[]
+      console.log(action.payload)
+      state.items = state.items?.filter((item) => action.payload !== item.bookCopyId) as Copy[]
       console.log('Copy deleted successfully')
     })
 

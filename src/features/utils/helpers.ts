@@ -9,12 +9,3 @@ export const formatDate = (dateString: string) => {
   })
   return formattedDate
 }
-
-export const findError = (errorStates: ErrorState[]) => {
-  for (const errorState of errorStates) {
-    if (errorState.error !== null) {
-      return errorState.error
-    }
-  }
-  return null
-}

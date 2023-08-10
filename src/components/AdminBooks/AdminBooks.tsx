@@ -4,9 +4,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { deleteBook, getAllBooks } from '../../features/slices/bookSlice'
 import { fetchAuthors } from '../../features/slices/authorSlice'
 import { getAllCategories } from '../../features/slices/categorySlice'
-import TableHeading from '../TableHeading/TableHeading'
+import { TableCell, TableRow } from '../TableItems/TableItems'
 import { useNavigate } from 'react-router-dom'
 import Button from '../Button/Button'
+import AdminTable from '../AdminTable/AdminTable'
 
 function AdminBooks() {
   const dispatch = useDispatch<AppDispatch>()
@@ -35,56 +36,39 @@ function AdminBooks() {
     dispatch(fetchAuthors())
     dispatch(getAllCategories())
   }, [])
+  const headers = ['Author', 'Title', 'Category', 'Actions']
+  const rows =
+    book.items !== null && book.items.length > 0
+      ? book.items.map((book) => (
+          <TableRow key={book.id}>
+            <TableCell>{book.author.name}</TableCell>
+            <TableCell>{book.title}</TableCell>
+            <TableCell>{book.category.name}</TableCell>
+            <TableCell>
+              <Button
+                label="Edit book"
+                handleClick={() => navigate(`books/edit/${book.id}`)}
+                type="edit"
+              />
+              <Button
+                label="Edit copies"
+                handleClick={() => navigate(`copies/edit/${book.id}`)}
+                type="edit"
+              />
+              {book.id}
+              <Button label="Delete book" handleClick={() => handleDelete(book.id)} type="delete" />
+            </TableCell>
+          </TableRow>
+        ))
+      : [
+          <TableRow key={0}>
+            <TableCell>No books found.</TableCell>
+          </TableRow>
+        ]
 
   return (
     <>
-      <table className="divide-y divide-gray-200 w-full">
-        <thead className="bg-gray-50">
-          <tr>
-            <TableHeading label="Author" />
-            <TableHeading label="Title" />
-            <TableHeading label="Category" />
-            <TableHeading label="Actions" />
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {book.items !== null && book.items.length > 0 ? (
-            book.items.map((book) => {
-              return (
-                <tr key={book.id} className="hover:bg-gray-100">
-                  <td className="py-4 px-6 whitespace-nowrap">{book.author.name}</td>
-                  <td className="py-4 px-6 whitespace-nowrap">{book.title}</td>
-                  <td className="py-4 px-6 whitespace-nowrap">{book.category.name}</td>
-                  <td className="py-4 px-6 whitespace-nowrap space-x-2">
-                    <Button
-                      label="Edit book"
-                      handleClick={() => navigate(`books/edit/${book.id}`)}
-                      type="edit"
-                    />
-                    <Button
-                      label="Edit copies"
-                      handleClick={() => navigate(`copies/edit/${book.id}`)}
-                      type="edit"
-                    />
-                    {book.id}
-                    <Button
-                      label="Delete book"
-                      handleClick={() => handleDelete(book.id)}
-                      type="delete"
-                    />
-                  </td>
-                </tr>
-              )
-            })
-          ) : (
-            <tr>
-              <td className="py-4 px-6 whitespace-nowrap" colSpan={5}>
-                No books found.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+      <AdminTable headers={headers} rows={rows} />
       <div className="flex justify-center">
         <Button label="Add book" handleClick={handleNavigation} type="neutral" />
       </div>

@@ -1,10 +1,11 @@
 import React from 'react'
-import TableHeading from '../TableHeading/TableHeading'
+import { TableCell, TableRow } from '../TableItems/TableItems'
 import { AppDispatch, RootState } from '../../store'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { deleteCategory } from '../../features/slices/categorySlice'
 import Button from '../Button/Button'
+import AdminTable from '../AdminTable/AdminTable'
 
 function AdminCategories() {
   const categories = useSelector((state: RootState) => state.category)
@@ -29,45 +30,38 @@ function AdminCategories() {
     }
   }
 
+  const headers = ['Name', 'Actions']
+
+  const rows =
+    categories.items !== null && categories.items.length > 0
+      ? categories.items.map((category) => {
+          return (
+            <TableRow key={category.id}>
+              <TableCell>{category.name}</TableCell>
+              <TableCell>
+                <Button
+                  label="Edit category"
+                  handleClick={() => navigate(`../categories/edit/${category.id}`)}
+                  type="edit"
+                />
+                <Button
+                  label="Delete category"
+                  handleClick={() => handleDelete(category.id)}
+                  type="delete"
+                />
+              </TableCell>
+            </TableRow>
+          )
+        })
+      : [
+          <TableRow key={0}>
+            <TableCell>No categories</TableCell>
+          </TableRow>
+        ]
+
   return (
     <>
-      <table className="divide-y divide-gray-200 w-full">
-        <thead className="bg-gray-50">
-          <tr>
-            <TableHeading label="Name" />
-            <TableHeading label="Actions" />
-          </tr>
-        </thead>
-        <tbody>
-          {categories.items !== null && categories.items.length > 0 ? (
-            categories.items.map((category) => {
-              return (
-                <tr key={category.id}>
-                  <td className="py-4 px-6 whitespace-nowrap">{category.name}</td>
-                  <td className="py-4 px-6 whitespace-nowrap space-x-2">
-                    <Button
-                      label="Edit category"
-                      handleClick={() => navigate(`../categories/edit/${category.id}`)}
-                      type="edit"
-                    />
-                    <Button
-                      label="Delete category"
-                      handleClick={() => handleDelete(category.id)}
-                      type="delete"
-                    />
-                  </td>
-                </tr>
-              )
-            })
-          ) : (
-            <tr>
-              <td className="py-4 px-6 whitespace-nowrap" colSpan={5}>
-                No categories found.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+      <AdminTable headers={headers} rows={rows} />
       <div className="flex justify-center">
         <Button label="Add new category" handleClick={handleNavigation} type="neutral" />
       </div>

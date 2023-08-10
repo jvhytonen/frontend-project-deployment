@@ -20,13 +20,18 @@ import EditCopy from './components/EditCopy/EditCopy'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from './store'
 import Modal from './components/Modal/Modal'
-import { findError } from './features/utils/helpers'
+import { findError } from './features/utils/errors'
 import { nullifyCategoryError } from './features/slices/categorySlice'
 import EditCategory from './components/EditCategory/EditCategory'
+import { nullifyBookError } from './features/slices/bookSlice'
+import { nullifyAuthorError } from './features/slices/authorSlice'
+import { nullifyCopyError } from './features/slices/copySlice'
+import { nullifyUserError } from './features/slices/userSlice'
+import { nullifyAuthError } from './features/slices/authSlice'
 
 function App() {
   const dispatch = useDispatch<AppDispatch>()
-  // For the global error modal!
+  // For the global error modal.
   const categoryErr = useSelector((state: RootState) => state.category)
   const bookErr = useSelector((state: RootState) => state.book)
   const authorErr = useSelector((state: RootState) => state.author)
@@ -39,7 +44,27 @@ function App() {
   const errorMessage = findError(errorMessages)
 
   const closeModal = () => {
-    dispatch(nullifyCategoryError())
+    if (categoryErr) {
+      dispatch(nullifyCategoryError())
+    }
+    if (bookErr) {
+      dispatch(nullifyBookError())
+    }
+    if (authorErr) {
+      dispatch(nullifyAuthorError())
+    }
+    if (categoryErr) {
+      dispatch(nullifyCategoryError())
+    }
+    if (copyErr) {
+      dispatch(nullifyCopyError())
+    }
+    if (userErr) {
+      dispatch(nullifyUserError())
+    }
+    if (authErr) {
+      dispatch(nullifyAuthError())
+    }
   }
 
   return (

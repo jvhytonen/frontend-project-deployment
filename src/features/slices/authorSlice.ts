@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
 import { AuthorState, Author, AuthorPostRequest, AuthorDeleteRequest } from '../types/types'
+import { deleteItem } from '../utils/thunks'
 
 const initialState: AuthorState = {
   items: null,
@@ -68,28 +69,15 @@ export const updateExistingAuthor = createAsyncThunk(
 
 export const deleteAuthor = createAsyncThunk(
   'authors/delete',
-  async (request: AuthorDeleteRequest, { rejectWithValue }) => {
-    try {
-      const URL = 'http://localhost:8081/api/v1/authors/' + request.id
-      const response = await fetch(URL, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          // eslint-disable-next-line prettier/prettier
-        'Authorization': `Bearer ${request.token}`
-        }
-      })
-      if (!response.ok) {
-        const errorData = await response.json()
-        const errorMessage = errorData.error
-        return rejectWithValue(errorMessage)
-      }
-      const data = await response.json()
-      return data
-    } catch (error: any) {
-      // Error is temporarily 'any' as otherwise the reject value cannot be returned.
-      return rejectWithValue(error.message as string)
+  async (request: AuthorDeleteRequest) => {
+    const URL = 'http://localhost:8081/api/v1/authors/' + request.id
+    const req = {
+      url: URL,
+      token: request.token
     }
+    const response = await deleteItem(req)
+    console.log(response)
+    return response
   }
 )
 
@@ -162,6 +150,18 @@ export const authorSlice = createSlice({
     builder.addCase(updateExistingAuthor.rejected, (state, action) => {
       state.isLoading = false
       state.error = action.payload as string
+    })
+    builder.addCase(deleteAuthor.fulfilled, (state, action) => {
+      state.isLoading = false
+      state.items = state.items?.filter((item) => action.payload.id !== item.id) as Author[]
+    })
+    builder.addCase(deleteAuthor.pending, (state) => {
+      state.isLoading = true
+    })
+    builder.addCase(deleteAuthor.rejected, (state, action) => {
+      console.log(action.payload)
+      state.isLoading = false
+      state.error = action.error.message as string
     })
   }
 })

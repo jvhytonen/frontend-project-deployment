@@ -2,7 +2,6 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
 import { Category, CategoryState, CategoryPostRequest, CategoryDeleteRequest } from '../types/types'
-import { apiErrorHandler } from '../utils/errors'
 import { deleteItem } from '../utils/thunks'
 
 const initialState: CategoryState = {
@@ -69,13 +68,14 @@ export const updateExistingCategory = createAsyncThunk(
 
 export const deleteCategory = createAsyncThunk(
   'categories/delete',
-  async (deleteReq: CategoryDeleteRequest, { rejectWithValue }) => {
+  async (deleteReq: CategoryDeleteRequest) => {
     const URL = 'http://localhost:8081/api/v1/categories/' + deleteReq.id
     const req = {
       url: URL,
       token: deleteReq.token
     }
     const response = await deleteItem(req)
+    console.log(response)
     return response
   }
 )
