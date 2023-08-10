@@ -94,11 +94,17 @@ export type CopyState = {
   error: string | null
 }
 
-export type Copy = {
+/* export type Copy = {
   copyId: string
   book: Book
   latestCheckout: Checkout
+} */
+
+export type Copy = {
+  bookCopyId: string
+  latestChecktout: null | Checkout
 }
+
 export type NewCopy = {
   bookId: string
 }
@@ -197,10 +203,23 @@ export interface BookPostRequest {
   data: Book
   coverImage: File | null
 }
-
+export interface DeleteRequest {
+  url: string
+  token: Token
+}
 export interface BookDeleteRequest {
   id: string
   token: Token
+}
+
+export interface CopyPostRequest {
+  token: Token
+  bookId: string
+}
+
+export interface CopyDeleteRequest {
+  token: Token
+  id: string
 }
 
 export interface ErrorState {

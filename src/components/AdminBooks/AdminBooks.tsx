@@ -44,7 +44,6 @@ function AdminBooks() {
             <TableHeading label="Author" />
             <TableHeading label="Title" />
             <TableHeading label="Category" />
-            <TableHeading label="Copies" />
             <TableHeading label="Actions" />
           </tr>
         </thead>
@@ -56,7 +55,6 @@ function AdminBooks() {
                   <td className="py-4 px-6 whitespace-nowrap">{book.author.name}</td>
                   <td className="py-4 px-6 whitespace-nowrap">{book.title}</td>
                   <td className="py-4 px-6 whitespace-nowrap">{book.category.name}</td>
-                  <td className="py-4 px-6 whitespace-nowrap">0</td>
                   <td className="py-4 px-6 whitespace-nowrap space-x-2">
                     <Button
                       label="Edit book"
@@ -68,6 +66,7 @@ function AdminBooks() {
                       handleClick={() => navigate(`copies/edit/${book.id}`)}
                       type="edit"
                     />
+                    {book.id}
                     <Button
                       label="Delete book"
                       handleClick={() => handleDelete(book.id)}

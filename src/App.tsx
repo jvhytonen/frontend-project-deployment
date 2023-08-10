@@ -22,6 +22,7 @@ import { AppDispatch, RootState } from './store'
 import Modal from './components/Modal/Modal'
 import { findError } from './features/utils/helpers'
 import { nullifyCategoryError } from './features/slices/categorySlice'
+import EditCategory from './components/EditCategory/EditCategory'
 
 function App() {
   const dispatch = useDispatch<AppDispatch>()
@@ -56,6 +57,7 @@ function App() {
           <Route path="authors/add" element={<ProtectedRoute component={AddAuthor} />} />
           <Route path="admin/dashboard" element={<ProtectedRoute component={AdminDashboard} />} />
           <Route path="categories/add" element={<ProtectedRoute component={AddCategory} />} />
+          <Route path="categories/edit/:id" element={<ProtectedRoute component={EditCategory} />} />
           <Route path="authors/edit/:id" element={<ProtectedRoute component={EditAuthor} />} />
           <Route
             path="/admin/dashboard/copies/edit/:id"

@@ -146,7 +146,7 @@ function AddBook() {
               type="text"
               handleChange={handleChange}
             />
-            <Button label="Save" handleClick={handleSubmit} />
+            <Button label="Save" handleClick={handleSubmit} type="neutral" />
           </form>
         </div>
       ) : (

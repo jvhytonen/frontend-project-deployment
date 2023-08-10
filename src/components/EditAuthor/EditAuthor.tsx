@@ -1,18 +1,20 @@
 import React, { ChangeEvent, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { Author, FormElement } from '../../features/types/types'
+import { Author, AuthorPostRequest, FormElement } from '../../features/types/types'
 import { AppDispatch, RootState } from '../../store'
 import Button from '../Button/Button'
 import { validateAuthorData } from '../../features/validation/validate'
-import { updateAuthor } from '../../features/slices/authorSlice'
+import { updateAuthor, updateExistingAuthor } from '../../features/slices/authorSlice'
 import InputItem from '../FormControls/InputItem/InputItem'
 import TextArea from '../FormControls/TextArea/TextArea'
 
 function EditAuthor() {
   const params = useParams()
   const dispatch = useDispatch<AppDispatch>()
+  const navigate = useNavigate()
+  const token = useSelector((state: RootState) => state.auth.token)
   const authors = useSelector((state: RootState) => state.author)
   const item = authors.items ? authors.items?.find((author) => params.id === author.id) : null
   const [authorToEdit, setAuthorToEdit] = useState<Author | null | undefined>(item)
@@ -26,17 +28,20 @@ function EditAuthor() {
       }))
     }
   }
-  const handleSubmit = () => {
-    if (validationError) {
-      setValidationError(false)
-    }
-    if (authorToEdit) {
-      if (validateAuthorData(authorToEdit)) {
-        dispatch(updateAuthor(authorToEdit))
-        setAuthorToEdit(null)
-      } else {
-        setValidationError(true)
+  const handleSubmit: () => void = () => {
+    if (token !== null && authorToEdit !== null && authorToEdit !== undefined) {
+      // All data needed in redux slice to send the request: token and body.
+      const authorData: AuthorPostRequest = {
+        data: authorToEdit,
+        token: token
       }
+      if (authorToEdit) {
+        if (validateAuthorData(authorToEdit)) {
+          dispatch(updateExistingAuthor(authorData))
+        }
+      }
+      setAuthorToEdit(null)
+      navigate('/admin/dahsboard')
     }
   }
   return (
@@ -65,7 +70,8 @@ function EditAuthor() {
               handleChange={handleChange}
             />
             <div>
-              <Button label="Save changes" handleClick={handleSubmit} />
+              <Button label="Save changes" handleClick={handleSubmit} type="neutral" />
+              {authorToEdit.id}
             </div>
           </form>
         </div>

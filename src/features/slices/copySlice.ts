@@ -1,8 +1,16 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
-import { CheckoutHandler, CopyState, NewCopy } from '../types/types'
+import {
+  CheckoutHandler,
+  Copy,
+  CopyDeleteRequest,
+  CopyPostRequest,
+  CopyState,
+  NewCopy
+} from '../types/types'
 import { Checkout } from '../types/types'
+import { apiErrorHandler } from '../utils/errors'
 
 const initialState: CopyState = {
   items: null,
@@ -16,21 +24,44 @@ export const getCopies = createAsyncThunk('book-copies/fetch', async (id: string
   return response
 })
 
-export const addNewCopy = createAsyncThunk('book-copies/add', async (newCopy: NewCopy) => {
+export const addNewCopy = createAsyncThunk('book-copies/add', async (request: CopyPostRequest) => {
   const URL = 'http://localhost:8081/api/v1/book-copies/'
   const response = await fetch(URL, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      // eslint-disable-next-line prettier/prettier
+       'Authorization': `Bearer ${request.token}`
     },
-    body: JSON.stringify(newCopy)
+    body: JSON.stringify(request)
   })
   if (!response.ok) {
-    throw new Error('Adding a book failed!')
+    console.log(response)
+    throw new Error('Adding new copy failed!')
   }
   const data = await response.json()
+  console.log(data)
   return data
 })
+
+export const deleteCopy = createAsyncThunk(
+  'book-copies/delete',
+  async (request: CopyDeleteRequest) => {
+    const URL = 'http://localhost:8081/api/v1/book-copies/' + request.id
+    const response = await fetch(URL, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        // eslint-disable-next-line prettier/prettier
+       'Authorization': `Bearer ${request.token}`
+      },
+      body: JSON.stringify(request)
+    })
+    await apiErrorHandler(response)
+    const data = await response.json()
+    return data
+  }
+)
 
 export const handleBorrow = createAsyncThunk(
   'book-copies/borrow',
@@ -90,7 +121,7 @@ export const copySlice = createSlice({
       state.error = 'An error occurred! Try again later'
     })
     builder.addCase(addNewCopy.fulfilled, (state, action) => {
-      console.log('Copy added successfully')
+      state.items ? state.items.push(action.payload) : null
     })
 
     builder.addCase(addNewCopy.pending, (state) => {
@@ -101,6 +132,21 @@ export const copySlice = createSlice({
     builder.addCase(addNewCopy.rejected, (state) => {
       // Handle the error state
       state.error = 'Failed to add new copy'
+    })
+
+    builder.addCase(deleteCopy.fulfilled, (state, action) => {
+      state.items = state.items?.filter((item) => action.payload.id !== item.bookCopyId) as Copy[]
+      console.log('Copy deleted successfully')
+    })
+
+    builder.addCase(deleteCopy.pending, (state) => {
+      // Handle the pending state if needed
+      console.log('Deleting...')
+    })
+
+    builder.addCase(deleteCopy.rejected, (state) => {
+      // Handle the error state
+      state.error = 'Failed to delete copy'
     })
   }
 })

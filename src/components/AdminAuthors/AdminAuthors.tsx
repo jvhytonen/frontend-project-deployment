@@ -46,7 +46,7 @@ function AdminAuthors() {
                   <td className="py-4 px-6 whitespace-nowrap space-x-2">
                     <Button
                       label="Edit author"
-                      handleClick={() => navigate(`books/edit/${author.id}`)}
+                      handleClick={() => navigate(`../authors/edit/${author.id}`)}
                       type="edit"
                     />
                     <Button

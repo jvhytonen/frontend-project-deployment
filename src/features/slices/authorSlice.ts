@@ -30,24 +30,53 @@ export const addNewAuthor = createAsyncThunk(
       body: JSON.stringify(newAuthorReq.data)
     })
     if (!response.ok) {
-      throw new Error('Error when borrowing book')
+      throw new Error('Error when adding author')
     }
     const data = await response.json()
     return data
   }
 )
 
+export const updateExistingAuthor = createAsyncThunk(
+  'authors/update',
+  async (request: AuthorPostRequest, { rejectWithValue }) => {
+    try {
+      const URL = 'http://localhost:8081/api/v1/authors/' + request.data.id
+      const response = await fetch(URL, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          // eslint-disable-next-line prettier/prettier
+          'Authorization': `Bearer ${request.token}`
+        },
+        body: JSON.stringify(request.data)
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        const errorMessage = errorData.error
+        return rejectWithValue(errorMessage)
+      }
+      const data = await response.json()
+      return data
+    } catch (error: any) {
+      // Error is temporarily 'any' as otherwise the reject value cannot be returned.
+      return rejectWithValue(error.message as string)
+    }
+  }
+)
+
 export const deleteAuthor = createAsyncThunk(
   'authors/delete',
-  async (deleteReq: AuthorDeleteRequest, { rejectWithValue }) => {
+  async (request: AuthorDeleteRequest, { rejectWithValue }) => {
     try {
-      const URL = 'http://localhost:8081/api/v1/authors/' + deleteReq.id
+      const URL = 'http://localhost:8081/api/v1/authors/' + request.id
       const response = await fetch(URL, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
           // eslint-disable-next-line prettier/prettier
-        'Authorization': `Bearer ${deleteReq.token}`
+        'Authorization': `Bearer ${request.token}`
         }
       })
       if (!response.ok) {
@@ -122,6 +151,17 @@ export const authorSlice = createSlice({
     })
     builder.addCase(addNewAuthor.pending, (state) => {
       state.isLoading = true
+    })
+    builder.addCase(updateExistingAuthor.fulfilled, (state, action) => {
+      state.isLoading = false
+      console.log(action.payload)
+    })
+    builder.addCase(updateExistingAuthor.pending, (state) => {
+      state.isLoading = true
+    })
+    builder.addCase(updateExistingAuthor.rejected, (state, action) => {
+      state.isLoading = false
+      state.error = action.payload as string
     })
   }
 })

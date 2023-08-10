@@ -47,7 +47,7 @@ function AdminCategories() {
                   <td className="py-4 px-6 whitespace-nowrap space-x-2">
                     <Button
                       label="Edit category"
-                      handleClick={() => navigate(`books/edit/${category.id}`)}
+                      handleClick={() => navigate(`../categories/edit/${category.id}`)}
                       type="edit"
                     />
                     <Button
@@ -69,7 +69,7 @@ function AdminCategories() {
         </tbody>
       </table>
       <div className="flex justify-center">
-        <Button label="Add new author" handleClick={handleNavigation} type="neutral" />
+        <Button label="Add new category" handleClick={handleNavigation} type="neutral" />
       </div>
     </>
   )

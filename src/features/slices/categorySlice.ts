@@ -2,6 +2,8 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
 import { Category, CategoryState, CategoryPostRequest, CategoryDeleteRequest } from '../types/types'
+import { apiErrorHandler } from '../utils/errors'
+import { deleteItem } from '../utils/thunks'
 
 const initialState: CategoryState = {
   items: null,
@@ -36,18 +38,19 @@ export const addNewCategory = createAsyncThunk(
   }
 )
 
-export const deleteCategory = createAsyncThunk(
-  'categories/delete',
-  async (deleteReq: CategoryDeleteRequest, { rejectWithValue }) => {
+export const updateExistingCategory = createAsyncThunk(
+  'categories/update',
+  async (request: CategoryPostRequest, { rejectWithValue }) => {
     try {
-      const URL = 'http://localhost:8081/api/v1/categories/' + deleteReq.id
+      const URL = 'http://localhost:8081/api/v1/categories/' + request.data.id
       const response = await fetch(URL, {
-        method: 'DELETE',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           // eslint-disable-next-line prettier/prettier
-          'Authorization': `Bearer ${deleteReq.token}`
-        }
+          'Authorization': `Bearer ${request.token}`
+        },
+        body: JSON.stringify(request.data)
       })
 
       if (!response.ok) {
@@ -55,7 +58,6 @@ export const deleteCategory = createAsyncThunk(
         const errorMessage = errorData.error
         return rejectWithValue(errorMessage)
       }
-
       const data = await response.json()
       return data
     } catch (error: any) {
@@ -65,7 +67,20 @@ export const deleteCategory = createAsyncThunk(
   }
 )
 
-export const bookSlice = createSlice({
+export const deleteCategory = createAsyncThunk(
+  'categories/delete',
+  async (deleteReq: CategoryDeleteRequest, { rejectWithValue }) => {
+    const URL = 'http://localhost:8081/api/v1/categories/' + deleteReq.id
+    const req = {
+      url: URL,
+      token: deleteReq.token
+    }
+    const response = await deleteItem(req)
+    return response
+  }
+)
+
+export const categorySlice = createSlice({
   name: 'categories',
   initialState,
   // Normal reducers only needed for TypeScript
@@ -99,19 +114,29 @@ export const bookSlice = createSlice({
     })
     builder.addCase(deleteCategory.fulfilled, (state, action) => {
       state.isLoading = false
-      state.items = state.items?.filter((item) => action.payload !== item.id) as Category[]
+      state.items = state.items?.filter((item) => action.payload.id !== item.id) as Category[]
     })
     builder.addCase(deleteCategory.pending, (state) => {
       console.log('deleting category...')
     })
     builder.addCase(deleteCategory.rejected, (state, action) => {
-      console.log('Error:', action.payload)
+      state.isLoading = false
+      state.error = action.error.message as string
+    })
+    builder.addCase(updateExistingCategory.fulfilled, (state, action) => {
+      state.isLoading = false
+      console.log(action.payload)
+    })
+    builder.addCase(updateExistingCategory.pending, (state) => {
+      state.isLoading = true
+    })
+    builder.addCase(updateExistingCategory.rejected, (state, action) => {
       state.isLoading = false
       state.error = action.payload as string
     })
   }
 })
 
-export const { nullifyCategoryError } = bookSlice.actions
+export const { nullifyCategoryError } = categorySlice.actions
 
-export default bookSlice.reducer
+export default categorySlice.reducer

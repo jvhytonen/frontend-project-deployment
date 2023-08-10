@@ -51,7 +51,7 @@ function AddCategory() {
           handleChange={handleChange}
         />
         <div>
-          <Button label="Add category" handleClick={handleSubmit} />
+          <Button label="Add category" handleClick={handleSubmit} type="neutral" />
         </div>
       </form>
     </div>

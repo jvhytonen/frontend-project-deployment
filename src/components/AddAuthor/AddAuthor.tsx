@@ -59,7 +59,7 @@ function AddAuthor() {
           handleChange={handleChange}
         />
         <div>
-          <Button label="Add author to the list" handleClick={handleSubmit} />
+          <Button label="Add author to the list" handleClick={handleSubmit} type="neutral" />
         </div>
       </form>
       {/* <Modal heading={'This is headin'} text={'This is text'} close={closeModal} /> */}
