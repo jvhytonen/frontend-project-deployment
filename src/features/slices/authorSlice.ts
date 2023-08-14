@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
 import { AuthorState, Author, AuthorPostRequest, AuthorDeleteRequest } from '../types/types'
-import { deleteItem } from '../utils/thunks'
+import { addItem, deleteItem, updateItem } from '../utils/thunks'
 
 const initialState: AuthorState = {
   items: null,
@@ -17,53 +17,25 @@ export const fetchAuthors = createAsyncThunk('authors/fetch', async () => {
   return response
 })
 
-export const addNewAuthor = createAsyncThunk(
-  'authors/add',
-  async (newAuthorReq: AuthorPostRequest) => {
-    const URL = 'http://localhost:8081/api/v1/authors/'
-    const response = await fetch(URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        // eslint-disable-next-line prettier/prettier
-        'Authorization': `Bearer ${newAuthorReq.token}`
-      },
-      body: JSON.stringify(newAuthorReq.data)
-    })
-    if (!response.ok) {
-      throw new Error('Error when adding author')
-    }
-    const data = await response.json()
-    return data
+export const addNewAuthor = createAsyncThunk('authors/add', async (postReq: AuthorPostRequest) => {
+  const req = {
+    url: 'http://localhost:8081/api/v1/authors/',
+    token: postReq.token,
+    body: postReq.data
   }
-)
-
+  const response = await addItem(req)
+  return response
+})
 export const updateExistingAuthor = createAsyncThunk(
   'authors/update',
-  async (request: AuthorPostRequest, { rejectWithValue }) => {
-    try {
-      const URL = 'http://localhost:8081/api/v1/authors/' + request.data.id
-      const response = await fetch(URL, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          // eslint-disable-next-line prettier/prettier
-          'Authorization': `Bearer ${request.token}`
-        },
-        body: JSON.stringify(request.data)
-      })
-
-      if (!response.ok) {
-        const errorData = await response.json()
-        const errorMessage = errorData.error
-        return rejectWithValue(errorMessage)
-      }
-      const data = await response.json()
-      return data
-    } catch (error: any) {
-      // Error is temporarily 'any' as otherwise the reject value cannot be returned.
-      return rejectWithValue(error.message as string)
+  async (postReq: AuthorPostRequest) => {
+    const req = {
+      url: 'http://localhost:8081/api/v1/authors/' + postReq.data.id,
+      token: postReq.token,
+      body: postReq.data
     }
+    const response = await updateItem(req)
+    return response
   }
 )
 
@@ -85,30 +57,6 @@ export const authorSlice = createSlice({
   name: 'authors',
   initialState,
   reducers: {
-    addAuthor: (state, action: PayloadAction<Author>) => {
-      // In real project the id will be created in the backend, but now we create id by getting the length of the array so we automatically
-      // have unique value in this small example
-      const newAuthor: Author = {
-        ...action.payload
-      }
-      if (state.items !== null) {
-        state.items = [...state.items, newAuthor]
-      } else {
-        state.items = [newAuthor]
-      }
-    },
-    updateAuthor: (state, action: PayloadAction<Author>) => {
-      // We update the whole data of the author even only one field e.g description changes.
-      // Find index of the object needing the update.
-      const objIndex = state.items?.findIndex((obj) => obj.id === action.payload.id)
-      // Assing the payload to that index.
-      if (state.items !== null && objIndex !== undefined) {
-        state.items[objIndex] = action.payload
-      }
-    },
-    removeAuthor: (state, action: PayloadAction<string>) => {
-      state.items = state.items?.filter((item) => action.payload !== item.id) as Author[]
-    },
     nullifyAuthorError: (state) => {
       state.error = null
     }
@@ -166,6 +114,5 @@ export const authorSlice = createSlice({
   }
 })
 
-export const { addAuthor, updateAuthor, removeAuthor, nullifyAuthorError } = authorSlice.actions
-
+export const { nullifyAuthorError } = authorSlice.actions
 export default authorSlice.reducer

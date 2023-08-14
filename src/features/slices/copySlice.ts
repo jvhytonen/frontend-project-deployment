@@ -11,7 +11,7 @@ import {
 } from '../types/types'
 import { Checkout } from '../types/types'
 import { apiErrorHandler } from '../utils/errors'
-import { deleteItem } from '../utils/thunks'
+import { addItem, deleteItem } from '../utils/thunks'
 
 const initialState: CopyState = {
   items: null,
@@ -26,23 +26,13 @@ export const getCopies = createAsyncThunk('book-copies/fetch', async (id: string
 })
 
 export const addNewCopy = createAsyncThunk('book-copies/add', async (request: CopyPostRequest) => {
-  const URL = 'http://localhost:8081/api/v1/book-copies/'
-  const response = await fetch(URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      // eslint-disable-next-line prettier/prettier
-       'Authorization': `Bearer ${request.token}`
-    },
-    body: JSON.stringify(request)
-  })
-  if (!response.ok) {
-    console.log(response)
-    throw new Error('Adding new copy failed!')
+  const req = {
+    url: 'http://localhost:8081/api/v1/book-copies/',
+    token: request.token,
+    body: request
   }
-  const data = await response.json()
-  console.log(data)
-  return data
+  const response = await addItem(req)
+  return response
 })
 
 export const deleteCopy = createAsyncThunk(

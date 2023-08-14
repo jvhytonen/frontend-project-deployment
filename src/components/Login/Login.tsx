@@ -1,17 +1,23 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { GoogleLogin } from '@react-oauth/google'
 import jwt_decode from 'jwt-decode'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { AppDispatch } from '../../store'
-import { login } from '../../features/slices/authSlice'
+import { AppDispatch, RootState } from '../../store'
+import { login, nullifyAuthError } from '../../features/slices/authSlice'
 import PasswordField from '../FormControls/PasswordField/PasswordField'
 import UsernameField from '../FormControls/UsernameField/UsernameField'
+import { useNavigate } from 'react-router-dom'
+import { Root } from 'react-dom/client'
 
 function Login() {
   const dispatch = useDispatch<AppDispatch>()
   const [userName, setUserName] = useState<string | null>(null)
   const [passWord, setPassWord] = useState<string | null>(null)
+  const [authenticationCompleted, setAuthenticationCompleted] = useState<boolean>(false)
+  const navigate = useNavigate()
+  const role = useSelector((state: RootState) => state.auth.items.role)
+  const error = useSelector((state: RootState) => state.auth.error)
 
   const handlePassword = (pword: string) => {
     setPassWord(pword)
@@ -21,48 +27,49 @@ function Login() {
     setUserName(uname)
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    // We must make error null if the user has tried to unsuccessfully log in before.
+    if (error) {
+      dispatch(nullifyAuthError())
+    }
     if (userName && passWord) {
-      console.log('HandleSubmit')
       const credentials = {
         username: userName,
         password: passWord
       }
-      dispatch(login(credentials))
+
+      try {
+        //Unwrap will return a promise. Necessary for error handling.
+        await dispatch(login(credentials)).unwrap()
+        setAuthenticationCompleted(true)
+      } catch (error) {
+        return
+      }
     }
   }
+  useEffect(() => {
+    if (authenticationCompleted) {
+      if (role === 'ADMIN') {
+        navigate('../admin/dashboard')
+      } else if (role === 'USER') {
+        navigate('/')
+      }
+    }
+  }, [authenticationCompleted])
+
   return (
     <div className="flex justify-center items-center">
       <div className="w-[40%] bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col">
         <UsernameField onChange={handleUserName} />
         <PasswordField onChange={handlePassword} labelText="Password" />
+        {error !== null ? <p className="text-red-700">{error}</p> : null}
         <div className="flex items-center justify-between">
           <button
             className="bg-blue-500 hover:bg-blue-800 font-bold py-2 px-4 rounded"
             type="button"
             onClick={() => handleSubmit()}>
-            Sign In
+            Sign in
           </button>
-          {/*      <GoogleLogin
-            onSuccess={(credentialResponse) => {
-              if (credentialResponse.credential) {
-                const decodedCredentials: LoginCredentialType = jwt_decode(
-                  credentialResponse.credential
-                )
-                const credentials = {
-                  name: decodedCredentials.name,
-                  isAdmin: isOnTheWhitelist(decodedCredentials.email),
-                  isLoggedIn: true,
-                  email: decodedCredentials.email,
-                  id: Number(decodedCredentials.sub)
-                }
-                dispatch(loginSuccess(credentials))
-              }
-            }}
-            onError={() => {
-              console.log('Login Failed')
-            }}
-          /> */}
         </div>
       </div>
     </div>

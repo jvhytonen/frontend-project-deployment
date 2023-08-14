@@ -2,7 +2,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
 import { Category, CategoryState, CategoryPostRequest, CategoryDeleteRequest } from '../types/types'
-import { deleteItem } from '../utils/thunks'
+import { addItem, deleteItem, updateItem } from '../utils/thunks'
 
 const initialState: CategoryState = {
   items: null,
@@ -18,67 +18,51 @@ export const getAllCategories = createAsyncThunk('categories/getAll', async () =
 
 export const addNewCategory = createAsyncThunk(
   'categories/add',
-  async (categoryData: CategoryPostRequest) => {
-    const URL = 'http://localhost:8081/api/v1/categories/'
-    const response = await fetch(URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        // eslint-disable-next-line prettier/prettier
-        'Authorization': `Bearer ${categoryData.token}`
-      },
-      body: JSON.stringify(categoryData.data)
-    })
-    if (!response.ok) {
-      throw new Error('Adding a category failed!')
+  async (postReq: CategoryPostRequest) => {
+    const req = {
+      url: 'http://localhost:8081/api/v1/categories/',
+      token: postReq.token,
+      body: postReq.data
     }
-    const data = await response.json()
-    return data
+    const response = await addItem(req)
+    return response
   }
 )
-
 export const updateExistingCategory = createAsyncThunk(
   'categories/update',
-  async (request: CategoryPostRequest, { rejectWithValue }) => {
-    try {
-      const URL = 'http://localhost:8081/api/v1/categories/' + request.data.id
-      const response = await fetch(URL, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          // eslint-disable-next-line prettier/prettier
-          'Authorization': `Bearer ${request.token}`
-        },
-        body: JSON.stringify(request.data)
-      })
-
-      if (!response.ok) {
-        const errorData = await response.json()
-        const errorMessage = errorData.error
-        return rejectWithValue(errorMessage)
-      }
-      const data = await response.json()
-      return data
-    } catch (error: any) {
-      // Error is temporarily 'any' as otherwise the reject value cannot be returned.
-      return rejectWithValue(error.message as string)
+  async (postReq: CategoryPostRequest) => {
+    const req = {
+      url: 'http://localhost:8081/api/v1/categories/' + postReq.data.id,
+      token: postReq.token,
+      body: postReq.data
     }
+    const response = await updateItem(req)
+    return response
   }
 )
 
 export const deleteCategory = createAsyncThunk(
   'categories/delete',
   async (deleteReq: CategoryDeleteRequest) => {
-    const URL = 'http://localhost:8081/api/v1/categories/' + deleteReq.id
     const req = {
-      url: URL,
+      url: 'http://localhost:8081/api/v1/categories/' + deleteReq.id,
       token: deleteReq.token
     }
     const response = await deleteItem(req)
-    console.log(response)
     return response
   }
 )
+
+const categoryConfirmation = {
+  type: 'confirmation',
+  heading: 'Confirm adding new category',
+  message: 'Are you sure you want to add a new category?'
+}
+const categorySuccess = {
+  type: 'success',
+  heading: 'Category added successfully',
+  message: ''
+}
 
 export const categorySlice = createSlice({
   name: 'categories',
@@ -99,25 +83,26 @@ export const categorySlice = createSlice({
     })
     builder.addCase(getAllCategories.rejected, (state) => {
       state.error = 'An error occurred! Try again later'
+      state.isLoading = false
     })
     builder.addCase(addNewCategory.fulfilled, (state, action) => {
-      console.log('Category added successfully')
       state.items ? state.items.push(action.payload) : null
+      state.isLoading = false
     })
 
     builder.addCase(addNewCategory.pending, (state) => {
-      console.log('Adding category...')
+      state.isLoading = true
     })
 
     builder.addCase(addNewCategory.rejected, (state) => {
-      state.error = 'Failed to add category'
+      state.isLoading = false
     })
     builder.addCase(deleteCategory.fulfilled, (state, action) => {
       state.isLoading = false
       state.items = state.items?.filter((item) => action.payload.id !== item.id) as Category[]
     })
     builder.addCase(deleteCategory.pending, (state) => {
-      console.log('deleting category...')
+      state.isLoading = true
     })
     builder.addCase(deleteCategory.rejected, (state, action) => {
       state.isLoading = false

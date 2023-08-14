@@ -1,25 +1,8 @@
-import { PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { fetchData } from '../fetchAPI/fetchAPI'
-import { User, Credentials } from '../types/types'
+import { User, Credentials, UserState } from '../types/types'
 import jwtDecode from 'jwt-decode'
-
-export type LoginCredentialType = {
-  name: string
-  email: string
-  isAdmin: boolean
-  sub: string
-}
-
-export type LoginTry = {
-  id: string
-}
-
-type UserState = {
-  token: string | null
-  items: User
-  isLoading: boolean
-  error: null | string
-}
+import { apiErrorHandler } from '../utils/errors'
 
 const initialUser: User = {
   id: '',
@@ -30,27 +13,28 @@ const initialUser: User = {
 const initialState: UserState = {
   token: null,
   items: initialUser,
-  isLoading: false,
+  loading: null,
   error: null
 }
 
-export const login = createAsyncThunk('login', async (credentials: Credentials) => {
-  console.log(credentials)
+export const login = createAsyncThunk('login', async (credentials: Credentials, thunkAPI) => {
   const URL = 'http://localhost:8081/api/v1/signin'
-  const response = await fetch(URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-  if (!response.ok) {
-    throw new Error('Error with signup!')
+  try {
+    const response = await fetch(URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(credentials)
+    })
+    await apiErrorHandler(response)
+    const data = await response.text()
+    return data
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(error.message)
   }
-  const data = await response.text()
-  console.log(data)
-  return data
 })
+
 export const decodeToken = (token: string) => {
   try {
     const decodedToken: any = jwtDecode(token)
@@ -68,11 +52,9 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    logUserIn: (state, action: PayloadAction<LoginTry>) => {
-      console.log('Login')
-    },
     logUserOut: (state) => {
-      ;(state.token = null), (state.items = initialUser)
+      state.items = initialUser
+      state.token = null
     },
     nullifyAuthError: (state) => {
       state.error = null
@@ -80,9 +62,8 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(login.fulfilled, (state, action) => {
-      state.isLoading = false
+      state.loading = 'completed'
       state.token = action.payload
-      console.log(state.token)
       // Adding data to the user object from the token.
       const userData = decodeToken(action.payload)
       if (userData) {
@@ -90,9 +71,16 @@ export const authSlice = createSlice({
         state.items.role = userData.role
       }
     })
+    builder.addCase(login.pending, (state) => {
+      state.loading = 'loading'
+    })
+    builder.addCase(login.rejected, (state, action) => {
+      state.loading = 'completed'
+      state.error = 'Check your username and password!'
+    })
   }
 })
 
-export const { logUserIn, logUserOut, nullifyAuthError } = authSlice.actions
+export const { logUserOut, nullifyAuthError } = authSlice.actions
 
 export default authSlice.reducer

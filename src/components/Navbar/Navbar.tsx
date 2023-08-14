@@ -52,6 +52,7 @@ function Navbar() {
           <Button
             label={user.items.username !== '' ? 'Logout' : 'Login'}
             handleClick={handleLoginLogOut}
+            type="neutral"
           />
         </div>
         <div

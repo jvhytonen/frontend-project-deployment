@@ -1,11 +1,7 @@
-import { createAsyncThunk } from '@reduxjs/toolkit'
 import { apiErrorHandler } from './errors'
-import { RootState } from '../../store'
-import { useSelector } from 'react-redux'
-import { DeleteRequest } from '../types/types'
+import { DeleteRequest, PostRequest } from '../types/types'
 
 export const deleteItem = async (req: DeleteRequest) => {
-  console.log(req.token)
   const response = await fetch(req.url, {
     method: 'DELETE',
     headers: {
@@ -14,9 +10,37 @@ export const deleteItem = async (req: DeleteRequest) => {
         'Authorization': `Bearer ${req.token}`
     }
   })
-
   await apiErrorHandler(response)
+  const responseData = await response.json()
+  return responseData
+}
 
+export const addItem = async (req: PostRequest) => {
+  const response = await fetch(req.url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      // eslint-disable-next-line prettier/prettier
+        'Authorization': `Bearer ${req.token}`
+    },
+    body: JSON.stringify(req.body)
+  })
+  await apiErrorHandler(response)
+  const responseData = await response.json()
+  return responseData
+}
+
+export const updateItem = async (req: PostRequest) => {
+  const response = await fetch(req.url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      // eslint-disable-next-line prettier/prettier
+        'Authorization': `Bearer ${req.token}`
+    },
+    body: JSON.stringify(req.body)
+  })
+  await apiErrorHandler(response)
   const responseData = await response.json()
   return responseData
 }

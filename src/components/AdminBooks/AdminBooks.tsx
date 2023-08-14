@@ -55,7 +55,6 @@ function AdminBooks() {
                 handleClick={() => navigate(`copies/edit/${book.id}`)}
                 type="edit"
               />
-              {book.id}
               <Button label="Delete book" handleClick={() => handleDelete(book.id)} type="delete" />
             </TableCell>
           </TableRow>

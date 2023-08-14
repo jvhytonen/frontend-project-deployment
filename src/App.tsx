@@ -28,42 +28,43 @@ import { nullifyAuthorError } from './features/slices/authorSlice'
 import { nullifyCopyError } from './features/slices/copySlice'
 import { nullifyUserError } from './features/slices/userSlice'
 import { nullifyAuthError } from './features/slices/authSlice'
+import { findLoadingStates } from './features/utils/helpers'
 
 function App() {
   const dispatch = useDispatch<AppDispatch>()
   // For the global error modal.
-  const categoryErr = useSelector((state: RootState) => state.category)
-  const bookErr = useSelector((state: RootState) => state.book)
-  const authorErr = useSelector((state: RootState) => state.author)
-  const copyErr = useSelector((state: RootState) => state.copy)
-  const userErr = useSelector((state: RootState) => state.user)
-  const authErr = useSelector((state: RootState) => state.auth)
+  const category = useSelector((state: RootState) => state.category)
+  const book = useSelector((state: RootState) => state.book)
+  const author = useSelector((state: RootState) => state.author)
+  const copy = useSelector((state: RootState) => state.copy)
+  const user = useSelector((state: RootState) => state.user)
+  // const authErr = useSelector((state: RootState) => state.auth)
 
-  const errorMessages = [categoryErr, bookErr, authorErr, copyErr, userErr, authErr]
+  const states = [category, book, author, copy, user]
   // There can only be one error at the time. Function returns that error if it exists
-  const errorMessage = findError(errorMessages)
+  const errorMessage = findError(states)
+  // The cursor will be in wait-mode if there is ongoing API-request that is not completed.
+  const isLoading = findLoadingStates(states)
+  document.body.style.cursor = isLoading ? 'wait' : 'auto'
 
   const closeModal = () => {
-    if (categoryErr) {
+    if (category) {
       dispatch(nullifyCategoryError())
     }
-    if (bookErr) {
+    if (book) {
       dispatch(nullifyBookError())
     }
-    if (authorErr) {
+    if (author) {
       dispatch(nullifyAuthorError())
     }
-    if (categoryErr) {
+    if (category) {
       dispatch(nullifyCategoryError())
     }
-    if (copyErr) {
+    if (copy) {
       dispatch(nullifyCopyError())
     }
-    if (userErr) {
+    if (user) {
       dispatch(nullifyUserError())
-    }
-    if (authErr) {
-      dispatch(nullifyAuthError())
     }
   }
 
@@ -95,8 +96,10 @@ function App() {
           />
         </Routes>
       </div>
+      {/*  Error-modal will be shown above all other features with backdrop and that's why it's
+      here. */}
       {errorMessage && (
-        <Modal heading={'Error!'} text={errorMessage} type={'error'} close={closeModal} />
+        <Modal heading={'Error!'} text={errorMessage} type={'error'} onConfirm={closeModal} />
       )}
     </div>
   )

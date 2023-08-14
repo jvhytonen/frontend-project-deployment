@@ -155,7 +155,7 @@ function EditBook() {
               type="text"
               handleChange={handleChange}
             />
-            <Button label="Save" handleClick={handleSubmit} type="neutral" />
+            <Button label="Update" handleClick={handleSubmit} type="neutral" />
           </form>
         </div>
       ) : null}

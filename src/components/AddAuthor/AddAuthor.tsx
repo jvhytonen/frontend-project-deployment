@@ -48,7 +48,7 @@ function AddAuthor() {
           fieldName="name"
           name="name"
           labelText="Name"
-          placeholder="Name of the category"
+          placeholder="Name of the author"
           type="text"
           handleChange={handleChange}
         />

@@ -59,7 +59,6 @@ function EditCategory() {
         />
         <div>
           <Button label="Edit category" handleClick={handleSubmit} type="neutral" />
-          {categoryToEdit?.id !== null ? categoryToEdit?.id : null}
         </div>
       </form>
     </div>

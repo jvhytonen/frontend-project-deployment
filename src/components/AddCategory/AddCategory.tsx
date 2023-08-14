@@ -9,6 +9,7 @@ import { AppDispatch, RootState } from '../../store'
 import { addNewAuthor } from '../../features/slices/authorSlice'
 import { validateAuthorData } from '../../features/validation/validate'
 import { addNewCategory } from '../../features/slices/categorySlice'
+import Modal from '../Modal/Modal'
 
 function AddCategory() {
   const token = useSelector((state: RootState) => state.auth.token)
@@ -24,6 +25,14 @@ function AddCategory() {
       [name]: value
     }))
   }
+  /*   const handleCancel: () => void = () => {
+    dispatch(nullifyCategoryModalInfo())
+  }
+  const handleConfirmation: () => void = () => {
+    if (newCategory) {
+      dispatch(setCategoryModalConfirmation())
+    }
+  } */
   const handleSubmit: () => void = () => {
     if (token !== null && newCategory !== null) {
       // All data needed in redux slice to send the request: token and body.
@@ -38,23 +47,43 @@ function AddCategory() {
       navigate('/categories')
     }
   }
+
   return (
-    <div className="flex flex-col justify-center items-center w-full mt-[200px]">
-      <h2 className="font-bold text-2xl">Add category:</h2>
-      <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <InputItem
-          fieldName="name"
-          name="name"
-          labelText="Category name"
-          placeholder="Add the name of the category here"
-          type="text"
-          handleChange={handleChange}
+    <>
+      <div className="flex flex-col justify-center items-center w-full mt-[200px]">
+        <h2 className="font-bold text-2xl">Add category:</h2>
+        <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <InputItem
+            fieldName="name"
+            name="name"
+            labelText="Category name"
+            placeholder="Add the name of the category here"
+            type="text"
+            handleChange={handleChange}
+          />
+          <div>
+            <Button label="Add category" handleClick={handleSubmit} type="neutral" />
+          </div>
+        </form>
+      </div>
+      {/* {modalInfo !== null && modalInfo.type === 'confirmation' ? (
+        <Modal
+          type="confirm"
+          heading={modalInfo.heading}
+          text={modalInfo.message}
+          onConfirm={handleSubmit}
+          onCancel={handleCancel}
         />
-        <div>
-          <Button label="Add category" handleClick={handleSubmit} type="neutral" />
-        </div>
-      </form>
-    </div>
+      ) : null}
+      {modalInfo !== null && modalInfo.type === 'success' ? (
+        <Modal
+          type="success"
+          heading={modalInfo.heading}
+          text={modalInfo.message}
+          onConfirm={handleSubmit}
+        />
+      ) : null} */}
+    </>
   )
 }
 export default AddCategory

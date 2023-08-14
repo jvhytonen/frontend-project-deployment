@@ -1,4 +1,4 @@
-import { ErrorState } from '../types/types'
+import { ErrorState, IsLoadingState } from '../types/types'
 
 export const formatDate = (dateString: string) => {
   const date = new Date(dateString)
@@ -8,4 +8,8 @@ export const formatDate = (dateString: string) => {
     year: 'numeric'
   })
   return formattedDate
+}
+// App.tsx will gather all loading states from slices. If there is "isloading:true" in one of them, it will be returned.
+export const findLoadingStates = (states: IsLoadingState[]): boolean => {
+  return states.some((state) => state.isLoading)
 }

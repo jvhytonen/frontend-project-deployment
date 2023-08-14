@@ -119,11 +119,18 @@ export type CategoryState = {
   error: string | null
 }
 
+export type ModalInfo = {
+  type: string
+  heading: string
+  message: string
+}
+
 export type ModalType = {
   heading: string
   text: string
-  type: 'error' | 'confirm'
-  close: () => void
+  type: 'error' | 'confirm' | 'success'
+  onConfirm: () => void
+  onCancel?: () => void
 }
 
 export type InputItemType = {
@@ -203,6 +210,11 @@ export interface DeleteRequest {
   url: string
   token: Token
 }
+export interface PostRequest {
+  url: string
+  token: Token
+  body: Category | Author | Book | User | NewCopy
+}
 export interface BookDeleteRequest {
   id: string
   token: Token
@@ -220,6 +232,10 @@ export interface CopyDeleteRequest {
 
 export interface ErrorState {
   error: string | null
+}
+
+export interface IsLoadingState {
+  isLoading: boolean
 }
 
 export interface TableProps {
