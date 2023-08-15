@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEventHandler } from 'react'
+import { ChangeEvent, FormEvent, MouseEventHandler } from 'react'
 
 export type Book = {
   id?: string
@@ -125,11 +125,14 @@ export type ModalInfo = {
   message: string
 }
 
+type OnConfirmWithEvent = (event: React.FormEvent<HTMLFormElement>) => void
+type OnConfirmWithoutEvent = () => void
+
 export type ModalType = {
   heading: string
   text: string
   type: 'error' | 'confirm' | 'success'
-  onConfirm: () => void
+  onConfirm: OnConfirmWithoutEvent
   onCancel?: () => void
 }
 

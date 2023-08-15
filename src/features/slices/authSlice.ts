@@ -13,7 +13,7 @@ const initialUser: User = {
 const initialState: UserState = {
   token: null,
   items: initialUser,
-  loading: null,
+  isLoading: false,
   error: null
 }
 
@@ -62,7 +62,7 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(login.fulfilled, (state, action) => {
-      state.loading = 'completed'
+      state.isLoading = false
       state.token = action.payload
       // Adding data to the user object from the token.
       const userData = decodeToken(action.payload)
@@ -72,10 +72,10 @@ export const authSlice = createSlice({
       }
     })
     builder.addCase(login.pending, (state) => {
-      state.loading = 'loading'
+      state.isLoading = true
     })
     builder.addCase(login.rejected, (state, action) => {
-      state.loading = 'completed'
+      state.isLoading = false
       state.error = 'Check your username and password!'
     })
   }

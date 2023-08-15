@@ -18,7 +18,6 @@ function AdminCategories() {
   }
 
   const handleDelete = (id: string | undefined) => {
-    console.log(id)
     if (id !== undefined && token !== null) {
       const deleteReq = {
         id: id,
@@ -29,7 +28,7 @@ function AdminCategories() {
       return
     }
   }
-
+  // Headers used in this table
   const headers = ['Name', 'Actions']
 
   const rows =

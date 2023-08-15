@@ -14,6 +14,8 @@ import Modal from '../Modal/Modal'
 function AddCategory() {
   const token = useSelector((state: RootState) => state.auth.token)
   const [newCategory, setNewCategory] = useState<Category | null>(null)
+  const [showConfirmation, setShowConfirmation] = useState<boolean>(false)
+  const [showCompletion, setShowCompletion] = useState<boolean>(false)
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
   const handleChange: (
@@ -25,26 +27,32 @@ function AddCategory() {
       [name]: value
     }))
   }
-  /*   const handleCancel: () => void = () => {
-    dispatch(nullifyCategoryModalInfo())
+
+  // In case the user don't want to add new category
+  const handleCancel: () => void = () => {
+    setShowConfirmation(false)
   }
-  const handleConfirmation: () => void = () => {
-    if (newCategory) {
-      dispatch(setCategoryModalConfirmation())
-    }
-  } */
-  const handleSubmit: () => void = () => {
+  //When user clicks "ok" after successfull addition of category.
+  const handleCompletionModalClosing: () => void = () => {
+    setNewCategory(null)
+    navigate('../admin/dashboard')
+  }
+
+  const handleSubmit: () => void = async () => {
+    event?.preventDefault()
+    //close modal
+    setShowConfirmation(false)
     if (token !== null && newCategory !== null) {
       // All data needed in redux slice to send the request: token and body.
       const categoryData: CategoryPostRequest = {
         data: newCategory,
         token: token
       }
+      // Send data to server via Redux thunk
       if (newCategory) {
-        dispatch(addNewCategory(categoryData))
+        await dispatch(addNewCategory(categoryData)).unwrap()
+        setShowCompletion(true)
       }
-      setNewCategory(null)
-      navigate('/categories')
     }
   }
 
@@ -62,27 +70,34 @@ function AddCategory() {
             handleChange={handleChange}
           />
           <div>
-            <Button label="Add category" handleClick={handleSubmit} type="neutral" />
+            <Button
+              label="Add category"
+              handleClick={(e) => {
+                e.preventDefault()
+                setShowConfirmation(true)
+              }}
+              type="neutral"
+            />
           </div>
         </form>
       </div>
-      {/* {modalInfo !== null && modalInfo.type === 'confirmation' ? (
+      {showConfirmation && (
         <Modal
           type="confirm"
-          heading={modalInfo.heading}
-          text={modalInfo.message}
+          heading={'Confirm adding new category'}
+          text={`Are you sure you want to add new category "${newCategory?.name}"?`}
           onConfirm={handleSubmit}
           onCancel={handleCancel}
         />
-      ) : null}
-      {modalInfo !== null && modalInfo.type === 'success' ? (
+      )}
+      {showCompletion && (
         <Modal
           type="success"
-          heading={modalInfo.heading}
-          text={modalInfo.message}
-          onConfirm={handleSubmit}
+          heading={'New category succesfully added'}
+          text={`New category "${newCategory?.name}" added.`}
+          onConfirm={handleCompletionModalClosing}
         />
-      ) : null} */}
+      )}
     </>
   )
 }

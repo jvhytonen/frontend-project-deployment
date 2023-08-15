@@ -1,6 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
-import { GoogleLogin } from '@react-oauth/google'
-import jwt_decode from 'jwt-decode'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { AppDispatch, RootState } from '../../store'
@@ -8,7 +6,6 @@ import { login, nullifyAuthError } from '../../features/slices/authSlice'
 import PasswordField from '../FormControls/PasswordField/PasswordField'
 import UsernameField from '../FormControls/UsernameField/UsernameField'
 import { useNavigate } from 'react-router-dom'
-import { Root } from 'react-dom/client'
 
 function Login() {
   const dispatch = useDispatch<AppDispatch>()
@@ -62,7 +59,6 @@ function Login() {
       <div className="w-[40%] bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col">
         <UsernameField onChange={handleUserName} />
         <PasswordField onChange={handlePassword} labelText="Password" />
-        {error !== null ? <p className="text-red-700">{error}</p> : null}
         <div className="flex items-center justify-between">
           <button
             className="bg-blue-500 hover:bg-blue-800 font-bold py-2 px-4 rounded"

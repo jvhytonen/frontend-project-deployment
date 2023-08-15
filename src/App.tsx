@@ -27,8 +27,8 @@ import { nullifyBookError } from './features/slices/bookSlice'
 import { nullifyAuthorError } from './features/slices/authorSlice'
 import { nullifyCopyError } from './features/slices/copySlice'
 import { nullifyUserError } from './features/slices/userSlice'
-import { nullifyAuthError } from './features/slices/authSlice'
 import { findLoadingStates } from './features/utils/helpers'
+import { nullifyAuthError } from './features/slices/authSlice'
 
 function App() {
   const dispatch = useDispatch<AppDispatch>()
@@ -38,9 +38,9 @@ function App() {
   const author = useSelector((state: RootState) => state.author)
   const copy = useSelector((state: RootState) => state.copy)
   const user = useSelector((state: RootState) => state.user)
-  // const authErr = useSelector((state: RootState) => state.auth)
+  const auth = useSelector((state: RootState) => state.auth)
 
-  const states = [category, book, author, copy, user]
+  const states = [category, book, author, copy, user, auth]
   // There can only be one error at the time. Function returns that error if it exists
   const errorMessage = findError(states)
   // The cursor will be in wait-mode if there is ongoing API-request that is not completed.
@@ -65,6 +65,9 @@ function App() {
     }
     if (user) {
       dispatch(nullifyUserError())
+    }
+    if (auth) {
+      dispatch(nullifyAuthError())
     }
   }
 

@@ -1,4 +1,4 @@
-import { AddAuthorType, ValidateBookType, Book } from '../types/types'
+import { ValidateBookType, Book, Author } from '../types/types'
 
 export const validateNewBookData = (formInputs: Book) => {
   if (
@@ -32,7 +32,8 @@ export const validateUpdatedBookData = (formInputs: Book) => {
   }
 }
 
-export const validateAuthorData = (formInputs: AddAuthorType) => {
+export const validateAuthorData = (formInputs: Author) => {
+  // We make sure both fields contain at least something.
   if (formInputs.name.length > 1 && formInputs.description.length > 1) {
     return true
   } else {
