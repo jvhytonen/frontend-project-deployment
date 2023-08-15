@@ -30,7 +30,7 @@ function AdminCategories() {
   }
   // Headers used in this table
   const headers = ['Name', 'Actions']
-
+  // AdminTable.tsx is wrapping this table
   const rows =
     categories.items !== null && categories.items.length > 0
       ? categories.items.map((category) => {

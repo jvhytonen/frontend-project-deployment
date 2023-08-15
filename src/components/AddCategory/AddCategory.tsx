@@ -10,12 +10,21 @@ import { addNewAuthor } from '../../features/slices/authorSlice'
 import { validateAuthorData } from '../../features/validation/validate'
 import { addNewCategory } from '../../features/slices/categorySlice'
 import Modal from '../Modal/Modal'
+import { useModal } from '../../features/hooks/useModal'
 
 function AddCategory() {
+  const {
+    showConfirmation,
+    showCompletion,
+    confirmationText,
+    handleConfirm,
+    setShowConfirmation,
+    setShowCompletion
+  } = useModal()
   const token = useSelector((state: RootState) => state.auth.token)
   const [newCategory, setNewCategory] = useState<Category | null>(null)
-  const [showConfirmation, setShowConfirmation] = useState<boolean>(false)
-  const [showCompletion, setShowCompletion] = useState<boolean>(false)
+  //const [showConfirmation, setShowConfirmation] = useState<boolean>(false)
+  //const [showCompletion, setShowCompletion] = useState<boolean>(false)
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
   const handleChange: (
@@ -72,24 +81,25 @@ function AddCategory() {
           <div>
             <Button
               label="Add category"
-              handleClick={(e) => {
-                e.preventDefault()
-                setShowConfirmation(true)
-              }}
+              handleClick={(e) =>
+                handleConfirm(e, `Are you sure you want to add new category "${newCategory?.name}"`)
+              }
               type="neutral"
             />
           </div>
         </form>
       </div>
+      {/* Modal to ask confirmation from the user. */}
       {showConfirmation && (
         <Modal
           type="confirm"
           heading={'Confirm adding new category'}
-          text={`Are you sure you want to add new category "${newCategory?.name}"?`}
+          text={confirmationText}
           onConfirm={handleSubmit}
           onCancel={handleCancel}
         />
       )}
+      {/* Modal to show that the operation was succesfull. */}
       {showCompletion && (
         <Modal
           type="success"
