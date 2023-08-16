@@ -94,12 +94,6 @@ export type CopyState = {
   error: string | null
 }
 
-/* export type Copy = {
-  copyId: string
-  book: Book
-  latestCheckout: Checkout
-} */
-
 export type Copy = {
   bookCopyId: string
   latestChecktout: null | Checkout

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AppDispatch, RootState } from '../../store'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteBook, getAllBooks } from '../../features/slices/bookSlice'
@@ -8,8 +8,22 @@ import { TableCell, TableRow } from '../TableItems/TableItems'
 import { useNavigate } from 'react-router-dom'
 import Button from '../Button/Button'
 import AdminTable from '../AdminTable/AdminTable'
+import { useModal } from '../../features/hooks/useModal'
+import Modal from '../Modal/Modal'
+import { Book } from '../../features/types/types'
+import NoData from '../NoData/NoData'
+import Loading from '../Loading/Loading'
 
 function AdminBooks() {
+  const {
+    showConfirmation,
+    showCompletion,
+    confirmationText,
+    handleConfirm,
+    setShowConfirmation,
+    setShowCompletion
+  } = useModal()
+  const [bookToBeDeleted, setBookToBeDeleted] = useState<Book | null>(null)
   const dispatch = useDispatch<AppDispatch>()
   const book = useSelector((state: RootState) => state.book)
   const token = useSelector((state: RootState) => state.auth.token)
@@ -18,15 +32,25 @@ function AdminBooks() {
   const handleNavigation = () => {
     navigate('../books/add')
   }
-
-  const handleDelete = (id: string | undefined) => {
-    console.log(id)
-    if (id !== undefined && token !== null) {
+  // In case the user don't want to add new category
+  const handleCancel: () => void = () => {
+    setShowConfirmation(false)
+  }
+  //When user clicks "ok" after successfull addition of category.
+  const handleCompletionModalClosing: () => void = () => {
+    setShowCompletion(false)
+    setBookToBeDeleted(null)
+    navigate('../admin/dashboard')
+  }
+  const handleDeleteBook = async () => {
+    setShowConfirmation(false)
+    if (bookToBeDeleted !== null && bookToBeDeleted.id !== undefined && token !== null) {
       const deleteReq = {
-        id: id,
+        id: bookToBeDeleted.id,
         token: token
       }
-      dispatch(deleteBook(deleteReq))
+      await dispatch(deleteBook(deleteReq)).unwrap()
+      setShowCompletion(true)
     } else {
       return
     }
@@ -55,22 +79,46 @@ function AdminBooks() {
                 handleClick={() => navigate(`copies/edit/${book.id}`)}
                 type="edit"
               />
-              <Button label="Delete book" handleClick={() => handleDelete(book.id)} type="delete" />
+              <Button
+                label="Delete book"
+                handleClick={(e) => {
+                  setBookToBeDeleted(book)
+                  handleConfirm(e, `Are you sure you want to delete "${book.title}"?`)
+                }}
+                type="delete"
+              />
             </TableCell>
           </TableRow>
         ))
-      : [
-          <TableRow key={0}>
-            <TableCell>No books found.</TableCell>
-          </TableRow>
-        ]
+      : [<NoData key="no-data" />] // This will be displayed instead of rows if there are no data in the table.
 
   return (
     <>
-      <AdminTable headers={headers} rows={rows} />
+      {/* If the data
+      is still under loading in the server the loading will be shown. */}
+      <AdminTable headers={headers} rows={book.isLoading ? [<Loading key="loading" />] : rows} />
+
       <div className="flex justify-center">
         <Button label="Add book" handleClick={handleNavigation} type="neutral" />
       </div>
+      {showConfirmation && (
+        <Modal
+          type="confirm"
+          heading={'Confirm deleting book'}
+          text={confirmationText}
+          onConfirm={handleDeleteBook}
+          onCancel={handleCancel}
+        />
+      )}
+      {/* Modal to show that the operation was succesfull. */}
+      {showCompletion && (
+        <Modal
+          type="success"
+          heading={'Book deleted'}
+          text={`Book "${bookToBeDeleted?.title}" deleted`}
+          onConfirm={handleCompletionModalClosing}
+        />
+      )}
     </>
   )
 }

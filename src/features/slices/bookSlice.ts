@@ -54,23 +54,26 @@ export const addNewBook = createAsyncThunk('books/add', async (newBookReq: BookP
   return data
 })
 
-export const updateBook = createAsyncThunk('books/update', async (updateReq: BookPostRequest) => {
-  const URL = APIURL + updateReq.data.id
-  const response = await fetch(URL, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      // eslint-disable-next-line prettier/prettier
+export const updateExistingBook = createAsyncThunk(
+  'books/update',
+  async (updateReq: BookPostRequest) => {
+    const URL = APIURL + updateReq.data.id
+    const response = await fetch(URL, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        // eslint-disable-next-line prettier/prettier
       'Authorization': `Bearer ${updateReq.token}`
-    },
-    body: JSON.stringify(updateReq.data)
-  })
-  if (!response.ok) {
-    throw new Error('Updating book failed!')
+      },
+      body: JSON.stringify(updateReq.data)
+    })
+    if (!response.ok) {
+      throw new Error('Updating book failed!')
+    }
+    const data = await response.json()
+    return data
   }
-  const data = await response.json()
-  return data
-})
+)
 
 export const deleteBook = createAsyncThunk('books/delete', async (request: BookDeleteRequest) => {
   const URL = 'http://localhost:8081/api/v1/books/' + request.id
@@ -114,6 +117,28 @@ export const bookSlice = createSlice({
 
     builder.addCase(addNewBook.rejected, (state) => {
       state.error = 'Failed to add book'
+    })
+    builder.addCase(deleteBook.fulfilled, (state, action) => {
+      state.isLoading = false
+      state.items = state.items?.filter((item) => action.payload.id !== item.id) as Book[]
+    })
+    builder.addCase(deleteBook.pending, (state) => {
+      state.isLoading = true
+    })
+    builder.addCase(deleteBook.rejected, (state, action) => {
+      state.isLoading = false
+      state.error = action.error.message as string
+    })
+    builder.addCase(updateExistingBook.fulfilled, (state, action) => {
+      state.isLoading = false
+      console.log(action.payload)
+    })
+    builder.addCase(updateExistingBook.pending, (state) => {
+      state.isLoading = true
+    })
+    builder.addCase(updateExistingBook.rejected, (state, action) => {
+      state.isLoading = false
+      state.error = action.payload as string
     })
   }
 })

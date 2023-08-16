@@ -1,19 +1,30 @@
 import React, { ChangeEvent, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { Book, BookPostRequest } from '../../features/types/types'
 import { AppDispatch, RootState } from '../../store'
 import Button from '../Button/Button'
-import { updateBook } from '../../features/slices/bookSlice'
+import { updateExistingBook } from '../../features/slices/bookSlice'
 import { validateUpdatedBookData } from '../../features/validation/validate'
 import InputItem from '../FormControls/InputItem/InputItem'
 import OptionItem from '../FormControls/OptionItem/OptionItem'
 import TextArea from '../FormControls/TextArea/TextArea'
 import UploadImage from '../FormControls/UploadImage/UploadImage'
+import { useModal } from '../../features/hooks/useModal'
+import Modal from '../Modal/Modal'
 
 function EditBook() {
+  const {
+    showConfirmation,
+    showCompletion,
+    confirmationText,
+    handleConfirm,
+    setShowConfirmation,
+    setShowCompletion
+  } = useModal()
   const params = useParams()
+  const navigate = useNavigate()
   // Variables from Redux
   const book = useSelector((state: RootState) => state.book)
   const token = useSelector((state: RootState) => state.auth.token)
@@ -47,7 +58,20 @@ function EditBook() {
       imageUrl: fileName
     }))
   }
-  const handleSubmit: () => void = () => {
+
+  // In case the user don't want to add new category
+  const handleCancel: () => void = () => {
+    setShowConfirmation(false)
+  }
+
+  //When user clicks "ok" after successfull addition of category.
+  const handleCompletionModalClosing: () => void = () => {
+    setBookToEdit(null)
+    setShowCompletion(false)
+    navigate('../admin/dashboard')
+  }
+  const handleSubmit: () => void = async () => {
+    setShowConfirmation(false)
     // If the user has previously tried to update data that has validation error, it must be set to false.
     if (validationError) {
       setValidationError(false)
@@ -64,8 +88,8 @@ function EditBook() {
         coverImage: coverImage
       }
       if (validateUpdatedBookData(bookToEdit)) {
-        dispatch(updateBook(updatedBookReq))
-        setBookToEdit(null)
+        await dispatch(updateExistingBook(updatedBookReq)).unwrap()
+        setShowCompletion(true)
       } else {
         setValidationError(true)
       }
@@ -155,10 +179,34 @@ function EditBook() {
               type="text"
               handleChange={handleChange}
             />
-            <Button label="Update" handleClick={handleSubmit} type="neutral" />
+            <Button
+              label="Update"
+              handleClick={(e) =>
+                handleConfirm(e, `Are you sure you want to update "${item?.title}"?`)
+              }
+              type="neutral"
+            />
           </form>
         </div>
       ) : null}
+      {showConfirmation && (
+        <Modal
+          type="confirm"
+          heading={'Confirm updating book'}
+          text={confirmationText}
+          onConfirm={handleSubmit}
+          onCancel={handleCancel}
+        />
+      )}
+      {/* Modal to show that the operation was succesfull. */}
+      {showCompletion && (
+        <Modal
+          type="success"
+          heading={'Book updated'}
+          text={`Book "${bookToEdit?.title}" updated`}
+          onConfirm={handleCompletionModalClosing}
+        />
+      )}
     </>
   )
 }
