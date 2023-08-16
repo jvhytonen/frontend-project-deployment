@@ -2,12 +2,14 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
 import {
-  CheckoutHandler,
+  CheckoutData,
+  CheckoutRequest,
   Copy,
   CopyDeleteRequest,
   CopyPostRequest,
   CopyState,
-  NewCopy
+  NewCopy,
+  PostRequest
 } from '../types/types'
 import { Checkout } from '../types/types'
 import { apiErrorHandler } from '../utils/errors'
@@ -49,41 +51,28 @@ export const deleteCopy = createAsyncThunk(
   }
 )
 
-export const handleBorrow = createAsyncThunk(
+export const borrowCopy = createAsyncThunk(
   'book-copies/borrow',
-  async (details: CheckoutHandler) => {
-    const URL = 'http://localhost:8081/api/v1/checkouts/borrow/'
-    const response = await fetch(URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(details)
-    })
-    if (!response.ok) {
-      throw new Error('Error when borrowing book')
+  async (postReq: CheckoutRequest) => {
+    const req = {
+      url: 'http://localhost:8081/api/v1/checkouts/borrow/',
+      token: postReq.token,
+      body: postReq.body
     }
-    const data = await response.json()
-    return data
+    const response = await addItem(req)
+    return response
   }
 )
-
-export const handleReturn = createAsyncThunk(
+export const returnCopy = createAsyncThunk(
   'book-copies/return',
-  async (details: CheckoutHandler) => {
-    const URL = 'http://localhost:8081/api/v1/checkouts/return/'
-    const response = await fetch(URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(details)
-    })
-    if (!response.ok) {
-      throw new Error('Error when borrowing book')
+  async (postReq: CheckoutRequest) => {
+    const req = {
+      url: 'http://localhost:8081/api/v1/checkouts/return/',
+      token: postReq.token,
+      body: postReq.body
     }
-    const data = await response.json()
-    return data
+    const response = await addItem(req)
+    return response
   }
 )
 
@@ -103,37 +92,34 @@ export const copySlice = createSlice({
     builder.addCase(getCopies.pending, (state) => {
       state.isLoading = true
     })
-    builder.addCase(getCopies.rejected, (state) => {
-      state.error = 'An error occurred! Try again later'
+    builder.addCase(getCopies.rejected, (state, action) => {
+      state.isLoading = false
+      state.error = action.error.message as string
     })
     builder.addCase(addNewCopy.fulfilled, (state, action) => {
       state.items ? state.items.push(action.payload) : null
     })
 
     builder.addCase(addNewCopy.pending, (state) => {
-      // Handle the pending state if needed
-      console.log('Adding copy...')
+      state.isLoading = true
     })
 
-    builder.addCase(addNewCopy.rejected, (state) => {
-      // Handle the error state
-      state.error = 'Failed to add new copy'
+    builder.addCase(addNewCopy.rejected, (state, action) => {
+      state.isLoading = false
+      state.error = action.error.message as string
     })
 
     builder.addCase(deleteCopy.fulfilled, (state, action) => {
-      console.log(action.payload)
       state.items = state.items?.filter((item) => action.payload !== item.bookCopyId) as Copy[]
-      console.log('Copy deleted successfully')
     })
 
     builder.addCase(deleteCopy.pending, (state) => {
-      // Handle the pending state if needed
-      console.log('Deleting...')
+      state.isLoading = true
     })
 
-    builder.addCase(deleteCopy.rejected, (state) => {
-      // Handle the error state
-      state.error = 'Failed to delete copy'
+    builder.addCase(deleteCopy.rejected, (state, action) => {
+      state.isLoading = false
+      state.error = action.error.message as string
     })
   }
 })

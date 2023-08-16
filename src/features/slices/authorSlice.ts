@@ -107,7 +107,6 @@ export const authorSlice = createSlice({
       state.isLoading = true
     })
     builder.addCase(deleteAuthor.rejected, (state, action) => {
-      console.log(action.payload)
       state.isLoading = false
       state.error = action.error.message as string
     })

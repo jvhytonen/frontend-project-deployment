@@ -53,8 +53,8 @@ function BookDetails() {
                   <Copy
                     key={index}
                     copyOrderNumber={index + 1}
-                    latestCheckout={copy.latestCheckout ? copy.latestCheckout : null}
-                    copyId={copy.copyId}
+                    latestCheckout={copy.latestChecktout ? copy.latestChecktout : null}
+                    copyId={copy.bookCopyId}
                   />
                 )
               })

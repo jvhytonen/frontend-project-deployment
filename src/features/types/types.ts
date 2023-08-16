@@ -103,7 +103,7 @@ export type NewCopy = {
   bookId: string
 }
 
-export type CheckoutHandler = {
+export type CheckoutData = {
   copyId: string
   userId: string
 }
@@ -207,10 +207,14 @@ export interface DeleteRequest {
   url: string
   token: Token
 }
+export interface CheckoutRequest {
+  token: string
+  body: CheckoutData
+}
 export interface PostRequest {
   url: string
   token: Token
-  body: Category | Author | Book | User | NewCopy
+  body: Category | Author | Book | User | NewCopy | CheckoutData
 }
 export interface BookDeleteRequest {
   id: string
