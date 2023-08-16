@@ -52,7 +52,7 @@ function AdminAuthors() {
       return
     }
   }
-
+  // Headers used in this table
   const headers = ['Name', 'Actions']
 
   const rows =

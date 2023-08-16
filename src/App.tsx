@@ -16,7 +16,6 @@ import Navbar from './components/Navbar/Navbar'
 import AddCategory from './components/AddCategory/AddCategory'
 import AdminDashboard from './components/AdminDashboard/AdminDashboard'
 import Signup from './components/Signup/Signup'
-import EditCopy from './components/EditCopy/EditCopy'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from './store'
 import Modal from './components/Modal/Modal'
@@ -29,6 +28,7 @@ import { nullifyCopyError } from './features/slices/copySlice'
 import { nullifyUserError } from './features/slices/userSlice'
 import { findLoadingStates } from './features/utils/helpers'
 import { nullifyAuthError } from './features/slices/authSlice'
+import AdminCopies from './components/AdminCopies/AdminCopies'
 
 function App() {
   const dispatch = useDispatch<AppDispatch>()
@@ -90,7 +90,7 @@ function App() {
           <Route path="authors/edit/:id" element={<ProtectedRoute component={EditAuthor} />} />
           <Route
             path="/admin/dashboard/copies/edit/:id"
-            element={<ProtectedRoute component={EditCopy} />}
+            element={<ProtectedRoute component={AdminCopies} />}
           />
           <Route path="books/add" element={<ProtectedRoute component={AddBook} />} />
           <Route
