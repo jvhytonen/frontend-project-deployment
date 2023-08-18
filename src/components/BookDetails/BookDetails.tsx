@@ -1,26 +1,16 @@
-import React, { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { useParams, useNavigate } from 'react-router-dom'
+import React from 'react'
+import { useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
 
-import { RootState, AppDispatch } from '../../store'
-import Button, { HandleClick } from '../Button/Button'
-import { getCopies } from '../../features/slices/copySlice'
-import Copy from '../Copy/Copy'
+import { RootState } from '../../store'
+import Copies from '../Copies/Copies'
+import { showYear } from '../../features/utils/helpers'
 
 function BookDetails() {
-  const user = useSelector((state: RootState) => state.user)
   const book = useSelector((state: RootState) => state.book)
-  const copies = useSelector((state: RootState) => state.copy)
-  const dispatch = useDispatch<AppDispatch>()
   const params = useParams()
   const filteredBook = book.items?.filter((item) => params.id === item.id)
   const bookItem = filteredBook ? filteredBook[0] : null
-
-  useEffect(() => {
-    if (params.id) {
-      dispatch(getCopies(params.id))
-    }
-  }, [])
 
   return (
     <div className="flex justify-center h-[50%] mt-[100px]">
@@ -39,26 +29,13 @@ function BookDetails() {
               {bookItem.description}
             </p>
             <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200">
-              Published: {bookItem.yearPublished}
+              Published: {showYear(bookItem.yearPublished)}
             </p>
             <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200">
               Publisher: {bookItem.publisher}
             </p>
           </div>
-          <h3>Copies: </h3>
-          <p>Amount of copies: {copies ? copies.items?.length : '0'}</p>
-          {copies
-            ? copies.items?.map((copy, index) => {
-                return (
-                  <Copy
-                    key={index}
-                    copyOrderNumber={index + 1}
-                    latestCheckout={copy.latestChecktout ? copy.latestChecktout : null}
-                    copyId={copy.bookCopyId}
-                  />
-                )
-              })
-            : null}
+          <Copies bookId={bookItem.id as string} />
         </div>
       ) : null}
     </div>

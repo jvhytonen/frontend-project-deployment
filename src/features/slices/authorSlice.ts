@@ -1,8 +1,8 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
 import { AuthorState, Author, AuthorPostRequest, AuthorDeleteRequest } from '../types/types'
-import { addItem, deleteItem, updateItem } from '../utils/thunks'
+import { addItem, deleteItem, getItemNoAuth, updateItem } from '../utils/thunks'
 
 const initialState: AuthorState = {
   items: null,
@@ -11,9 +11,11 @@ const initialState: AuthorState = {
   showSuccessModal: false
 }
 
-export const fetchAuthors = createAsyncThunk('authors/fetch', async () => {
-  const URL = 'http://localhost:8081/api/v1/authors/'
-  const response = fetchData(URL)
+export const getAllAuthors = createAsyncThunk('authors/fetch', async () => {
+  const req = {
+    url: 'http://localhost:8081/api/v1/authors/'
+  }
+  const response = await getItemNoAuth(req)
   return response
 })
 
@@ -62,15 +64,15 @@ export const authorSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchAuthors.fulfilled, (state, action) => {
+    builder.addCase(getAllAuthors.fulfilled, (state, action) => {
       state.isLoading = false
       state.items = action.payload
     })
-    builder.addCase(fetchAuthors.rejected, (state) => {
+    builder.addCase(getAllAuthors.rejected, (state, action) => {
       state.isLoading = false
-      state.error = 'An error occured'
+      state.error = action.payload as string
     })
-    builder.addCase(fetchAuthors.pending, (state) => {
+    builder.addCase(getAllAuthors.pending, (state) => {
       state.isLoading = true
     })
     builder.addCase(addNewAuthor.fulfilled, (state, action) => {
@@ -81,9 +83,9 @@ export const authorSlice = createSlice({
         state.items = [action.payload]
       }
     })
-    builder.addCase(addNewAuthor.rejected, (state) => {
+    builder.addCase(addNewAuthor.rejected, (state, action) => {
       state.isLoading = false
-      state.error = 'An error occured'
+      state.error = action.payload as string
     })
     builder.addCase(addNewAuthor.pending, (state) => {
       state.isLoading = true

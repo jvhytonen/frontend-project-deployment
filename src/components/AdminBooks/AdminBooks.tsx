@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { AppDispatch, RootState } from '../../store'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteBook, getAllBooks } from '../../features/slices/bookSlice'
-import { fetchAuthors } from '../../features/slices/authorSlice'
+import { getAllAuthors } from '../../features/slices/authorSlice'
 import { getAllCategories } from '../../features/slices/categorySlice'
 import { TableCell, TableRow } from '../TableItems/TableItems'
 import { useNavigate } from 'react-router-dom'
@@ -57,7 +57,7 @@ function AdminBooks() {
   }
   useEffect(() => {
     dispatch(getAllBooks())
-    dispatch(fetchAuthors())
+    dispatch(getAllAuthors())
     dispatch(getAllCategories())
   }, [])
   const headers = ['Author', 'Title', 'Category', 'Actions']

@@ -3,14 +3,14 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { RootState, AppDispatch } from '../../store'
 import AuthorDetails from '../AuthorDetails/AuthorDetails'
-import { fetchAuthors } from '../../features/slices/authorSlice'
+import { getAllAuthors } from '../../features/slices/authorSlice'
 
 function Authors() {
   const dispatch = useDispatch<AppDispatch>()
   const { items, error } = useSelector((state: RootState) => state.author)
 
   useEffect(() => {
-    dispatch(fetchAuthors())
+    dispatch(getAllAuthors())
   }, [])
 
   return (

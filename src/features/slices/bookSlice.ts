@@ -2,7 +2,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
 import { Book, BookState, BookPostRequest, BookDeleteRequest } from '../types/types'
-import { deleteItem } from '../utils/thunks'
+import { deleteItem, getItemNoAuth } from '../utils/thunks'
 
 const APIURL = 'http://localhost:8081/api/v1/books/'
 
@@ -13,8 +13,10 @@ const initialState: BookState = {
 }
 
 export const getAllBooks = createAsyncThunk('books/getAll', async () => {
-  const URL = 'http://localhost:8081/api/v1/books/'
-  const response = fetchData(APIURL)
+  const req = {
+    url: 'http://localhost:8081/api/v1/books/'
+  }
+  const response = await getItemNoAuth(req)
   return response
 })
 

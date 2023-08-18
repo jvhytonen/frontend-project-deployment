@@ -9,6 +9,9 @@ export const formatDate = (dateString: string) => {
   })
   return formattedDate
 }
+export const showYear = (dateString: string) => {
+  return dateString.substring(0, 4)
+}
 // App.tsx will gather all loading states from slices. If there is "isloading:true" in one of them, it will be returned.
 export const findLoadingStates = (states: IsLoadingState[]): boolean => {
   return states.some((state) => state.isLoading)

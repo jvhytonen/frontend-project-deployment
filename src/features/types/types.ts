@@ -1,5 +1,7 @@
 import { ChangeEvent, FormEvent, MouseEventHandler } from 'react'
 
+// Items:
+
 export type Book = {
   id?: string
   isbn: string
@@ -13,6 +15,47 @@ export type Book = {
   publisher: string
   yearPublished: string
 }
+
+export type Category = {
+  id?: string
+  name: string
+}
+
+export type Author = {
+  id?: string
+  name: string
+  description: string
+}
+
+export type Checkout = {
+  id: string
+  startTime: string
+  endTime: string
+  user: User
+  returned: boolean
+}
+
+export type Copy = {
+  bookCopyId: string
+  latestCheckout: null | Checkout
+}
+
+export type User = {
+  id: string
+  username: string
+  role: 'USER' | 'ADMIN' | null
+}
+
+// Redux states
+
+export interface ErrorState {
+  error: string | null
+}
+
+export interface IsLoadingState {
+  isLoading: boolean
+}
+
 export type BookState = {
   items: Book[] | null
   isLoading: boolean
@@ -26,6 +69,27 @@ export type UserState = {
   error: null | string
 }
 
+export type AuthorState = {
+  items: Author[] | null
+  isLoading: boolean
+  error: null | string
+  showSuccessModal: boolean
+}
+
+export type CopyState = {
+  items: Copy[] | null
+  isLoading: boolean
+  error: string | null
+}
+
+export type CategoryState = {
+  items: Category[] | null
+  isLoading: boolean
+  error: string | null
+}
+
+// For the Redux persist to store data even when the browser is refreshed:
+
 export type PartialPersistedState = Partial<{
   book: BookState
   author: AuthorState
@@ -33,24 +97,6 @@ export type PartialPersistedState = Partial<{
   copy: CopyState
   category: CategoryState
 }>
-
-export type Category = {
-  id?: string
-  name: string
-}
-
-export type Author = {
-  id?: string
-  name: string
-  description: string
-}
-
-export type AuthorState = {
-  items: Author[] | null
-  isLoading: boolean
-  error: null | string
-  showSuccessModal: boolean
-}
 
 export type Borrow = {
   userId: string
@@ -62,73 +108,28 @@ export type BookIntroType = Partial<Book>
 export type HandleClick = () => void
 export type HandleAuthorClick = (id: number) => void
 
-export type ButtonType = {
-  label: string
-  type: 'neutral' | 'confirm' | 'cancel' | 'delete' | 'edit'
-  handleClick: MouseEventHandler<HTMLButtonElement>
-}
-
-export type User = {
-  id: string
-  username: string
-  role: 'USER' | 'ADMIN' | null
-}
-
 export type NewUser = Omit<User, 'id'>
 export type Credentials = {
   username: string
   password: string
 }
 
-export type Checkout = {
-  id: string
-  startTime: string
-  endTime: string
-  user: User
-  returned: boolean
-}
-
-export type CopyState = {
-  items: Copy[] | null
-  isLoading: boolean
-  error: string | null
-}
-
-export type Copy = {
-  bookCopyId: string
-  latestChecktout: null | Checkout
-}
-
 export type NewCopy = {
   bookId: string
 }
 
-export type CheckoutData = {
+export type CheckoutBorrow = {
   copyId: string
   userId: string
 }
-export type CategoryState = {
-  items: Category[] | null
-  isLoading: boolean
-  error: string | null
+
+export type CheckoutReturn = {
+  checkoutId: string
+  copyId: string
+  userId: string
 }
 
-export type ModalInfo = {
-  type: string
-  heading: string
-  message: string
-}
-
-type OnConfirmWithEvent = (event: React.FormEvent<HTMLFormElement>) => void
-type OnConfirmWithoutEvent = () => void
-
-export type ModalType = {
-  heading: string
-  text: string
-  type: 'error' | 'confirm' | 'success'
-  onConfirm: OnConfirmWithoutEvent
-  onCancel?: () => void
-}
+//Forms:
 
 export type InputItemType = {
   fieldName: string
@@ -160,13 +161,70 @@ export type TextAreaType = {
 export type UploadImageType = {
   onImageUpload: (file: File, fileName: string) => void
 }
-// All form elements neede to add or change data
+
+// All form elements needed to add or change data
 export type FormElement = HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement
+
+// Components:
+
+export type ButtonType = {
+  label: string
+  type: 'neutral' | 'confirm' | 'cancel' | 'delete' | 'edit'
+  handleClick: MouseEventHandler<HTMLButtonElement>
+}
 
 export type NavbarLinkType = {
   link: string
   label: string
 }
+
+export interface TableProps {
+  children: React.ReactNode
+}
+
+export type TableHeadingType = {
+  label: string
+}
+
+export interface AdminTableProps {
+  headers: string[]
+  rows: React.ReactNode[]
+}
+
+export type Modal = {
+  type: string
+  heading: string
+  message: string
+}
+
+export type ModalProps = {
+  heading: string
+  text: string
+  type: 'error' | 'confirm' | 'success'
+  onConfirm: () => void
+  onCancel?: () => void
+}
+
+export interface CopyProps {
+  latestCheckout: Checkout | null
+  copyOrderNumber: number
+  copyId: string
+}
+
+export interface CopiesProps {
+  bookId: string
+}
+
+export interface BorrowProps {
+  copyId: string
+}
+
+export interface ReturnProps {
+  copyId: string
+  checkoutId: string
+}
+
+// Helpers:
 
 export type ValidateBookType = {
   title: string
@@ -178,9 +236,9 @@ export type ValidateBookType = {
   publisher: string
 }
 
-export type Token = string
+// Requests to the server:
 
-// Types when sending data to server
+export type Token = string
 
 export interface CategoryPostRequest {
   token: Token
@@ -203,18 +261,18 @@ export interface BookPostRequest {
   data: Book
   coverImage: File | null
 }
+export interface CheckoutRequest {
+  token: Token
+  data: CheckoutBorrow | CheckoutReturn
+}
 export interface DeleteRequest {
   url: string
   token: Token
 }
-export interface CheckoutRequest {
-  token: string
-  body: CheckoutData
-}
 export interface PostRequest {
   url: string
   token: Token
-  body: Category | Author | Book | User | NewCopy | CheckoutData
+  body: Category | Author | Book | User | NewCopy | CheckoutBorrow | CheckoutReturn
 }
 export interface BookDeleteRequest {
   id: string
@@ -231,23 +289,9 @@ export interface CopyDeleteRequest {
   id: string
 }
 
-export interface ErrorState {
-  error: string | null
+export interface GetRequestWithAuth {
+  url: string
+  token: Token
 }
 
-export interface IsLoadingState {
-  isLoading: boolean
-}
-
-export interface TableProps {
-  children: React.ReactNode
-}
-
-export type TableHeadingType = {
-  label: string
-}
-
-export interface AdminTableProps {
-  headers: string[]
-  rows: React.ReactNode[]
-}
+export type GetRequestWithoutAuth = Omit<GetRequestWithAuth, 'token'>

@@ -1,5 +1,36 @@
 import { apiErrorHandler } from './errors'
-import { DeleteRequest, PostRequest } from '../types/types'
+import {
+  DeleteRequest,
+  GetRequestWithAuth,
+  GetRequestWithoutAuth,
+  PostRequest
+} from '../types/types'
+
+export const getItemNoAuth = async (req: GetRequestWithoutAuth) => {
+  const response = await fetch(req.url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  await apiErrorHandler(response)
+  const responseData = await response.json()
+  return responseData
+}
+
+export const getItemWithAuth = async (req: GetRequestWithAuth) => {
+  const response = await fetch(req.url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      // eslint-disable-next-line prettier/prettier
+      'Authorization': `Bearer ${req.token}`
+    }
+  })
+  await apiErrorHandler(response)
+  const responseData = await response.json()
+  return responseData
+}
 
 export const deleteItem = async (req: DeleteRequest) => {
   const response = await fetch(req.url, {
@@ -16,6 +47,8 @@ export const deleteItem = async (req: DeleteRequest) => {
 }
 
 export const addItem = async (req: PostRequest) => {
+  console.log('AddItem')
+  console.log(req.body)
   const response = await fetch(req.url, {
     method: 'POST',
     headers: {

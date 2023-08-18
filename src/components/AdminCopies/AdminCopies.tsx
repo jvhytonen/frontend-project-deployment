@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
 import { addNewCopy, deleteCopy, getCopies } from '../../features/slices/copySlice'
-import Copy from '../Copy/Copy'
+import Copy from '../CopyWithAuth/CopyWithAuth'
 import Button from '../Button/Button'
 import { TableCell, TableHeading, TableRow } from '../TableItems/TableItems'
 import { useModal } from '../../features/hooks/useModal'

@@ -17,19 +17,8 @@ function BookIntro({ isbn, title, id, author, description, imageUrl }: BookIntro
     navigate(`/edit/${isbn}`)
   }
 
-  const deleteBookHandler = () => {
-    if (id) {
-      dispatch(deleteBook(id))
-    }
-  }
-
   return (
     <div className="my-0 ml-8 mr-auto py-2 sm:py-8 md:py-2 rounded-lg shadow-lg w-2/3 shadow-gray-200 bg-white">
-      {user.items !== null && user.items.role === 'ADMIN' ? (
-        <p className="underline cursor-pointer" onClick={deleteBookHandler}>
-          Delete
-        </p>
-      ) : null}
       <div>
         <img
           src={imageUrl ? imageUrl : 'defaultCover.jpg'}

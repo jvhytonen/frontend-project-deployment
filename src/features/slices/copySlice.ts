@@ -1,19 +1,15 @@
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import { fetchData } from '../fetchAPI/fetchAPI'
 import {
-  CheckoutData,
+  CheckoutBorrow,
   CheckoutRequest,
+  CheckoutReturn,
   Copy,
   CopyDeleteRequest,
   CopyPostRequest,
-  CopyState,
-  NewCopy,
-  PostRequest
+  CopyState
 } from '../types/types'
-import { Checkout } from '../types/types'
-import { apiErrorHandler } from '../utils/errors'
-import { addItem, deleteItem } from '../utils/thunks'
+import { addItem, deleteItem, getItemNoAuth } from '../utils/thunks'
 
 const initialState: CopyState = {
   items: null,
@@ -22,8 +18,10 @@ const initialState: CopyState = {
 }
 
 export const getCopies = createAsyncThunk('book-copies/fetch', async (id: string) => {
-  const URL = 'http://localhost:8081/api/v1/book-copies/' + id
-  const response = fetchData(URL)
+  const req = {
+    url: 'http://localhost:8081/api/v1/book-copies/' + id
+  }
+  const response = await getItemNoAuth(req)
   return response
 })
 
@@ -57,7 +55,7 @@ export const borrowCopy = createAsyncThunk(
     const req = {
       url: 'http://localhost:8081/api/v1/checkouts/borrow/',
       token: postReq.token,
-      body: postReq.body
+      body: postReq.data
     }
     const response = await addItem(req)
     return response
@@ -69,7 +67,7 @@ export const returnCopy = createAsyncThunk(
     const req = {
       url: 'http://localhost:8081/api/v1/checkouts/return/',
       token: postReq.token,
-      body: postReq.body
+      body: postReq.data
     }
     const response = await addItem(req)
     return response
@@ -118,6 +116,29 @@ export const copySlice = createSlice({
     })
 
     builder.addCase(deleteCopy.rejected, (state, action) => {
+      state.isLoading = false
+      state.error = action.error.message as string
+    })
+    builder.addCase(borrowCopy.fulfilled, (state, action) => {
+      const newCheckout = action.payload
+      if (state.items === null) {
+        state.items = [newCheckout]
+      }
+      const objIndexToUpdate = state.items?.findIndex(
+        (obj) => obj.bookCopyId === newCheckout.bookCopyId
+      )
+      if (objIndexToUpdate === -1 || objIndexToUpdate === undefined) {
+        state.items.push(newCheckout)
+      } else {
+        state.items[objIndexToUpdate] = { ...state.items[objIndexToUpdate], ...newCheckout }
+      }
+    })
+
+    builder.addCase(borrowCopy.pending, (state) => {
+      state.isLoading = true
+    })
+
+    builder.addCase(borrowCopy.rejected, (state, action) => {
       state.isLoading = false
       state.error = action.error.message as string
     })

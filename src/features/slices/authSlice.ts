@@ -68,6 +68,7 @@ export const authSlice = createSlice({
       // Adding data to the user object from the token.
       const userData = decodeToken(action.payload)
       if (userData) {
+        state.items.id = userData.id
         state.items.username = userData.username
         state.items.role = userData.role
       }

@@ -2,7 +2,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { fetchData } from '../fetchAPI/fetchAPI'
 import { Category, CategoryState, CategoryPostRequest, CategoryDeleteRequest } from '../types/types'
-import { addItem, deleteItem, updateItem } from '../utils/thunks'
+import { addItem, deleteItem, getItemNoAuth, updateItem } from '../utils/thunks'
 
 const initialState: CategoryState = {
   items: null,
@@ -11,8 +11,10 @@ const initialState: CategoryState = {
 }
 
 export const getAllCategories = createAsyncThunk('categories/getAll', async () => {
-  const URL = 'http://localhost:8081/api/v1/categories/'
-  const response = fetchData(URL)
+  const req = {
+    url: 'http://localhost:8081/api/v1/categories/'
+  }
+  const response = await getItemNoAuth(req)
   return response
 })
 

@@ -9,7 +9,7 @@ import { validateNewBookData } from '../../features/validation/validate'
 import { useNavigate } from 'react-router-dom'
 import InputItem from '../FormControls/InputItem/InputItem'
 import { getAllCategories } from '../../features/slices/categorySlice'
-import { fetchAuthors } from '../../features/slices/authorSlice'
+import { getAllAuthors } from '../../features/slices/authorSlice'
 import OptionItem from '../FormControls/OptionItem/OptionItem'
 import TextArea from '../FormControls/TextArea/TextArea'
 import UploadImage from '../FormControls/UploadImage/UploadImage'
@@ -73,7 +73,7 @@ function AddBook() {
   }
   useEffect(() => {
     dispatch(getAllCategories())
-    dispatch(fetchAuthors())
+    dispatch(getAllAuthors())
   }, [])
   return (
     <div className="flex flex-col justify-center items-center w-1/2">
