@@ -1,31 +1,23 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { NewUser, User } from '../types/types'
+import { NewUser, User, UserState } from '../types/types'
+import { API_BASE_URL } from '../../../src/vite-env.e'
 
-export type LoginCredentialType = {
-  name: string
-  email: string
-  isAdmin: boolean
-  sub: string
-}
+const URL = API_BASE_URL + 'signup'
 
-export type LoginTry = {
-  id: string
-}
-
-type UserState = {
-  items: User | null
-  isLoading: boolean
-  error: null | string
+const initialUser: User = {
+  id: '',
+  username: '',
+  role: null
 }
 
 const initialState: UserState = {
-  items: null,
+  token: null,
+  items: initialUser,
   isLoading: false,
   error: null
 }
 
 export const signUpUser = createAsyncThunk('users/signup', async (user: NewUser) => {
-  const URL = 'http://localhost:8081/api/v1/signup'
   const response = await fetch(URL, {
     method: 'POST',
     headers: {
@@ -62,6 +54,6 @@ export const signUpSlice = createSlice({
   }
 })
 
-export const { signUpUser } = signUpSlice.actions
+//export const {} = signUpSlice.actions
 
 export default signUpSlice.reducer

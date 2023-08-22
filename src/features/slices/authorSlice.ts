@@ -1,8 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import { fetchData } from '../fetchAPI/fetchAPI'
 import { AuthorState, Author, AuthorPostRequest, AuthorDeleteRequest } from '../types/types'
 import { addItem, deleteItem, getItemNoAuth, updateItem } from '../utils/thunks'
+import { API_BASE_URL } from '../../../src/vite-env.e'
+
+const URL = API_BASE_URL + 'authors/'
 
 const initialState: AuthorState = {
   items: null,
@@ -12,7 +14,7 @@ const initialState: AuthorState = {
 
 export const getAllAuthors = createAsyncThunk('authors/fetch', async () => {
   const req = {
-    url: 'http://localhost:8081/api/v1/authors/'
+    url: URL
   }
   const response = await getItemNoAuth(req)
   return response
@@ -20,7 +22,7 @@ export const getAllAuthors = createAsyncThunk('authors/fetch', async () => {
 
 export const addNewAuthor = createAsyncThunk('authors/add', async (postReq: AuthorPostRequest) => {
   const req = {
-    url: 'http://localhost:8081/api/v1/authors/',
+    url: URL,
     token: postReq.token,
     body: postReq.data
   }
@@ -31,7 +33,7 @@ export const updateExistingAuthor = createAsyncThunk(
   'authors/update',
   async (postReq: AuthorPostRequest) => {
     const req = {
-      url: 'http://localhost:8081/api/v1/authors/' + postReq.data.id,
+      url: URL + postReq.data.id,
       token: postReq.token,
       body: postReq.data
     }
@@ -43,13 +45,11 @@ export const updateExistingAuthor = createAsyncThunk(
 export const deleteAuthor = createAsyncThunk(
   'authors/delete',
   async (request: AuthorDeleteRequest) => {
-    const URL = 'http://localhost:8081/api/v1/authors/' + request.id
     const req = {
-      url: URL,
+      url: URL + request.id,
       token: request.token
     }
     const response = await deleteItem(req)
-    console.log(response)
     return response
   }
 )

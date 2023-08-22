@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { API_BASE_URL } from '../../../src/vite-env.e'
+
+const URL = API_BASE_URL + 'book-copies/'
 
 import {
-  CheckoutBorrow,
   CheckoutRequest,
-  CheckoutReturn,
   Copy,
   CopyDeleteRequest,
   CopyPostRequest,
@@ -19,7 +20,7 @@ const initialState: CopyState = {
 
 export const getCopies = createAsyncThunk('book-copies/fetch', async (id: string) => {
   const req = {
-    url: 'http://localhost:8081/api/v1/book-copies/' + id
+    url: URL + id
   }
   const response = await getItemNoAuth(req)
   return response
@@ -27,7 +28,7 @@ export const getCopies = createAsyncThunk('book-copies/fetch', async (id: string
 
 export const addNewCopy = createAsyncThunk('book-copies/add', async (request: CopyPostRequest) => {
   const req = {
-    url: 'http://localhost:8081/api/v1/book-copies/',
+    url: URL,
     token: request.token,
     body: request
   }
@@ -39,9 +40,8 @@ export const deleteCopy = createAsyncThunk(
   'book-copies/delete',
   async (request: CopyDeleteRequest) => {
     console.log(request.id)
-    const URL = 'http://localhost:8081/api/v1/book-copies/' + request.id
     const req = {
-      url: URL,
+      url: URL + request.id,
       token: request.token
     }
     const response = await deleteItem(req)
@@ -53,7 +53,7 @@ export const borrowCopy = createAsyncThunk(
   'book-copies/borrow',
   async (postReq: CheckoutRequest) => {
     const req = {
-      url: 'http://localhost:8081/api/v1/checkouts/borrow/',
+      url: URL,
       token: postReq.token,
       body: postReq.data
     }
@@ -65,7 +65,7 @@ export const returnCopy = createAsyncThunk(
   'book-copies/return',
   async (postReq: CheckoutRequest) => {
     const req = {
-      url: 'http://localhost:8081/api/v1/checkouts/return/',
+      url: URL,
       token: postReq.token,
       body: postReq.data
     }

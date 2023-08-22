@@ -1,8 +1,10 @@
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import { fetchData } from '../fetchAPI/fetchAPI'
 import { Category, CategoryState, CategoryPostRequest, CategoryDeleteRequest } from '../types/types'
 import { addItem, deleteItem, getItemNoAuth, updateItem } from '../utils/thunks'
+import { API_BASE_URL } from '../../../src/vite-env.e'
+
+const URL = API_BASE_URL + 'categories/'
 
 const initialState: CategoryState = {
   items: null,
@@ -12,7 +14,7 @@ const initialState: CategoryState = {
 
 export const getAllCategories = createAsyncThunk('categories/getAll', async () => {
   const req = {
-    url: 'http://localhost:8081/api/v1/categories/'
+    url: URL
   }
   const response = await getItemNoAuth(req)
   return response
@@ -22,7 +24,7 @@ export const addNewCategory = createAsyncThunk(
   'categories/add',
   async (postReq: CategoryPostRequest) => {
     const req = {
-      url: 'http://localhost:8081/api/v1/categories/',
+      url: URL,
       token: postReq.token,
       body: postReq.data
     }
@@ -34,7 +36,7 @@ export const updateExistingCategory = createAsyncThunk(
   'categories/update',
   async (postReq: CategoryPostRequest) => {
     const req = {
-      url: 'http://localhost:8081/api/v1/categories/' + postReq.data.id,
+      url: URL + postReq.data.id,
       token: postReq.token,
       body: postReq.data
     }
@@ -47,24 +49,13 @@ export const deleteCategory = createAsyncThunk(
   'categories/delete',
   async (deleteReq: CategoryDeleteRequest) => {
     const req = {
-      url: 'http://localhost:8081/api/v1/categories/' + deleteReq.id,
+      url: URL + deleteReq.id,
       token: deleteReq.token
     }
     const response = await deleteItem(req)
     return response
   }
 )
-
-const categoryConfirmation = {
-  type: 'confirmation',
-  heading: 'Confirm adding new category',
-  message: 'Are you sure you want to add a new category?'
-}
-const categorySuccess = {
-  type: 'success',
-  heading: 'Category added successfully',
-  message: ''
-}
 
 export const categorySlice = createSlice({
   name: 'categories',

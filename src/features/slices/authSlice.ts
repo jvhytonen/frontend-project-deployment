@@ -3,6 +3,9 @@ import { fetchData } from '../fetchAPI/fetchAPI'
 import { User, Credentials, UserState } from '../types/types'
 import jwtDecode from 'jwt-decode'
 import { apiErrorHandler } from '../utils/errors'
+import { API_BASE_URL } from '../../../src/vite-env.e'
+
+const URL = API_BASE_URL + 'signin'
 
 const initialUser: User = {
   id: '',
@@ -18,7 +21,6 @@ const initialState: UserState = {
 }
 
 export const login = createAsyncThunk('login', async (credentials: Credentials, thunkAPI) => {
-  const URL = 'http://localhost:8081/api/v1/signin'
   try {
     const response = await fetch(URL, {
       method: 'POST',
@@ -29,7 +31,6 @@ export const login = createAsyncThunk('login', async (credentials: Credentials, 
     })
     await apiErrorHandler(response)
     const data = await response.text()
-    console.log(data)
     return data
   } catch (error: any) {
     return thunkAPI.rejectWithValue(error.message)
