@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -11,16 +11,10 @@ import Modal from '../Modal/Modal'
 import TextArea from '../FormControls/TextArea/TextArea'
 import InputItem from '../FormControls/InputItem/InputItem'
 import { useModal } from '../../features/hooks/useModal'
+import { askConfirmation, finished } from '../../features/slices/modalSlice'
 
 function AddAuthor() {
-  const {
-    showConfirmation,
-    showCompletion,
-    confirmationText,
-    handleConfirm,
-    setShowConfirmation,
-    setShowCompletion
-  } = useModal()
+  const modal = useSelector((state: RootState) => state.modal)
   const token = useSelector((state: RootState) => state.auth.token)
   const [newAuthor, setNewAuthor] = useState<Author | null>(null)
   const navigate = useNavigate()
@@ -32,19 +26,15 @@ function AddAuthor() {
       [name]: value
     }))
   }
-  // In case the user don't want to add new category
-  const handleCancel: () => void = () => {
-    setShowConfirmation(false)
-  }
-  //When user clicks "ok" after successfull addition of category.
-  const handleCompletionModalClosing: () => void = () => {
-    setNewAuthor(null)
-    navigate('../admin/dashboard')
-  }
+
+  useEffect(() => {
+    if (modal.status === 'confirmed') {
+      handleSubmit()
+    }
+  }, [modal.status])
   const handleSubmit: () => void = async () => {
     event?.preventDefault()
-    //close modal
-    setShowConfirmation(false)
+
     if (token !== null && newAuthor !== null) {
       // All data needed in redux slice to send the request: token and body.
       const authorData: AuthorPostRequest = {
@@ -54,7 +44,8 @@ function AddAuthor() {
       // Send data to server via Redux thunk
       if (newAuthor) {
         await dispatch(addNewAuthor(authorData)).unwrap()
-        setShowCompletion(true)
+        dispatch(finished('Author added succesfully!'))
+        navigate('../admin/dashboard')
       }
     }
   }
@@ -80,34 +71,18 @@ function AddAuthor() {
           />
           <div>
             <Button
-              label="Add author to the list"
-              handleClick={(e) =>
-                handleConfirm(e, `Are you sure you want to add new author "${newAuthor?.name}"`)
-              }
+              label="Add author"
+              handleClick={(e) => {
+                e.preventDefault()
+                dispatch(
+                  askConfirmation(`Are you sure you want to add new author "${newAuthor?.name}"?`)
+                )
+              }}
               type="neutral"
             />
           </div>
         </form>
       </div>
-      {/* Modal to ask confirmation from the user. */}
-      {showConfirmation && (
-        <Modal
-          type="confirm"
-          heading={'Confirm adding new category'}
-          text={confirmationText}
-          onConfirm={handleSubmit}
-          onCancel={handleCancel}
-        />
-      )}
-      {/* Modal to show that the operation was succesfull. */}
-      {showCompletion && (
-        <Modal
-          type="success"
-          heading={'New author succesfully added'}
-          text={`New author "${newAuthor?.name}" added.`}
-          onConfirm={handleCompletionModalClosing}
-        />
-      )}
     </>
   )
 }

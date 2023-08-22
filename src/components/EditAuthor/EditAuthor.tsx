@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -6,15 +6,17 @@ import { Author, AuthorPostRequest, FormElement } from '../../features/types/typ
 import { AppDispatch, RootState } from '../../store'
 import Button from '../Button/Button'
 import { validateAuthorData } from '../../features/validation/validate'
-import { updateAuthor, updateExistingAuthor } from '../../features/slices/authorSlice'
+import { updateExistingAuthor } from '../../features/slices/authorSlice'
 import InputItem from '../FormControls/InputItem/InputItem'
 import TextArea from '../FormControls/TextArea/TextArea'
+import { askConfirmation, finished } from '../../features/slices/modalSlice'
 
 function EditAuthor() {
   const params = useParams()
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
   const token = useSelector((state: RootState) => state.auth.token)
+  const modal = useSelector((state: RootState) => state.modal)
   const authors = useSelector((state: RootState) => state.author)
   const item = authors.items ? authors.items?.find((author) => params.id === author.id) : null
   const [authorToEdit, setAuthorToEdit] = useState<Author | null | undefined>(item)
@@ -28,6 +30,12 @@ function EditAuthor() {
       }))
     }
   }
+  useEffect(() => {
+    if (modal.status === 'confirmed') {
+      handleSubmit()
+    }
+  }, [modal.status])
+
   const handleSubmit: () => void = () => {
     if (token !== null && authorToEdit !== null && authorToEdit !== undefined) {
       // All data needed in redux slice to send the request: token and body.
@@ -41,7 +49,8 @@ function EditAuthor() {
         }
       }
       setAuthorToEdit(null)
-      navigate('/admin/dahsboard')
+      dispatch(finished('Author edited succesfully!'))
+      navigate('../admin/dashboard')
     }
   }
   return (
@@ -70,8 +79,18 @@ function EditAuthor() {
               handleChange={handleChange}
             />
             <div>
-              <Button label="Save changes" handleClick={handleSubmit} type="neutral" />
-              {authorToEdit.id}
+              <Button
+                label="Edit author"
+                handleClick={(e) => {
+                  e.preventDefault()
+                  dispatch(
+                    askConfirmation(
+                      `Are you sure you want to add edit author "${authorToEdit?.name}"?`
+                    )
+                  )
+                }}
+                type="neutral"
+              />
             </div>
           </form>
         </div>

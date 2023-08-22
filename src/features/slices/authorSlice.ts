@@ -7,8 +7,7 @@ import { addItem, deleteItem, getItemNoAuth, updateItem } from '../utils/thunks'
 const initialState: AuthorState = {
   items: null,
   isLoading: false,
-  error: null,
-  showSuccessModal: false
+  error: null
 }
 
 export const getAllAuthors = createAsyncThunk('authors/fetch', async () => {

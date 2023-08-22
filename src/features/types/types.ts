@@ -22,7 +22,7 @@ export type Category = {
 }
 
 export type Author = {
-  id?: string
+  id: string
   name: string
   description: string
 }
@@ -73,7 +73,6 @@ export type AuthorState = {
   items: Author[] | null
   isLoading: boolean
   error: null | string
-  showSuccessModal: boolean
 }
 
 export type CopyState = {
@@ -86,6 +85,11 @@ export type CategoryState = {
   items: Category[] | null
   isLoading: boolean
   error: string | null
+}
+
+export type ModalState = {
+  text: string | null
+  status: null | 'waitingConfirmation' | 'confirmed' | 'finished' | 'error' | 'confirm' | 'success'
 }
 
 // For the Redux persist to store data even when the browser is refreshed:
@@ -173,6 +177,11 @@ export type ButtonType = {
   handleClick: MouseEventHandler<HTMLButtonElement>
 }
 
+export interface DeleteAuthorType {
+  authorId: string
+  authorName: string
+}
+
 export type NavbarLinkType = {
   link: string
   label: string
@@ -200,16 +209,18 @@ export type Modal = {
 export type ModalProps = {
   heading: string
   text: string
-  type: 'error' | 'confirm' | 'success'
+  type: 'waitingConfirmation' | 'confirmed' | 'finished' | 'error' | 'confirm' | 'success'
   onConfirm: () => void
   onCancel?: () => void
 }
 
 export interface CopyProps {
-  latestCheckout: Checkout | null
   copyOrderNumber: number
-  copyId: string
+  copy: Copy
+  onCheckout: (checkoutObj: Copy, actionType: CheckoutActionType) => void
 }
+
+export type CopyPropsNoAuth = Omit<CopyProps, 'onCheckout'>
 
 export interface CopiesProps {
   bookId: string
@@ -235,6 +246,10 @@ export type ValidateBookType = {
   description: string
   publisher: string
 }
+
+// Action type
+
+export type CheckoutActionType = 'borrow' | 'return'
 
 // Requests to the server:
 

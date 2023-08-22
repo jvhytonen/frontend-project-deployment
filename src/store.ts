@@ -3,13 +3,21 @@ import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
 import { combineReducers } from 'redux'
 
-import { BookState, AuthorState, UserState, CopyState, CategoryState } from './features/types/types'
+import {
+  BookState,
+  AuthorState,
+  UserState,
+  CopyState,
+  CategoryState,
+  ModalState
+} from './features/types/types'
 import bookReducer from './features/slices/bookSlice'
 import authorSlice from './features/slices/authorSlice'
 import userSlice from './features/slices/userSlice'
 import copySlice from './features/slices/copySlice'
 import categorySlice from './features/slices/categorySlice'
 import authSlice from './features/slices/authSlice'
+import modalSlice from './features/slices/modalSlice'
 
 export interface RootState {
   book: BookState
@@ -18,6 +26,7 @@ export interface RootState {
   copy: CopyState
   category: CategoryState
   auth: UserState
+  modal: ModalState
 }
 
 const persistConfig = {
@@ -32,7 +41,8 @@ const rootReducer = combineReducers<RootState>({
   user: userSlice,
   copy: copySlice,
   category: categorySlice,
-  auth: authSlice
+  auth: authSlice,
+  modal: modalSlice
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

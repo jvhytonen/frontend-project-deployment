@@ -29,6 +29,8 @@ import { nullifyUserError } from './features/slices/userSlice'
 import { findLoadingStates } from './features/utils/helpers'
 import { nullifyAuthError } from './features/slices/authSlice'
 import AdminCopies from './components/AdminCopies/AdminCopies'
+import { Root } from 'react-dom/client'
+import { resetModal, confirm } from './features/slices/modalSlice'
 
 function App() {
   const dispatch = useDispatch<AppDispatch>()
@@ -39,6 +41,7 @@ function App() {
   const copy = useSelector((state: RootState) => state.copy)
   const user = useSelector((state: RootState) => state.user)
   const auth = useSelector((state: RootState) => state.auth)
+  const modal = useSelector((state: RootState) => state.modal)
 
   const states = [category, book, author, copy, user, auth]
   // There can only be one error at the time. Function returns that error if it exists
@@ -103,6 +106,18 @@ function App() {
       here. */}
       {errorMessage && (
         <Modal heading={'Error!'} text={errorMessage} type={'error'} onConfirm={closeModal} />
+      )}
+      {modal.text && modal.status !== null && (
+        <Modal
+          heading={'Modal'}
+          text={modal.text}
+          type={modal.status}
+          onConfirm={
+            modal.status === 'waitingConfirmation'
+              ? () => dispatch(confirm())
+              : () => dispatch(resetModal())
+          }
+        />
       )}
     </div>
   )

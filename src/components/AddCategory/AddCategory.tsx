@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -9,19 +9,13 @@ import { AppDispatch, RootState } from '../../store'
 import { addNewAuthor } from '../../features/slices/authorSlice'
 import { validateAuthorData } from '../../features/validation/validate'
 import { addNewCategory } from '../../features/slices/categorySlice'
+import { askConfirmation, finished } from '../../features/slices/modalSlice'
 import Modal from '../Modal/Modal'
 import { useModal } from '../../features/hooks/useModal'
 
 function AddCategory() {
-  const {
-    showConfirmation,
-    showCompletion,
-    confirmationText,
-    handleConfirm,
-    setShowConfirmation,
-    setShowCompletion
-  } = useModal()
   const token = useSelector((state: RootState) => state.auth.token)
+  const modal = useSelector((state: RootState) => state.modal)
   const [newCategory, setNewCategory] = useState<Category | null>(null)
   //const [showConfirmation, setShowConfirmation] = useState<boolean>(false)
   //const [showCompletion, setShowCompletion] = useState<boolean>(false)
@@ -37,20 +31,14 @@ function AddCategory() {
     }))
   }
 
-  // In case the user don't want to add new category
-  const handleCancel: () => void = () => {
-    setShowConfirmation(false)
-  }
-  //When user clicks "ok" after successfull addition of category.
-  const handleCompletionModalClosing: () => void = () => {
-    setNewCategory(null)
-    navigate('../admin/dashboard')
-  }
+  useEffect(() => {
+    if (modal.status === 'confirmed') {
+      handleSubmit()
+    }
+  }, [modal.status])
 
   const handleSubmit: () => void = async () => {
     event?.preventDefault()
-    //close modal
-    setShowConfirmation(false)
     if (token !== null && newCategory !== null) {
       // All data needed in redux slice to send the request: token and body.
       const categoryData: CategoryPostRequest = {
@@ -60,7 +48,8 @@ function AddCategory() {
       // Send data to server via Redux thunk
       if (newCategory) {
         await dispatch(addNewCategory(categoryData)).unwrap()
-        setShowCompletion(true)
+        dispatch(finished('Category added succesfully!'))
+        navigate('../admin/dashboard')
       }
     }
   }
@@ -81,33 +70,19 @@ function AddCategory() {
           <div>
             <Button
               label="Add category"
-              handleClick={(e) =>
-                handleConfirm(e, `Are you sure you want to add new category "${newCategory?.name}"`)
-              }
+              handleClick={(e) => {
+                e.preventDefault()
+                dispatch(
+                  askConfirmation(
+                    `Are you sure you want to add new category "${newCategory?.name}"?`
+                  )
+                )
+              }}
               type="neutral"
             />
           </div>
         </form>
       </div>
-      {/* Modal to ask confirmation from the user. */}
-      {showConfirmation && (
-        <Modal
-          type="confirm"
-          heading={'Confirm adding new category'}
-          text={confirmationText}
-          onConfirm={handleSubmit}
-          onCancel={handleCancel}
-        />
-      )}
-      {/* Modal to show that the operation was succesfull. */}
-      {showCompletion && (
-        <Modal
-          type="success"
-          heading={'New category succesfully added'}
-          text={`New category "${newCategory?.name}" added.`}
-          onConfirm={handleCompletionModalClosing}
-        />
-      )}
     </>
   )
 }

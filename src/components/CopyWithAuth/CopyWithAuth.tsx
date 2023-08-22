@@ -1,38 +1,53 @@
-import React from 'react'
-
-import { CheckoutBorrow, CheckoutReturn, CopyProps } from '../../features/types/types'
+import { CopyProps } from '../../features/types/types'
 import { formatDate } from '../../features/utils/helpers'
 import Button from '../Button/Button'
-import { AppDispatch, RootState } from '../../store'
-import { useDispatch, useSelector } from 'react-redux'
-import { borrowCopy, returnCopy } from '../../features/slices/copySlice'
-import { useModal } from '../../features/hooks/useModal'
-import Modal from '../Modal/Modal'
-import Borrow from '../Borrow/Borrow'
-import Return from '../Return/Return'
+import { RootState } from '../../store'
+import { useSelector } from 'react-redux'
 
-function CopyWithAuth({ latestCheckout, copyOrderNumber, copyId }: CopyProps) {
-  const {
-    showConfirmation,
-    showCompletion,
-    confirmationText,
-    handleConfirm,
-    setShowConfirmation,
-    setShowCompletion
-  } = useModal()
+function CopyWithAuth({ copy, copyOrderNumber, onCheckout }: CopyProps) {
   const user = useSelector((state: RootState) => state.auth.items)
 
   const showCopyStatus = () => {
     // This will find out if the copy is free, borrowed by someone or borrowed by user, content is rendered based on that
-    const copyIsFree = latestCheckout === null || latestCheckout.returned
-    const copyIsBorrowedBySomeone = !copyIsFree && latestCheckout !== null
-    const copyIsBorrowedByUser = copyIsBorrowedBySomeone && latestCheckout.user.id === user?.id
+    const copyIsFree =
+      copy.latestCheckout === null ||
+      copy.latestCheckout === undefined ||
+      copy.latestCheckout.returned
+    const copyIsBorrowedBySomeone = !copyIsFree && copy.latestCheckout !== null
+    const copyIsBorrowedByUser =
+      copyIsBorrowedBySomeone &&
+      copy.latestCheckout !== null &&
+      copy.latestCheckout.user.id === user?.id
     if (copyIsFree) {
-      return <Borrow copyId={copyId} />
+      return (
+        <Button
+          key={copy.bookCopyId}
+          label="Borrow"
+          handleClick={(e) => {
+            e.preventDefault()
+            onCheckout(copy, 'borrow')
+          }}
+          type="neutral"
+        />
+      )
     } else if (copyIsBorrowedByUser) {
-      return <Return copyId={copyId} checkoutId={latestCheckout.id} />
+      return (
+        <Button
+          key={copy.bookCopyId}
+          label="Return"
+          handleClick={(e) => {
+            e.preventDefault()
+            onCheckout(copy, 'return')
+          }}
+          type="neutral"
+        />
+      )
     } else if (copyIsBorrowedBySomeone) {
-      return <>Borrowed. Return date: {formatDate(latestCheckout!.endTime)}</>
+      return (
+        <p key={copy.bookCopyId}>
+          Borrowed. Return date: {formatDate(copy.latestCheckout?.endTime as string)}
+        </p>
+      )
     }
   }
 

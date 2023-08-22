@@ -1,15 +1,14 @@
-import React from 'react'
-import { CopyProps } from '../../features/types/types'
+import { CopyPropsNoAuth } from '../../features/types/types'
 import { formatDate } from '../../features/utils/helpers'
 
-function CopyNoAuth({ latestCheckout, copyOrderNumber }: CopyProps) {
+function CopyNoAuth({ copyOrderNumber, copy }: CopyPropsNoAuth) {
   return (
     <div className="flex">
       <p>Copy: {copyOrderNumber} &nbsp;&nbsp; </p>
       <p>
-        {latestCheckout === null || latestCheckout.returned
+        {copy.latestCheckout === null || copy.latestCheckout.returned
           ? 'Free'
-          : 'Borrowed, return date: ' + formatDate(latestCheckout.endTime)}
+          : 'Borrowed, return date: ' + formatDate(copy.latestCheckout.endTime)}
       </p>
     </div>
   )
