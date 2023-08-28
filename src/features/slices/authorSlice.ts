@@ -2,9 +2,9 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { AuthorState, Author, AuthorPostRequest, AuthorDeleteRequest } from '../types/types'
 import { addItem, deleteItem, getItemNoAuth, updateItem } from '../utils/thunks'
-import { API_BASE_URL } from '../../../src/vite-env.e'
+//import { API_BASE_URL } from '../../../src/vite-env.e'
 
-const URL = API_BASE_URL + 'authors/'
+const URL = process.env.API_BASE_URL + 'authors/'
 
 const initialState: AuthorState = {
   items: null,
