@@ -1,10 +1,4 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-
-import { AppDispatch, RootState } from '../../store'
-import { deleteAuthor } from '../../features/slices/authorSlice'
-import AdminActionIcons from '../AdminActionIcons/AdminActionIcons'
 import { Author } from '../../features/types/types'
 
 function AuthorDetails({ id, name, description }: Author) {
