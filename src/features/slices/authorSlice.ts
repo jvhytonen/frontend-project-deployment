@@ -15,6 +15,7 @@ const initialState: AuthorState = {
 export const getAllAuthors = createAsyncThunk('authors/fetch', async () => {
   console.log('URL test')
   console.log(URL)
+  console.log(process.env.REACT_APP_API_BASE_URL)
   const req = {
     url: URL
   }
