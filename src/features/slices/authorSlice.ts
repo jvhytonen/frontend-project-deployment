@@ -13,6 +13,8 @@ const initialState: AuthorState = {
 }
 
 export const getAllAuthors = createAsyncThunk('authors/fetch', async () => {
+  console.log('URL test')
+  console.log(URL)
   const req = {
     url: URL
   }
