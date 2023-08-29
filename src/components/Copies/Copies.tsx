@@ -42,6 +42,7 @@ function Copies({ bookId }: CopiesProps) {
   }, [modal.status])
 
   const handleCheckoutConfirmation = (checkoutObj: Copy, actionType: CheckoutActionType) => {
+    //Action type defines is this a borrow or return of the book.
     setCheckoutItem(checkoutObj)
     setCheckoutType(actionType)
     dispatch(askConfirmation(`Are you sure you want to ${actionType} this book?`))

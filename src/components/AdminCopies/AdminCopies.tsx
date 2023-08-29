@@ -10,6 +10,8 @@ import { TableCell, TableHeading, TableRow } from '../TableItems/TableItems'
 import { useModal } from '../../features/hooks/useModal'
 import AdminTable from '../AdminTable/AdminTable'
 import Modal from '../Modal/Modal'
+import { Checkout } from '../../features/types/types'
+import { formatDate } from '../../features/utils/helpers'
 
 function AdminCopies() {
   const {
@@ -65,6 +67,13 @@ function AdminCopies() {
       return
     }
   }
+  const showStatus = (checkout: Checkout | null) => {
+    if (checkout === null || checkout.returned) {
+      return 'Free'
+    } else {
+      return 'Borrowed. Return date: ' + formatDate(checkout.endTime)
+    }
+  }
   useEffect(() => {
     if (params.id) {
       dispatch(getCopies(params.id))
@@ -78,7 +87,7 @@ function AdminCopies() {
           return (
             <TableRow key={copy.bookCopyId}>
               <TableCell>{copy.bookCopyId}</TableCell>
-              <TableCell>Free?</TableCell>
+              <TableCell>{showStatus(copy.latestCheckout)}</TableCell>
               <TableCell>
                 <Button
                   label="Delete copy"

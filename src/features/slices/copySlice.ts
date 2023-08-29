@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { API_BASE_URL } from '../utils/variables'
 
-const URL = API_BASE_URL + 'book-copies/'
-
+const URL_COPIES = API_BASE_URL + 'book-copies/'
+const URL_BORROW = API_BASE_URL + 'checkouts/borrow/'
+const URL_RETURN = API_BASE_URL + 'checkouts/return/'
 import {
   CheckoutRequest,
   Copy,
@@ -20,7 +21,7 @@ const initialState: CopyState = {
 
 export const getCopies = createAsyncThunk('book-copies/fetch', async (id: string) => {
   const req = {
-    url: URL + id
+    url: URL_COPIES + id
   }
   const response = await getItemNoAuth(req)
   return response
@@ -28,7 +29,7 @@ export const getCopies = createAsyncThunk('book-copies/fetch', async (id: string
 
 export const addNewCopy = createAsyncThunk('book-copies/add', async (request: CopyPostRequest) => {
   const req = {
-    url: URL,
+    url: URL_COPIES,
     token: request.token,
     body: request
   }
@@ -39,9 +40,8 @@ export const addNewCopy = createAsyncThunk('book-copies/add', async (request: Co
 export const deleteCopy = createAsyncThunk(
   'book-copies/delete',
   async (request: CopyDeleteRequest) => {
-    console.log(request.id)
     const req = {
-      url: URL + request.id,
+      url: URL_COPIES + request.id,
       token: request.token
     }
     const response = await deleteItem(req)
@@ -53,10 +53,12 @@ export const borrowCopy = createAsyncThunk(
   'book-copies/borrow',
   async (postReq: CheckoutRequest) => {
     const req = {
-      url: URL,
+      url: URL_BORROW,
       token: postReq.token,
       body: postReq.data
     }
+    console.log('jh')
+    console.log(req)
     const response = await addItem(req)
     return response
   }
@@ -65,7 +67,7 @@ export const returnCopy = createAsyncThunk(
   'book-copies/return',
   async (postReq: CheckoutRequest) => {
     const req = {
-      url: URL,
+      url: URL_RETURN,
       token: postReq.token,
       body: postReq.data
     }
