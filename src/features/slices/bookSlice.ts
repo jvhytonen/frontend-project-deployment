@@ -4,8 +4,8 @@ import { Book, BookState, BookPostRequest, BookDeleteRequest } from '../types/ty
 import { deleteItem, getItemNoAuth } from '../utils/thunks'
 //import { API_BASE_URL } from '../../../src/vite-env.e'
 
-const URL = process.env.API_BASE_URL + 'books/'
-
+//const URL = process.env.API_BASE_URL + 'books/'
+const URL = 'e'
 const initialState: BookState = {
   items: null,
   isLoading: false,

@@ -4,8 +4,7 @@ import { AuthorState, Author, AuthorPostRequest, AuthorDeleteRequest } from '../
 import { addItem, deleteItem, getItemNoAuth, updateItem } from '../utils/thunks'
 //import { API_BASE_URL } from '../../../src/vite-env.e'
 
-const URL = process.env.REACT_APP_API_BASE_URL + 'authors/'
-
+const URL = 'https://fs14-backend-6whg.onrender.com/api/v1/'
 const initialState: AuthorState = {
   items: null,
   isLoading: false,

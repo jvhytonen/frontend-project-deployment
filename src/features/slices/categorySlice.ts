@@ -4,7 +4,8 @@ import { Category, CategoryState, CategoryPostRequest, CategoryDeleteRequest } f
 import { addItem, deleteItem, getItemNoAuth, updateItem } from '../utils/thunks'
 //import { API_BASE_URL } from '../../../src/vite-env.e'
 
-const URL = process.env.API_BASE_URL + 'categories/'
+//const URL = process.env.API_BASE_URL + 'categories/'
+const URL = 'e'
 
 const initialState: CategoryState = {
   items: null,

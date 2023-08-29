@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 //import { API_BASE_URL } from '../../../src/vite-env.e'
 
-const URL = process.env.API_BASE_URL + 'book-copies/'
+//const URL = process.env.API_BASE_URL + 'book-copies/'
+const URL = 'e'
 
 import {
   CheckoutRequest,

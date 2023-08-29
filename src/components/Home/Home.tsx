@@ -1,9 +1,5 @@
 import React from 'react'
 
-const urlBook = 'http://localhost:8081/api/v1/books/'
-const urlAuthor = 'http://localhost:8081/api/v1/authors/'
-const urlCategory = 'http://localhost:8081/api/v1/categories/'
-
 function Home() {
   return (
     <div className="flex justify-center items-center w-full">
