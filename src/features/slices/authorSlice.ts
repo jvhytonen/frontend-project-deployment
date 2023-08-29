@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { AuthorState, Author, AuthorPostRequest, AuthorDeleteRequest } from '../types/types'
 import { addItem, deleteItem, getItemNoAuth, updateItem } from '../utils/thunks'
-//import { API_BASE_URL } from '../../../src/vite-env.e'
 import { API_BASE_URL } from '../utils/variables'
 
 const URL = API_BASE_URL + 'authors/'
@@ -14,8 +13,6 @@ const initialState: AuthorState = {
 }
 
 export const getAllAuthors = createAsyncThunk('authors/fetch', async () => {
-  console.log(URL)
-  console.log(process.env.REACT_APP_API_BASE_URL)
   const req = {
     url: URL
   }
@@ -94,7 +91,6 @@ export const authorSlice = createSlice({
     })
     builder.addCase(updateExistingAuthor.fulfilled, (state, action) => {
       state.isLoading = false
-      console.log(action.payload)
     })
     builder.addCase(updateExistingAuthor.pending, (state) => {
       state.isLoading = true

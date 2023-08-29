@@ -55,16 +55,18 @@ function AdminAuthors() {
             <TableRow key={author.id}>
               <TableCell>{author.name}</TableCell>
               <TableCell>
-                <Button
-                  label="Edit author"
-                  handleClick={() => navigate(`../authors/edit/${author.id}`)}
-                  type="edit"
-                />
-                <Button
-                  label="Delete author"
-                  handleClick={() => handleDeleteConfirmation(author)}
-                  type="delete"
-                />
+                <div className="flex justify-around">
+                  <Button
+                    label="Edit author"
+                    handleClick={() => navigate(`../authors/edit/${author.id}`)}
+                    type="edit"
+                  />
+                  <Button
+                    label="Delete author"
+                    handleClick={() => handleDeleteConfirmation(author)}
+                    type="delete"
+                  />
+                </div>
               </TableCell>
             </TableRow>
           )

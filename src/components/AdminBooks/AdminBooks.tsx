@@ -69,24 +69,26 @@ function AdminBooks() {
             <TableCell>{book.title}</TableCell>
             <TableCell>{book.category.name}</TableCell>
             <TableCell>
-              <Button
-                label="Edit book"
-                handleClick={() => navigate(`books/edit/${book.id}`)}
-                type="edit"
-              />
-              <Button
-                label="Edit copies"
-                handleClick={() => navigate(`copies/edit/${book.id}`)}
-                type="edit"
-              />
-              <Button
-                label="Delete book"
-                handleClick={(e) => {
-                  setBookToBeDeleted(book)
-                  handleConfirm(e, `Are you sure you want to delete "${book.title}"?`)
-                }}
-                type="delete"
-              />
+              <div className="flex justify-around">
+                <Button
+                  label="Edit book"
+                  handleClick={() => navigate(`books/edit/${book.id}`)}
+                  type="edit"
+                />
+                <Button
+                  label="Edit copies"
+                  handleClick={() => navigate(`copies/edit/${book.id}`)}
+                  type="edit"
+                />
+                <Button
+                  label="Delete book"
+                  handleClick={(e) => {
+                    setBookToBeDeleted(book)
+                    handleConfirm(e, `Are you sure you want to delete "${book.title}"?`)
+                  }}
+                  type="delete"
+                />
+              </div>
             </TableCell>
           </TableRow>
         ))
@@ -99,26 +101,8 @@ function AdminBooks() {
       <AdminTable headers={headers} rows={book.isLoading ? [<Loading key="loading" />] : rows} />
 
       <div className="flex justify-center">
-        <Button label="Add book" handleClick={handleNavigation} type="neutral" />
+        <Button label="Add book" handleClick={() => navigate('../books/add')} type="neutral" />
       </div>
-      {showConfirmation && (
-        <Modal
-          type="confirm"
-          heading={'Confirm deleting book'}
-          text={confirmationText}
-          onConfirm={handleDeleteBook}
-          onCancel={handleCancel}
-        />
-      )}
-      {/* Modal to show that the operation was succesfull. */}
-      {showCompletion && (
-        <Modal
-          type="success"
-          heading={'Book deleted'}
-          text={`Book "${bookToBeDeleted?.title}" deleted`}
-          onConfirm={handleCompletionModalClosing}
-        />
-      )}
     </>
   )
 }

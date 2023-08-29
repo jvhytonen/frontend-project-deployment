@@ -24,7 +24,6 @@ function Books() {
   return (
     <section className="py-10 px-12">
       <h2 className="text-4xl font-bold text-center">Books: </h2>
-      {/* <FilterAuthors filterBooks={filterBooks} /> */}
       <div className="grid grid-flow-row gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {items !== null
           ? items.map((item) => {

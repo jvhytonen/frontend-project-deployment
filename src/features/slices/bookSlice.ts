@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { Book, BookState, BookPostRequest, BookDeleteRequest } from '../types/types'
 import { deleteItem, getItemNoAuth } from '../utils/thunks'
-//import { API_BASE_URL } from '../../../src/vite-env.e'
 import { API_BASE_URL } from '../utils/variables'
 
 const URL = API_BASE_URL + 'books/'
@@ -26,7 +25,6 @@ const uploadImage = async (file: File) => {
   formData.append('image', file)
   const URL =
     'https://erfv9p79ya.execute-api.eu-central-1.amazonaws.com/dev/upload-image-s3-jvh/' + file.name
-  console.log(URL)
   const res = await fetch(URL, {
     method: 'PUT',
     body: formData
@@ -41,7 +39,6 @@ export const addNewBook = createAsyncThunk('books/add', async (newBookReq: BookP
     const imageUpload = await uploadImage(newBookReq.coverImage)
     console.log(imageUpload)
   } */
-  const URL = 'http://localhost:8081/api/v1/books/'
   const response = await fetch(URL, {
     method: 'POST',
     headers: {
@@ -133,7 +130,6 @@ export const bookSlice = createSlice({
     })
     builder.addCase(updateExistingBook.fulfilled, (state, action) => {
       state.isLoading = false
-      console.log(action.payload)
     })
     builder.addCase(updateExistingBook.pending, (state) => {
       state.isLoading = true

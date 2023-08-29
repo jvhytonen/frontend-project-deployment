@@ -150,7 +150,8 @@ function AddBook() {
           </form>
         </div>
       ) : (
-        'No authors!'
+        // One cannot add new book if there are no authors or categories in the database or they are unavailable.
+        'No authors or categories found!'
       )}
     </div>
   )

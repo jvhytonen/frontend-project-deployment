@@ -1,17 +1,8 @@
-import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 import { BookIntroType } from '../../features/types/types'
-import { AppDispatch, RootState } from '../../store'
-import { useSelector } from 'react-redux'
-import { deleteBook } from '../../features/slices/bookSlice'
 
-function BookIntro({ isbn, title, id, author, description, imageUrl }: BookIntroType) {
-  const user = useSelector((state: RootState) => state.user)
-  const dispatch = useDispatch<AppDispatch>()
-  const navigate = useNavigate()
-
+function BookIntro({ title, id, description, imageUrl }: BookIntroType) {
   return (
     <div className="my-0 ml-8 mr-auto py-2 sm:py-8 md:py-2 rounded-lg shadow-lg w-2/3 shadow-gray-200 bg-white">
       <div>

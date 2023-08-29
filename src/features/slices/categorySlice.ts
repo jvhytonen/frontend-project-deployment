@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { Category, CategoryState, CategoryPostRequest, CategoryDeleteRequest } from '../types/types'
 import { addItem, deleteItem, getItemNoAuth, updateItem } from '../utils/thunks'
-//import { API_BASE_URL } from '../../../src/vite-env.e'
 import { API_BASE_URL } from '../utils/variables'
 
 const URL = API_BASE_URL + 'categories/'
@@ -104,7 +103,6 @@ export const categorySlice = createSlice({
     })
     builder.addCase(updateExistingCategory.fulfilled, (state, action) => {
       state.isLoading = false
-      console.log(action.payload)
     })
     builder.addCase(updateExistingCategory.pending, (state) => {
       state.isLoading = true

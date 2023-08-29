@@ -11,14 +11,13 @@ function BookDetails() {
   const params = useParams()
   const filteredBook = book.items?.filter((item) => params.id === item.id)
   const bookItem = filteredBook ? filteredBook[0] : null
-
   return (
     <div className="flex justify-center h-[50%] mt-[100px]">
       {bookItem ? (
         <div className="block w-[30%] my-8 rounded-lg bg-white shadow-lg dark:bg-neutral-700">
           <img
             className="rounded-t-lg"
-            src="https://tubular-unicorn-f30c80.netlify.app/seven_brothers.jpg"
+            src={bookItem.imageUrl ? bookItem.imageUrl : '../defaultCover.jpg'}
             alt=""
           />
           <div className="p-6">
@@ -29,6 +28,7 @@ function BookDetails() {
               {bookItem.description}
             </p>
             <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200">
+              {/* Formats the date to a year */}
               Published: {showYear(bookItem.yearPublished)}
             </p>
             <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200">

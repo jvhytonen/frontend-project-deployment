@@ -57,16 +57,18 @@ function AdminCategories() {
             <TableRow key={category.id}>
               <TableCell>{category.name}</TableCell>
               <TableCell>
-                <Button
-                  label="Edit category"
-                  handleClick={() => navigate(`../categories/edit/${category.id}`)}
-                  type="edit"
-                />
-                <Button
-                  label="Delete category"
-                  handleClick={() => handleDeleteConfirmation(category)}
-                  type="delete"
-                />
+                <div className="flex justify-around">
+                  <Button
+                    label="Edit category"
+                    handleClick={() => navigate(`../categories/edit/${category.id}`)}
+                    type="edit"
+                  />
+                  <Button
+                    label="Delete category"
+                    handleClick={() => handleDeleteConfirmation(category)}
+                    type="delete"
+                  />
+                </div>
               </TableCell>
             </TableRow>
           )

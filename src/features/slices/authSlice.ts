@@ -1,9 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { fetchData } from '../fetchAPI/fetchAPI'
 import { User, Credentials, UserState } from '../types/types'
 import jwtDecode from 'jwt-decode'
 import { apiErrorHandler } from '../utils/errors'
-//import { API_BASE_URL } from '../../../src/vite-env.e'
 import { API_BASE_URL } from '../utils/variables'
 
 const URL = API_BASE_URL + 'signin'

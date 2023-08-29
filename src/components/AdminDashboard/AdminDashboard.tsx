@@ -8,12 +8,12 @@ function AdminDashboard() {
     <div>
       <h2 className="font-bold text-2xl text-center">Books</h2>
       <AdminBooks />
-      <div className="w-full flex my-2">
-        <div className="w-1/2">
+      <div className="w-full flex justify-around my-2">
+        <div className="w-2/5">
           <h2 className="font-bold text-2xl text-center">Authors</h2>
           <AdminAuthors />
         </div>
-        <div className="w-1/2">
+        <div className="w-2/5">
           <h2 className="font-bold text-2xl text-center">Categories</h2>
           <AdminCategories />
         </div>

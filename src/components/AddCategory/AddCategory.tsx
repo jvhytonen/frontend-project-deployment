@@ -58,7 +58,7 @@ function AddCategory() {
     <>
       <div className="flex flex-col justify-center items-center w-full mt-[200px]">
         <h2 className="font-bold text-2xl">Add category:</h2>
-        <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-1/2">
           <InputItem
             fieldName="name"
             name="name"
