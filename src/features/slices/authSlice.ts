@@ -4,9 +4,10 @@ import { User, Credentials, UserState } from '../types/types'
 import jwtDecode from 'jwt-decode'
 import { apiErrorHandler } from '../utils/errors'
 //import { API_BASE_URL } from '../../../src/vite-env.e'
+import { API_BASE_URL } from '../utils/variables'
 
-//const URL = process.env.API_BASE_URL + 'signin'
-const URL = 'e'
+const URL = API_BASE_URL + 'signin'
+
 const initialUser: User = {
   id: '',
   username: '',

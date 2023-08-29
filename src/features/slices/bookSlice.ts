@@ -3,9 +3,10 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { Book, BookState, BookPostRequest, BookDeleteRequest } from '../types/types'
 import { deleteItem, getItemNoAuth } from '../utils/thunks'
 //import { API_BASE_URL } from '../../../src/vite-env.e'
+import { API_BASE_URL } from '../utils/variables'
 
-//const URL = process.env.API_BASE_URL + 'books/'
-const URL = 'e'
+const URL = API_BASE_URL + 'books/'
+
 const initialState: BookState = {
   items: null,
   isLoading: false,

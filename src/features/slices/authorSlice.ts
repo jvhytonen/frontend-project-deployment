@@ -3,8 +3,10 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { AuthorState, Author, AuthorPostRequest, AuthorDeleteRequest } from '../types/types'
 import { addItem, deleteItem, getItemNoAuth, updateItem } from '../utils/thunks'
 //import { API_BASE_URL } from '../../../src/vite-env.e'
+import { API_BASE_URL } from '../utils/variables'
 
-const URL = 'https://fs14-backend-6whg.onrender.com/api/v1/'
+const URL = API_BASE_URL + 'authors/'
+
 const initialState: AuthorState = {
   items: null,
   isLoading: false,
