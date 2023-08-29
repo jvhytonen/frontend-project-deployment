@@ -21,6 +21,5 @@ export const uploadImage = async (file: File) => {
     body: formData
   })
   const response = res.json()
-  console.log(response)
   return response
 }
