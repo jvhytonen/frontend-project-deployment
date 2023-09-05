@@ -1,12 +1,10 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '../../store'
+import { useNavigate } from 'react-router-dom'
 
 import Button from '../Button/Button'
-import { AppDispatch, RootState } from '../../store'
-import { Book, BookPostRequest } from '../../features/types/types'
 import { addNewBook, uploadImage } from '../../features/slices/bookSlice'
-import { validateNewBookData } from '../../features/validation/validate'
-import { useNavigate } from 'react-router-dom'
 import InputItem from '../FormControls/InputItem/InputItem'
 import { getAllCategories } from '../../features/slices/categorySlice'
 import { getAllAuthors } from '../../features/slices/authorSlice'
@@ -14,7 +12,8 @@ import OptionItem from '../FormControls/OptionItem/OptionItem'
 import TextArea from '../FormControls/TextArea/TextArea'
 import UploadImage from '../FormControls/UploadImage/UploadImage'
 import { askConfirmation, finished } from '../../features/slices/modalSlice'
-//import { uploadImage } from '../../features/fetchAPI/fetchAPI'
+import { Book } from '../../features/types/reduxTypes'
+import { BookPostRequest } from '../../features/types/requestTypes'
 
 function AddBook() {
   // Variables from Redux
@@ -50,7 +49,7 @@ function AddBook() {
     }))
   }
   // Sets cover image to it's own state and the filename to a state where everything else resides.
-  const handleImage = (image: File, fileName: string) => {
+  const handleImage = (image: File) => {
     setCoverImage(image)
     if (newBook?.isbn) {
       setNewBook((prevState) => ({

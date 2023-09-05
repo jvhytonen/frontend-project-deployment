@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { User, Credentials, UserState } from '../types/types'
+import { User, UserState } from '../types/reduxTypes'
 import jwtDecode from 'jwt-decode'
 import { apiErrorHandler } from '../utils/errors'
 import { API_BASE_URL } from '../utils/variables'
+import { Credentials } from '../types/actionTypes'
 
 const URL = API_BASE_URL + 'signin'
 

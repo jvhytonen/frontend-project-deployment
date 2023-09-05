@@ -5,12 +5,9 @@ import { useNavigate } from 'react-router-dom'
 import { deleteAuthor } from '../../features/slices/authorSlice'
 import Button from '../Button/Button'
 import AdminTable from '../AdminTable/AdminTable'
-import { useModal } from '../../features/hooks/useModal'
 import { useEffect, useState } from 'react'
-import { Author } from '../../features/types/types'
-import Modal from '../Modal/Modal'
 import { askConfirmation, finished } from '../../features/slices/modalSlice'
-import DeleteAuthor from '../DeleteAuthor/DeleteAuthor'
+import { Author } from '../../features/types/reduxTypes'
 
 function AdminAuthors() {
   const [authorToDelete, setAuthorToDelete] = useState<Author | null>(null)
@@ -50,7 +47,7 @@ function AdminAuthors() {
 
   const rows =
     authors.items !== null && authors.items.length > 0
-      ? authors.items.map((author) => {
+      ? authors.items.map((author: Author) => {
           return (
             <TableRow key={author.id}>
               <TableCell>{author.name}</TableCell>

@@ -1,8 +1,8 @@
-import { CopyProps } from '../../features/types/types'
 import { formatDate } from '../../features/utils/helpers'
 import Button from '../Button/Button'
 import { RootState } from '../../store'
 import { useSelector } from 'react-redux'
+import { CopyProps } from '../../features/types/componentTypes'
 
 function CopyWithAuth({ copy, copyOrderNumber, onCheckout }: CopyProps) {
   const user = useSelector((state: RootState) => state.auth.items)
@@ -27,7 +27,7 @@ function CopyWithAuth({ copy, copyOrderNumber, onCheckout }: CopyProps) {
             e.preventDefault()
             onCheckout(copy, 'borrow')
           }}
-          type="neutral"
+          type="borrow"
         />
       )
     } else if (copyIsBorrowedByUser) {
@@ -39,7 +39,7 @@ function CopyWithAuth({ copy, copyOrderNumber, onCheckout }: CopyProps) {
             e.preventDefault()
             onCheckout(copy, 'return')
           }}
-          type="neutral"
+          type="return"
         />
       )
     } else if (copyIsBorrowedBySomeone) {
@@ -52,7 +52,7 @@ function CopyWithAuth({ copy, copyOrderNumber, onCheckout }: CopyProps) {
   }
 
   return (
-    <div className="flex items-center my-1">
+    <div className="flex flex-col items-center justify-around m-3">
       <p>Copy: {copyOrderNumber}: &nbsp;&nbsp; </p>
       {showCopyStatus()}
     </div>

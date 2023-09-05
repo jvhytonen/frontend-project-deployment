@@ -10,7 +10,7 @@ import {
   CopyState,
   CategoryState,
   ModalState
-} from './features/types/types'
+} from './features/types/miscTypes'
 import bookReducer from './features/slices/bookSlice'
 import authorSlice from './features/slices/authorSlice'
 import userSlice from './features/slices/userSlice'

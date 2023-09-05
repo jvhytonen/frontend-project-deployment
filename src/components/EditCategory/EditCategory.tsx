@@ -2,12 +2,14 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import { Category, CategoryPostRequest, FormElement } from '../../features/types/types'
 import InputItem from '../FormControls/InputItem/InputItem'
 import Button from '../Button/Button'
 import { AppDispatch, RootState } from '../../store'
 import { updateExistingCategory } from '../../features/slices/categorySlice'
 import { askConfirmation, finished } from '../../features/slices/modalSlice'
+import { Category } from '../../features/types/reduxTypes'
+import { FormElement } from '../../features/types/componentTypes'
+import { CategoryPostRequest } from '../../features/types/requestTypes'
 
 function EditCategory() {
   const token = useSelector((state: RootState) => state.auth.token)
@@ -15,7 +17,7 @@ function EditCategory() {
   const categories = useSelector((state: RootState) => state.category)
   const params = useParams()
   const item = categories.items
-    ? categories.items?.find((category) => params.id === category.id)
+    ? categories.items?.find((category: Category) => params.id === category.id)
     : null
   const [categoryToEdit, setCategoryToEdit] = useState<Category | null | undefined>(item)
 

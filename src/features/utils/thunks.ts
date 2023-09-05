@@ -1,10 +1,10 @@
-import { apiErrorHandler } from './errors'
 import {
   DeleteRequest,
   GetRequestWithAuth,
   GetRequestWithoutAuth,
   PostRequest
-} from '../types/types'
+} from '../types/requestTypes'
+import { apiErrorHandler } from './errors'
 
 export const getItemNoAuth = async (req: GetRequestWithoutAuth) => {
   const response = await fetch(req.url, {

@@ -1,4 +1,4 @@
-import { ValidateBookType, Book, Author } from '../types/types'
+import { Author, Book } from '../types/reduxTypes'
 
 export const validateNewBookData = (formInputs: Book) => {
   if (

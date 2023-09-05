@@ -1,4 +1,4 @@
-import { ErrorState, IsLoadingState } from '../types/types'
+import { IsLoadingState } from '../types/reduxTypes'
 
 export const formatDate = (dateString: string) => {
   const date = new Date(dateString)

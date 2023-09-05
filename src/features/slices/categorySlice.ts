@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import { Category, CategoryState, CategoryPostRequest, CategoryDeleteRequest } from '../types/types'
 import { addItem, deleteItem, getItemNoAuth, updateItem } from '../utils/thunks'
 import { API_BASE_URL } from '../utils/variables'
+import { Category, CategoryState } from '../types/reduxTypes'
+import { CategoryDeleteRequest, CategoryPostRequest } from '../types/requestTypes'
 
 const URL = API_BASE_URL + 'categories/'
 

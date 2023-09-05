@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { RootState, AppDispatch } from '../../store'
 import AuthorDetails from '../AuthorDetails/AuthorDetails'
 import { getAllAuthors } from '../../features/slices/authorSlice'
+import { Author } from '../../features/types/reduxTypes'
 
 function Authors() {
   const dispatch = useDispatch<AppDispatch>()
@@ -19,7 +20,7 @@ function Authors() {
       <div className="w-full mx-8 my-8 flex items-center justify-center">
         <div className="grid grid-cols-3 gap-20 w-[80%]">
           {items !== null
-            ? items.map((item) => {
+            ? items.map((item: Author) => {
                 return (
                   <AuthorDetails
                     key={item.id}

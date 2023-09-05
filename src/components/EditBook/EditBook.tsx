@@ -2,7 +2,6 @@ import React, { ChangeEvent, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { Book, BookPostRequest } from '../../features/types/types'
 import { AppDispatch, RootState } from '../../store'
 import Button from '../Button/Button'
 import { updateExistingBook } from '../../features/slices/bookSlice'
@@ -13,6 +12,8 @@ import TextArea from '../FormControls/TextArea/TextArea'
 import UploadImage from '../FormControls/UploadImage/UploadImage'
 import { useModal } from '../../features/hooks/useModal'
 import Modal from '../Modal/Modal'
+import { Book } from '../../features/types/reduxTypes'
+import { BookPostRequest } from '../../features/types/requestTypes'
 
 function EditBook() {
   const {
@@ -31,7 +32,7 @@ function EditBook() {
   const authors = useSelector((state: RootState) => state.author.items)
   const categories = useSelector((state: RootState) => state.category.items)
   // Item is the book to be edited.
-  const item = book.items ? book.items?.find((book) => params.id === book.id) : null
+  const item = book.items ? book.items?.find((book: Book) => params.id === book.id) : null
 
   const [bookToEdit, setBookToEdit] = useState<Book | null | undefined>(item)
   const [coverImage, setCoverImage] = useState<File | null>(null)
@@ -84,8 +85,7 @@ function EditBook() {
       // All data needed in redux slice to send the request: token and body.
       const updatedBookReq: BookPostRequest = {
         data: bookToEdit,
-        token: token,
-        coverImage: coverImage
+        token: token
       }
       if (validateUpdatedBookData(bookToEdit)) {
         await dispatch(updateExistingBook(updatedBookReq)).unwrap()

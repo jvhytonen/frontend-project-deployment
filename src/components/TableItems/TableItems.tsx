@@ -1,5 +1,5 @@
 import React from 'react'
-import { TableHeadingType, TableProps } from '../../features/types/types'
+import { TableHeadingType, TableProps } from '../../features/types/componentTypes'
 
 export function TableHeading({ label }: TableHeadingType) {
   return (

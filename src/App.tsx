@@ -29,7 +29,6 @@ import { nullifyUserError } from './features/slices/userSlice'
 import { findLoadingStates } from './features/utils/helpers'
 import { nullifyAuthError } from './features/slices/authSlice'
 import AdminCopies from './components/AdminCopies/AdminCopies'
-import { Root } from 'react-dom/client'
 import { resetModal, confirm } from './features/slices/modalSlice'
 
 function App() {

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { ModalState } from '../types/types'
+import { ModalState } from '../types/reduxTypes'
 
 const initialState: ModalState = {
   text: null,

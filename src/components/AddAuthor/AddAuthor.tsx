@@ -3,15 +3,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import Button from '../Button/Button'
-import { Author, AuthorPostRequest, FormElement } from '../../features/types/types'
 import { AppDispatch, RootState } from '../../store'
 import { addNewAuthor } from '../../features/slices/authorSlice'
-import { validateAuthorData } from '../../features/validation/validate'
-import Modal from '../Modal/Modal'
 import TextArea from '../FormControls/TextArea/TextArea'
 import InputItem from '../FormControls/InputItem/InputItem'
-import { useModal } from '../../features/hooks/useModal'
 import { askConfirmation, finished } from '../../features/slices/modalSlice'
+import { Author } from '../../features/types/reduxTypes'
+import { FormElement } from '../../features/types/componentTypes'
+import { AuthorPostRequest } from '../../features/types/requestTypes'
 
 function AddAuthor() {
   const modal = useSelector((state: RootState) => state.modal)

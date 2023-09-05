@@ -4,42 +4,34 @@ import { useParams } from 'react-router-dom'
 
 import { RootState } from '../../store'
 import Copies from '../Copies/Copies'
-import { showYear } from '../../features/utils/helpers'
-import { S3IMAGEURL } from '../../features/utils/variables'
+import BookCoverImage from '../BookCoverImage/BookCoverImage'
+import CardHeading from '../CardHeading/CardHeading'
+import CategoryAndPublisher from '../CategoryAndPublisher/CategoryAndPublisher'
+import Description from '../Description/Description'
+import { Book } from '../../features/types/reduxTypes'
 
 function BookDetails() {
   const book = useSelector((state: RootState) => state.book)
   const params = useParams()
-  const filteredBook = book.items?.filter((item) => params.id === item.id)
+  const filteredBook = book.items?.filter((item: Book) => params.id === item.id)
   const bookItem = filteredBook ? filteredBook[0] : null
   return (
     <div>
       {bookItem ? (
-        <div className="w-full flex mx-8 rounded-lg bg-white shadow-lg">
-          <img
-            className="rounded-lg max-w-[360px]"
-            src={bookItem.imageUrl ? S3IMAGEURL + bookItem.imageUrl : '../defaultCover.jpg'}
-            alt=""
-          />
-          <div className="m-7 font-bold flex-grow">
-            <h3 className="text-center text-5xl"> {bookItem.title}</h3>
-            <p className="text-center text-base text-neutral-600 justify-self-end">
-              By: {bookItem.author.name}
-            </p>
-            <div className="flex justify-around mt-4 mb-8 border-y-2 border-gray-300">
-              <p className="mb-4 text-base text-neutral-600 ">Category: {bookItem.category.name}</p>
-              <p className="mb-4 text-base text-neutral-600 ">Publisher: {bookItem.publisher}</p>
-              <p className="mb-4 text-base text-neutral-600 ">
-                Published: {showYear(bookItem.yearPublished)}
-              </p>
-              <p className="mb-4 text-base text-neutral-600">ISBN: {bookItem.isbn}</p>
-            </div>
-            <div className="h-1/4">
-              <p className="mb-4 text-center text-base text-neutral-600 italic">
-                {bookItem.description}
-              </p>
-            </div>
-            <div className="flex ml-4 mt-4 mb-8 border-t-2 border-gray-300">
+        <div className="block w-[90%] md:flex mx-8 rounded-lg bg-white shadow-lg">
+          <div className="flex justify-center items-center">
+            <BookCoverImage imageUrl={bookItem.imageUrl} />
+          </div>
+          <div className="h-full md:m-7 font-bold flex-grow">
+            <CardHeading author={bookItem.author} title={bookItem.title} />
+            <CategoryAndPublisher
+              category={bookItem.category}
+              publisher={bookItem.publisher}
+              yearPublished={bookItem.yearPublished}
+              isbn={bookItem.isbn}
+            />
+            <Description description={bookItem.description} />
+            <div className="flex border-t-2 border-gray-300">
               <Copies bookId={bookItem.id as string} />
             </div>
           </div>

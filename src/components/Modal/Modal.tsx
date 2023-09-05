@@ -1,9 +1,10 @@
 import React from 'react'
-import { ModalProps } from '../../features/types/types'
+
 import Button from '../Button/Button'
 import { AppDispatch, RootState } from '../../store'
 import { useDispatch, useSelector } from 'react-redux'
 import { resetModal } from '../../features/slices/modalSlice'
+import { ModalProps } from '../../features/types/componentTypes'
 
 function Modal({ heading, text, type, onConfirm, onCancel }: ModalProps) {
   const modal = useSelector((state: RootState) => state.modal)

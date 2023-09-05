@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { fetchData } from '../fetchAPI/fetchAPI'
-import { User, UserState, Credentials } from '../types/types'
 import jwtDecode from 'jwt-decode'
+import { User, UserState } from '../types/reduxTypes'
 
 const initialUser: User = {
   id: '',

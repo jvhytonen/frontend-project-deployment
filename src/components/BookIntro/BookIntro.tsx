@@ -1,10 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom'
 
-import { BookIntroType } from '../../features/types/types'
 import { S3IMAGEURL } from '../../features/utils/variables'
 import Button from '../Button/Button'
+import { BookIntroProps } from '../../features/types/componentTypes'
 
-function BookIntro({ title, id, author, imageUrl }: BookIntroType) {
+function BookIntro({ title, id, author, imageUrl }: BookIntroProps) {
   const navigate = useNavigate()
   return (
     <div className="my-0 ml-8 mr-auto py-2 sm:py-8 md:py-2 rounded-lg shadow-lg w-2/3 shadow-gray-200 bg-white">
@@ -21,9 +21,6 @@ function BookIntro({ title, id, author, imageUrl }: BookIntroType) {
       <div className="text-center">
         <Button label="Read more" handleClick={() => navigate(`/books/${id}`)} type="neutral" />
       </div>
-      {/*  <div className="text-center">
-        <Link to={`/books/${id}`}>Read more</Link>
-      </div> */}
     </div>
   )
 }

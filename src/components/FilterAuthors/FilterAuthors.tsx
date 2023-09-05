@@ -2,15 +2,14 @@ import React, { useState } from 'react'
 import { RootState } from '../../store'
 import { useSelector } from 'react-redux'
 import FilterAuthorCheckbox from '../FilterAuthorCheckbox/FilterAuthorCheckbox'
-import { FilterType } from '../Books/Books'
+import { Author } from '../../features/types/reduxTypes'
+import { FilterAuthors } from '../../features/types/componentTypes'
 
-type FilterAuthors = {
-  filterBooks: FilterType
-}
+/* Filter still under construction */
 
 function FilterAuthors({ filterBooks }: FilterAuthors) {
   const [isAllChecked, setIsAllChecked] = useState<boolean>(true)
-  const { items, error } = useSelector((state: RootState) => state.author)
+  const { items } = useSelector((state: RootState) => state.author)
   const handleSetAllChecked = () => {
     setIsAllChecked(!isAllChecked)
   }
@@ -32,7 +31,7 @@ function FilterAuthors({ filterBooks }: FilterAuthors) {
           </label>
         </div>
         {items
-          ? items.map((item) => {
+          ? items.map((item: Author) => {
               return (
                 <FilterAuthorCheckbox
                   filterBooks={filterBooks}

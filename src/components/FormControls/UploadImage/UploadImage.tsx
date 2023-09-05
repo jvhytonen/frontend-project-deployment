@@ -1,5 +1,5 @@
 import React from 'react'
-import { UploadImageType } from '../../../features/types/types'
+import { UploadImageType } from '../../../features/types/componentTypes'
 
 function UploadImage({ onImageUpload }: UploadImageType) {
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {

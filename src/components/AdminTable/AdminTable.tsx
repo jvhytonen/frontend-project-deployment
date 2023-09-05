@@ -1,6 +1,5 @@
-import React from 'react'
-import { AdminTableProps } from '../../features/types/types'
 import { TableHeading } from '../TableItems/TableItems'
+import { AdminTableProps } from '../../features/types/componentTypes'
 
 function AdminTable({ headers, rows }: AdminTableProps) {
   return (

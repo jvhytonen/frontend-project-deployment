@@ -2,7 +2,6 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { Author, AuthorPostRequest, FormElement } from '../../features/types/types'
 import { AppDispatch, RootState } from '../../store'
 import Button from '../Button/Button'
 import { validateAuthorData } from '../../features/validation/validate'
@@ -10,6 +9,9 @@ import { updateExistingAuthor } from '../../features/slices/authorSlice'
 import InputItem from '../FormControls/InputItem/InputItem'
 import TextArea from '../FormControls/TextArea/TextArea'
 import { askConfirmation, finished } from '../../features/slices/modalSlice'
+import { Author } from '../../features/types/reduxTypes'
+import { FormElement } from '../../features/types/componentTypes'
+import { AuthorPostRequest } from '../../features/types/requestTypes'
 
 function EditAuthor() {
   const params = useParams()
@@ -18,7 +20,9 @@ function EditAuthor() {
   const token = useSelector((state: RootState) => state.auth.token)
   const modal = useSelector((state: RootState) => state.modal)
   const authors = useSelector((state: RootState) => state.author)
-  const item = authors.items ? authors.items?.find((author) => params.id === author.id) : null
+  const item = authors.items
+    ? authors.items?.find((author: Author) => params.id === author.id)
+    : null
   const [authorToEdit, setAuthorToEdit] = useState<Author | null | undefined>(item)
   const [validationError, setValidationError] = useState<boolean>(false)
   const handleChange: (e: ChangeEvent<FormElement>) => void = (e) => {

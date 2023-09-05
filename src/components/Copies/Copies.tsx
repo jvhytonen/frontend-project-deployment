@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {
-  CheckoutActionType,
-  CheckoutBorrow,
-  CheckoutReturn,
-  CopiesProps,
-  Copy
-} from '../../features/types/types'
+
 import { AppDispatch, RootState } from '../../store'
 import { useDispatch, useSelector } from 'react-redux'
 import CopyWithAuth from '../CopyWithAuth/CopyWithAuth'
@@ -13,6 +7,13 @@ import CopyNoAuth from '../CopyNoAuth/CopyNoAuth'
 import { borrowCopy, getCopies, returnCopy } from '../../features/slices/copySlice'
 import { askConfirmation, finished } from '../../features/slices/modalSlice'
 import { useNavigate } from 'react-router-dom'
+import { CopiesProps } from '../../features/types/componentTypes'
+import { Copy } from '../../features/types/reduxTypes'
+import {
+  CheckoutActionType,
+  CheckoutBorrow,
+  CheckoutReturn
+} from '../../features/types/actionTypes'
 
 function Copies({ bookId }: CopiesProps) {
   // Item to be borrowed or returned
@@ -34,6 +35,7 @@ function Copies({ bookId }: CopiesProps) {
   }, [])
 
   useEffect(() => {
+    // When the user confirms the action in modal, borrow or return is excecuted.
     if (modal.status === 'confirmed' && checkoutType === 'borrow') {
       handleBorrow()
     } else if (modal.status === 'confirmed' && checkoutType === 'return') {
@@ -81,12 +83,12 @@ function Copies({ bookId }: CopiesProps) {
     }
   }
 
-  // If the user is logged in, the CopyWithAuth will be rendered. If not CopyNoAuth will be shown.
+  // If the user is logged in, the CopyWithAuth (with the possibility to borrow/return) will be rendered. If not CopyNoAuth will be shown.
   const isLoggedIn = user.role !== null ? true : false
 
   const showCopies = () => {
     if (isLoggedIn && copies !== null) {
-      return copies.map((item, index) => (
+      return copies.map((item: Copy, index: number) => (
         <CopyWithAuth
           key={item.bookCopyId}
           copy={item}
@@ -95,7 +97,7 @@ function Copies({ bookId }: CopiesProps) {
         />
       ))
     } else if (!isLoggedIn && copies !== null) {
-      return copies.map((item, index) => (
+      return copies.map((item: Copy, index: number) => (
         <CopyNoAuth key={item.bookCopyId} copyOrderNumber={index + 1} copy={item} />
       ))
     } else {
@@ -104,9 +106,9 @@ function Copies({ bookId }: CopiesProps) {
   }
 
   return (
-    <div>
-      <h3 className="text-2xl">Copies</h3>
-      {showCopies()}
+    <div className="w-full">
+      <h3 className="text-2xl text-center">Copies</h3>
+      <div className="flex flex-col justify-around md:flex-row">{showCopies()}</div>
     </div>
   )
 }

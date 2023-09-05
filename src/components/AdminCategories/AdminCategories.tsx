@@ -6,10 +6,8 @@ import { useNavigate } from 'react-router-dom'
 import { deleteCategory } from '../../features/slices/categorySlice'
 import Button from '../Button/Button'
 import AdminTable from '../AdminTable/AdminTable'
-import { useModal } from '../../features/hooks/useModal'
-import Modal from '../Modal/Modal'
-import { Category } from '../../features/types/types'
 import { askConfirmation, finished } from '../../features/slices/modalSlice'
+import { Category } from '../../features/types/reduxTypes'
 
 function AdminCategories() {
   const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null)
@@ -52,7 +50,7 @@ function AdminCategories() {
   // AdminTable.tsx is wrapping this table
   const rows =
     categories.items !== null && categories.items.length > 0
-      ? categories.items.map((category) => {
+      ? categories.items.map((category: Category) => {
           return (
             <TableRow key={category.id}>
               <TableCell>{category.name}</TableCell>

@@ -2,16 +2,13 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { Category, CategoryPostRequest } from '../../features/types/types'
 import InputItem from '../FormControls/InputItem/InputItem'
 import Button from '../Button/Button'
 import { AppDispatch, RootState } from '../../store'
-import { addNewAuthor } from '../../features/slices/authorSlice'
-import { validateAuthorData } from '../../features/validation/validate'
 import { addNewCategory } from '../../features/slices/categorySlice'
 import { askConfirmation, finished } from '../../features/slices/modalSlice'
-import Modal from '../Modal/Modal'
-import { useModal } from '../../features/hooks/useModal'
+import { Category } from '../../features/types/reduxTypes'
+import { CategoryPostRequest } from '../../features/types/requestTypes'
 
 function AddCategory() {
   const token = useSelector((state: RootState) => state.auth.token)

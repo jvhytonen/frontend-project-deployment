@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Book } from '../../features/types/types'
-import { FilterType } from '../Books/Books'
-
-type FilterAuthorsCheckbox = {
-  author: string
-  defaultChecked: boolean
-  filterBooks: FilterType
-}
+import { FilterAuthorsCheckbox } from '../../features/types/componentTypes'
 
 function FilterAuthorCheckbox({ author, defaultChecked, filterBooks }: FilterAuthorsCheckbox) {
   const [isChecked, setIsChecked] = useState<boolean>(defaultChecked)

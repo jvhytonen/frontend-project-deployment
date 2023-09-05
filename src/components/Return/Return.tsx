@@ -3,10 +3,11 @@ import Button from '../Button/Button'
 import { useModal } from '../../features/hooks/useModal'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../store'
-import { CheckoutReturn, ReturnProps } from '../../features/types/types'
 import { returnCopy } from '../../features/slices/copySlice'
 import Modal from '../Modal/Modal'
 import { useNavigate } from 'react-router-dom'
+import { ReturnProps } from '../../features/types/componentTypes'
+import { CheckoutReturn } from '../../features/types/actionTypes'
 
 function Borrow({ copyId, checkoutId }: ReturnProps) {
   const user = useSelector((state: RootState) => state.auth.items)

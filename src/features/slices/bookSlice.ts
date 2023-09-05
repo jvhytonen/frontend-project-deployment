@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import { Book, BookState, BookPostRequest, BookDeleteRequest, Token } from '../types/types'
 import { deleteItem, getItemNoAuth } from '../utils/thunks'
 import { API_BASE_URL } from '../utils/variables'
+import { Book, BookState } from '../types/reduxTypes'
+import { BookDeleteRequest, BookPostRequest } from '../types/requestTypes'
 
 const URL = API_BASE_URL + 'books/'
 const IMAGEUPLOADURL = API_BASE_URL + 'images/upload/'
-//const IMAGEUPLOADURL = 'http://localhost:8081/api/v1/images/upload/'
 
 const initialState: BookState = {
   items: null,

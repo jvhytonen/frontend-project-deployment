@@ -1,5 +1,5 @@
 import React from 'react'
-import { InputItemType } from '../../../features/types/types'
+import { InputItemType } from '../../../features/types/componentTypes'
 
 function InputItem({
   fieldName,

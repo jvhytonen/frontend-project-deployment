@@ -4,14 +4,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
 import { addNewCopy, deleteCopy, getCopies } from '../../features/slices/copySlice'
-import Copy from '../CopyWithAuth/CopyWithAuth'
 import Button from '../Button/Button'
-import { TableCell, TableHeading, TableRow } from '../TableItems/TableItems'
+import { TableCell, TableRow } from '../TableItems/TableItems'
 import { useModal } from '../../features/hooks/useModal'
 import AdminTable from '../AdminTable/AdminTable'
 import Modal from '../Modal/Modal'
-import { Checkout } from '../../features/types/types'
 import { formatDate } from '../../features/utils/helpers'
+import { Book, Checkout, Copy } from '../../features/types/reduxTypes'
 
 function AdminCopies() {
   const {
@@ -29,7 +28,7 @@ function AdminCopies() {
   const copies = useSelector((state: RootState) => state.copy)
   const book = useSelector((state: RootState) => state.book)
   // Item is the book related to the copies.
-  const item = book.items ? book.items?.find((book) => params.id === book.id) : null
+  const item = book.items ? book.items?.find((book: Book) => params.id === book.id) : null
 
   const handleAddNewCopy = async () => {
     setShowConfirmation(false)
@@ -83,7 +82,7 @@ function AdminCopies() {
   const headers = ['Copy-id', 'Status', 'Actions']
   const rows =
     copies.items !== null && copies.items.length > 0
-      ? copies.items.map((copy) => {
+      ? copies.items.map((copy: Copy) => {
           return (
             <TableRow key={copy.bookCopyId}>
               <TableCell>{copy.bookCopyId}</TableCell>

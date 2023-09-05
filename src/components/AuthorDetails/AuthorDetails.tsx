@@ -1,5 +1,5 @@
 import React from 'react'
-import { Author } from '../../features/types/types'
+import { Author } from '../../features/types/reduxTypes'
 
 function AuthorDetails({ id, name, description }: Author) {
   return (

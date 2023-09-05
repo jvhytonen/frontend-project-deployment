@@ -9,10 +9,10 @@ import { TableCell, TableRow } from '../TableItems/TableItems'
 import { useNavigate } from 'react-router-dom'
 import Button from '../Button/Button'
 import AdminTable from '../AdminTable/AdminTable'
-import { Book } from '../../features/types/types'
 import NoData from '../NoData/NoData'
 import Loading from '../Loading/Loading'
 import { askConfirmation, finished } from '../../features/slices/modalSlice'
+import { Book } from '../../features/types/reduxTypes'
 
 function AdminBooks() {
   const [bookToDelete, setBookToDelete] = useState<Book | null>(null)
@@ -51,7 +51,7 @@ function AdminBooks() {
   const headers = ['Author', 'Title', 'Category', 'Actions']
   const rows =
     book.items !== null && book.items.length > 0
-      ? book.items.map((book) => (
+      ? book.items.map((book: Book) => (
           <TableRow key={book.id}>
             <TableCell>{book.author.name}</TableCell>
             <TableCell>{book.title}</TableCell>

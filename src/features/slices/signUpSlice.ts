@@ -1,8 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { NewUser, User, UserState } from '../types/types'
-//import { API_BASE_URL } from '../../../src/vite-env.e'
+import { NewUser, User, UserState } from '../types/reduxTypes'
 
-//const URL = process.env.API_BASE_URL + 'signup'
 const URL = 'e'
 const initialUser: User = {
   id: '',
@@ -53,7 +51,5 @@ export const signUpSlice = createSlice({
     })
   }
 })
-
-//export const {} = signUpSlice.actions
 
 export default signUpSlice.reducer

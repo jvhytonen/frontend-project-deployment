@@ -1,4 +1,4 @@
-import { CopyPropsNoAuth } from '../../features/types/types'
+import { CopyPropsNoAuth } from '../../features/types/componentTypes'
 import { formatDate } from '../../features/utils/helpers'
 
 function CopyNoAuth({ copyOrderNumber, copy }: CopyPropsNoAuth) {

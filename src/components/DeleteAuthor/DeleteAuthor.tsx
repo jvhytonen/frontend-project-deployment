@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../store'
 import { useNavigate } from 'react-router-dom'
 import { deleteAuthor } from '../../features/slices/authorSlice'
-import { DeleteAuthorType } from '../../features/types/types'
+import { DeleteAuthorType } from '../../features/types/componentTypes'
 
 function DeleteAuthor({ authorId, authorName }: DeleteAuthorType) {
   const dispatch = useDispatch<AppDispatch>()

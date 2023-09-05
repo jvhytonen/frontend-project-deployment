@@ -1,5 +1,5 @@
 import React from 'react'
-import { TextAreaType } from '../../../features/types/types'
+import { TextAreaType } from '../../../features/types/componentTypes'
 
 function TextArea({ fieldName, labelText, placeholder, handleChange, defaultValue }: TextAreaType) {
   return (

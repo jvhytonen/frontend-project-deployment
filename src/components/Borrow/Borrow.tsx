@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react'
 import Button from '../Button/Button'
-import { useModal } from '../../features/hooks/useModal'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../store'
-import { BorrowProps, CheckoutBorrow } from '../../features/types/types'
 import { borrowCopy } from '../../features/slices/copySlice'
-import Modal from '../Modal/Modal'
 import { useNavigate } from 'react-router-dom'
 import { askConfirmation, finished } from '../../features/slices/modalSlice'
-import { addNewCategory } from '../../features/slices/categorySlice'
+import { BorrowProps } from '../../features/types/componentTypes'
+import { CheckoutBorrow } from '../../features/types/actionTypes'
 
 function Borrow({ copyId }: BorrowProps) {
   const user = useSelector((state: RootState) => state.auth.items)
