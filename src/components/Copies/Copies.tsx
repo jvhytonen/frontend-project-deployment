@@ -104,10 +104,10 @@ function Copies({ bookId }: CopiesProps) {
   }
 
   return (
-    <>
-      <h3>Copies</h3>
+    <div>
+      <h3 className="text-2xl">Copies</h3>
       {showCopies()}
-    </>
+    </div>
   )
 }
 

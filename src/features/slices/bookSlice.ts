@@ -1,10 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import { Book, BookState, BookPostRequest, BookDeleteRequest } from '../types/types'
+import { Book, BookState, BookPostRequest, BookDeleteRequest, Token } from '../types/types'
 import { deleteItem, getItemNoAuth } from '../utils/thunks'
 import { API_BASE_URL } from '../utils/variables'
 
 const URL = API_BASE_URL + 'books/'
+const IMAGEUPLOADURL = API_BASE_URL + 'images/upload/'
+//const IMAGEUPLOADURL = 'http://localhost:8081/api/v1/images/upload/'
 
 const initialState: BookState = {
   items: null,
@@ -20,25 +22,34 @@ export const getAllBooks = createAsyncThunk('books/getAll', async () => {
   return response
 })
 
-const uploadImage = async (file: File) => {
-  const formData = new FormData()
-  formData.append('image', file)
-  const URL =
-    'https://erfv9p79ya.execute-api.eu-central-1.amazonaws.com/dev/upload-image-s3-jvh/' + file.name
-  const res = await fetch(URL, {
-    method: 'PUT',
-    body: formData
-  })
-  const response = res.json()
-  return response
-}
+export const uploadImage = createAsyncThunk('images/upload', async (file: File) => {
+  // First version of the image upload that works
+  try {
+    const formData = new FormData()
+    formData.append('file', file)
+
+    const response = await fetch(IMAGEUPLOADURL, {
+      method: 'POST',
+      headers: {
+        //'Content-Type': 'multipart/form-data'
+        // eslint-disable-next-line prettier/prettier
+        //  'Authorization': `Bearer ${token}`
+      },
+      body: formData
+    })
+    if (response.ok) {
+      const result = await response.text()
+      console.log('Image uploaded successfully:', result)
+    } else {
+      const error = await response.text()
+      console.error('Image upload failed:', error)
+    }
+  } catch (error) {
+    console.error('Error:', error)
+  }
+})
 
 export const addNewBook = createAsyncThunk('books/add', async (newBookReq: BookPostRequest) => {
-  // Uploading image still under construction
-  /*   if (newBookReq.coverImage) {
-    const imageUpload = await uploadImage(newBookReq.coverImage)
-    console.log(imageUpload)
-  } */
   const response = await fetch(URL, {
     method: 'POST',
     headers: {

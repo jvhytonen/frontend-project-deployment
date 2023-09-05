@@ -59,12 +59,12 @@ function AdminCategories() {
               <TableCell>
                 <div className="flex justify-around">
                   <Button
-                    label="Edit category"
+                    label="Edit"
                     handleClick={() => navigate(`../categories/edit/${category.id}`)}
                     type="edit"
                   />
                   <Button
-                    label="Delete category"
+                    label="Delete"
                     handleClick={() => handleDeleteConfirmation(category)}
                     type="delete"
                   />
@@ -83,7 +83,7 @@ function AdminCategories() {
     <>
       <AdminTable headers={headers} rows={rows} />
       <div className="flex justify-center">
-        <Button label="Add new category" handleClick={handleNavigation} type="neutral" />
+        <Button label="New category" handleClick={handleNavigation} type="neutral" />
       </div>
     </>
   )

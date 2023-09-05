@@ -47,8 +47,6 @@ export const deleteItem = async (req: DeleteRequest) => {
 }
 
 export const addItem = async (req: PostRequest) => {
-  console.log('AddItem')
-  console.log(req.body)
   const response = await fetch(req.url, {
     method: 'POST',
     headers: {

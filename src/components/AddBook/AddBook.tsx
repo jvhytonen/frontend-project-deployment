@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Button from '../Button/Button'
 import { AppDispatch, RootState } from '../../store'
 import { Book, BookPostRequest } from '../../features/types/types'
-import { addNewBook } from '../../features/slices/bookSlice'
+import { addNewBook, uploadImage } from '../../features/slices/bookSlice'
 import { validateNewBookData } from '../../features/validation/validate'
 import { useNavigate } from 'react-router-dom'
 import InputItem from '../FormControls/InputItem/InputItem'
@@ -13,12 +13,15 @@ import { getAllAuthors } from '../../features/slices/authorSlice'
 import OptionItem from '../FormControls/OptionItem/OptionItem'
 import TextArea from '../FormControls/TextArea/TextArea'
 import UploadImage from '../FormControls/UploadImage/UploadImage'
+import { askConfirmation, finished } from '../../features/slices/modalSlice'
+//import { uploadImage } from '../../features/fetchAPI/fetchAPI'
 
 function AddBook() {
   // Variables from Redux
   const token = useSelector((state: RootState) => state.auth.token)
   const authors = useSelector((state: RootState) => state.author.items)
   const categories = useSelector((state: RootState) => state.category.items)
+  const modal = useSelector((state: RootState) => state.modal)
   // States
   const [newBook, setNewBook] = useState<Book | null>(null)
   const [coverImage, setCoverImage] = useState<File | null>(null)
@@ -30,6 +33,12 @@ function AddBook() {
   useEffect(() => {
     dispatch(getAllCategories())
   }, [])
+
+  useEffect(() => {
+    if (modal.status === 'confirmed') {
+      handleSubmit()
+    }
+  }, [modal.status])
 
   const handleChange: (
     e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>
@@ -43,31 +52,36 @@ function AddBook() {
   // Sets cover image to it's own state and the filename to a state where everything else resides.
   const handleImage = (image: File, fileName: string) => {
     setCoverImage(image)
-    setNewBook((prevState) => ({
-      ...(prevState as Book),
-      imageUrl: fileName
-    }))
+    if (newBook?.isbn) {
+      setNewBook((prevState) => ({
+        ...(prevState as Book),
+        imageUrl: newBook?.isbn + '.jpg'
+      }))
+    }
   }
-  const handleSubmit: () => void = () => {
+  // Change image filename to isbn-number and upload it before sending other data to server.
+  const handleImageUpload = async () => {
+    if (coverImage && newBook?.isbn) {
+      const blob = new Blob([coverImage], { type: coverImage.type })
+      const fileName = newBook.isbn + '.jpg'
+      const imageToUpload = new File([blob], fileName, { type: coverImage.type })
+      await dispatch(uploadImage(imageToUpload)).unwrap()
+    }
+  }
+
+  const handleSubmit: () => void = async () => {
     if (token !== null && newBook !== null) {
+      // Upload cover image first.
+      await handleImageUpload()
       // All data needed in redux slice to send the request: token and body.
       const newBookReq: BookPostRequest = {
         data: newBook,
-        token: token,
-        coverImage: coverImage
-      }
-      // In case the user has tried to add data that was not valid, we must set validation error back to false.
-      if (validationError) {
-        setValidationError(false)
+        token: token
       }
       if (newBook) {
-        if (validateNewBookData(newBook)) {
-          dispatch(addNewBook(newBookReq))
-          setNewBook(null)
-          navigate('/books')
-        } else {
-          setValidationError(true)
-        }
+        await dispatch(addNewBook(newBookReq)).unwrap()
+        dispatch(finished('Book added succesfully!'))
+        navigate('../admin/dashboard')
       }
     }
   }
@@ -114,6 +128,14 @@ function AddBook() {
               placeholder="Write a short description about the book"
               handleChange={handleChange}
             />
+            <InputItem
+              fieldName="isbn"
+              name="isbn"
+              labelText="ISBN (You have to enter ISBN before adding cover image)"
+              placeholder="ISBN"
+              type="text"
+              handleChange={handleChange}
+            />
             {coverImage && (
               <img
                 src={URL.createObjectURL(coverImage)}
@@ -121,7 +143,7 @@ function AddBook() {
                 style={{ maxWidth: '300px', marginTop: '10px' }}
               />
             )}
-            <UploadImage onImageUpload={handleImage} />
+            {newBook !== null && newBook.isbn ? <UploadImage onImageUpload={handleImage} /> : null}
             <InputItem
               fieldName="publisher"
               name="publisher"
@@ -138,15 +160,16 @@ function AddBook() {
               type="text"
               handleChange={handleChange}
             />
-            <InputItem
-              fieldName="isbn"
-              name="isbn"
-              labelText="ISBN"
-              placeholder="ISBN"
-              type="text"
-              handleChange={handleChange}
+            <Button
+              label="Add"
+              handleClick={(e) => {
+                e.preventDefault()
+                dispatch(
+                  askConfirmation(`Are you sure you want to add new author "${newBook?.title}"?`)
+                )
+              }}
+              type="neutral"
             />
-            <Button label="Save" handleClick={handleSubmit} type="neutral" />
           </form>
         </div>
       ) : (

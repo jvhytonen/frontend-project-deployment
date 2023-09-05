@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { AppDispatch, RootState } from '../../store'
 import { useDispatch, useSelector } from 'react-redux'
+
 import { deleteBook, getAllBooks } from '../../features/slices/bookSlice'
 import { getAllAuthors } from '../../features/slices/authorSlice'
 import { getAllCategories } from '../../features/slices/categorySlice'
@@ -8,51 +9,32 @@ import { TableCell, TableRow } from '../TableItems/TableItems'
 import { useNavigate } from 'react-router-dom'
 import Button from '../Button/Button'
 import AdminTable from '../AdminTable/AdminTable'
-import { useModal } from '../../features/hooks/useModal'
-import Modal from '../Modal/Modal'
 import { Book } from '../../features/types/types'
 import NoData from '../NoData/NoData'
 import Loading from '../Loading/Loading'
+import { askConfirmation, finished } from '../../features/slices/modalSlice'
 
 function AdminBooks() {
-  const {
-    showConfirmation,
-    showCompletion,
-    confirmationText,
-    handleConfirm,
-    setShowConfirmation,
-    setShowCompletion
-  } = useModal()
-  const [bookToBeDeleted, setBookToBeDeleted] = useState<Book | null>(null)
+  const [bookToDelete, setBookToDelete] = useState<Book | null>(null)
   const dispatch = useDispatch<AppDispatch>()
   const book = useSelector((state: RootState) => state.book)
+  const modal = useSelector((state: RootState) => state.modal)
   const token = useSelector((state: RootState) => state.auth.token)
   const navigate = useNavigate()
+  const handleDeleteConfirmation = (objToDelete: Book) => {
+    setBookToDelete(objToDelete)
+    dispatch(askConfirmation(`Are you sure you want to delete book "${objToDelete.title}"?`))
+  }
 
-  const handleNavigation = () => {
-    navigate('../books/add')
-  }
-  // In case the user don't want to add new category
-  const handleCancel: () => void = () => {
-    setShowConfirmation(false)
-  }
-  //When user clicks "ok" after successfull addition of category.
-  const handleCompletionModalClosing: () => void = () => {
-    setShowCompletion(false)
-    setBookToBeDeleted(null)
-    navigate('../admin/dashboard')
-  }
-  const handleDeleteBook = async () => {
-    setShowConfirmation(false)
-    if (bookToBeDeleted !== null && bookToBeDeleted.id !== undefined && token !== null) {
+  const handleDelete = async () => {
+    if (token !== null && bookToDelete !== null && bookToDelete.id) {
       const deleteReq = {
-        id: bookToBeDeleted.id,
+        id: bookToDelete.id,
         token: token
       }
       await dispatch(deleteBook(deleteReq)).unwrap()
-      setShowCompletion(true)
-    } else {
-      return
+      dispatch(finished('Book deleted'))
+      navigate('../admin/dashboard')
     }
   }
   useEffect(() => {
@@ -60,6 +42,12 @@ function AdminBooks() {
     dispatch(getAllAuthors())
     dispatch(getAllCategories())
   }, [])
+
+  useEffect(() => {
+    if (modal.status === 'confirmed') {
+      handleDelete()
+    }
+  }, [modal.status])
   const headers = ['Author', 'Title', 'Category', 'Actions']
   const rows =
     book.items !== null && book.items.length > 0
@@ -76,16 +64,13 @@ function AdminBooks() {
                   type="edit"
                 />
                 <Button
-                  label="Edit copies"
+                  label="Copies"
                   handleClick={() => navigate(`copies/edit/${book.id}`)}
                   type="edit"
                 />
                 <Button
                   label="Delete book"
-                  handleClick={(e) => {
-                    setBookToBeDeleted(book)
-                    handleConfirm(e, `Are you sure you want to delete "${book.title}"?`)
-                  }}
+                  handleClick={() => handleDeleteConfirmation(book)}
                   type="delete"
                 />
               </div>

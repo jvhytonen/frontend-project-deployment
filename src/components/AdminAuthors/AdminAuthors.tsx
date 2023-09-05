@@ -57,12 +57,12 @@ function AdminAuthors() {
               <TableCell>
                 <div className="flex justify-around">
                   <Button
-                    label="Edit author"
+                    label="Edit"
                     handleClick={() => navigate(`../authors/edit/${author.id}`)}
                     type="edit"
                   />
                   <Button
-                    label="Delete author"
+                    label="Delete"
                     handleClick={() => handleDeleteConfirmation(author)}
                     type="delete"
                   />
@@ -81,7 +81,7 @@ function AdminAuthors() {
     <>
       <AdminTable headers={headers} rows={rows} />
       <div className="flex justify-center">
-        <Button label="Add new author" handleClick={handleNavigation} type="neutral" />
+        <Button label="New author" handleClick={handleNavigation} type="neutral" />
       </div>
     </>
   )

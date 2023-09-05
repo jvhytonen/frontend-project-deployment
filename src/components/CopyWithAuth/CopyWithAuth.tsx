@@ -52,8 +52,8 @@ function CopyWithAuth({ copy, copyOrderNumber, onCheckout }: CopyProps) {
   }
 
   return (
-    <div className="flex">
-      <p>Copy: {copyOrderNumber} &nbsp;&nbsp; </p>
+    <div className="flex items-center my-1">
+      <p>Copy: {copyOrderNumber}: &nbsp;&nbsp; </p>
       {showCopyStatus()}
     </div>
   )

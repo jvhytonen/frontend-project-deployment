@@ -274,7 +274,6 @@ export interface AuthorDeleteRequest {
 export interface BookPostRequest {
   token: Token
   data: Book
-  coverImage: File | null
 }
 export interface CheckoutRequest {
   token: Token
