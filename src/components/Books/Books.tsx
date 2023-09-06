@@ -15,9 +15,9 @@ function Books() {
   }, [])
 
   return (
-    <section className="py-10 px-12">
+    <section className="w-full mx-12 flex flex-col justify-center items-center">
       <h2 className="text-4xl font-bold text-center">Books: </h2>
-      <div className="grid grid-flow-row gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid grid-flow-row gap-8 w-[90%] sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {items !== null
           ? items.map((item: Book) => {
               return (

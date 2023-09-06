@@ -26,15 +26,14 @@ function Navbar() {
   }
 
   return (
-    <nav className="bg-white fixed w-full z-20 top-0 left-0 border-b border-gray-200">
+    <nav className="bg-gradient-to-r from-white to-sky-200 border-b border-gray-200">
       <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
-        <div className="flex justify-between w-full md:w-auto md:order-2">
+        <div className="flex justify-around items-center w-full md:w-2/5 md:order-2">
           <HamburgerIcon
             isMobileNavOpen={isMobileNavOpen}
             handleClick={() => setIsMobileNavOpen((prevState) => !prevState)}
           />
           <NavbarUserInfo user={user} />
-          {/*   Login/logout-button */}
           <Button
             label={user.items.username !== '' ? 'Logout' : 'Login'}
             handleClick={handleLoginLogOut}

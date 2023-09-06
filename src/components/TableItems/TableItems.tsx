@@ -1,7 +1,7 @@
 import React from 'react'
-import { TableHeadingType, TableProps } from '../../features/types/componentTypes'
+import { TableHeadingProps, TableProps } from '../../features/types/componentTypes'
 
-export function TableHeading({ label }: TableHeadingType) {
+export function TableHeading({ label }: TableHeadingProps) {
   return (
     <th className="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
       {label}

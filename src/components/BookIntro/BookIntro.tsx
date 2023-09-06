@@ -7,7 +7,7 @@ import { BookIntroProps } from '../../features/types/componentTypes'
 function BookIntro({ title, id, author, imageUrl }: BookIntroProps) {
   const navigate = useNavigate()
   return (
-    <div className="my-0 ml-8 mr-auto py-2 sm:py-8 md:py-2 rounded-lg shadow-lg w-2/3 shadow-gray-200 bg-white">
+    <div className="my-0 ml-8 mr-auto py-2 sm:py-8 md:py-2 rounded-lg shadow-lg w-2/3 shadow-gray-200 bg-indigo-100">
       <div>
         <img
           src={imageUrl ? S3IMAGEURL + imageUrl : 'defaultCover.jpg'}

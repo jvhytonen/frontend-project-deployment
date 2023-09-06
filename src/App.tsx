@@ -74,9 +74,9 @@ function App() {
   }
 
   return (
-    <div className="App w-full">
+    <div className="App w-full h-screen bg-gradient-to-t from-sky-50 to-sky-200">
       <Navbar />
-      <div className="mt-20">
+      <div className="flex justify-center items-center">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -106,6 +106,7 @@ function App() {
       {errorMessage && (
         <Modal heading={'Error!'} text={errorMessage} type={'error'} onConfirm={closeModal} />
       )}
+      {/* Modal for handling confirmation of adding, editing and deleting books, categories and authors */}
       {modal.text && modal.status !== null && (
         <Modal
           heading={'Modal'}

@@ -4,7 +4,7 @@ import AdminCategories from '../AdminCategories/AdminCategories'
 
 function AdminDashboard() {
   return (
-    <div>
+    <div className="w-[95%] bg-sky-50">
       <h2 className="font-bold text-2xl text-center">Books</h2>
       <AdminBooks />
       <div className="w-full flex justify-around my-2">

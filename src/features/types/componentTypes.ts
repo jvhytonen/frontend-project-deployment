@@ -61,7 +61,7 @@ export interface TableProps {
   children: React.ReactNode
 }
 
-export type TableHeadingType = {
+export type TableHeadingProps = {
   label: string
 }
 
