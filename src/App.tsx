@@ -74,7 +74,7 @@ function App() {
   }
 
   return (
-    <div className="App w-full h-screen bg-gradient-to-t from-sky-50 to-sky-200">
+    <div className="App w-full h-screen">
       <Navbar />
       <div className="flex justify-center items-center">
         <Routes>
