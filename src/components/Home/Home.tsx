@@ -13,8 +13,12 @@ function Home() {
           <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
             Library app - Juho-Veikko Hytönen
           </h5>
+          <h6>Tech stack:</h6>
           <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-            Tech-stack: React, TypeScript, Tailwind CSS and Redux-toolkit
+            Front: React, TypeScript, Tailwind CSS and Redux-toolkit
+          </p>
+          <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+            Back: Spring Boot and PostgreSQL
           </p>
         </div>
       </div>
