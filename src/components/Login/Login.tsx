@@ -55,7 +55,7 @@ function Login() {
   }, [authenticationCompleted])
 
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center w-full mt-20">
       <div className="w-[40%] bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col">
         <UsernameField onChange={handleUserName} />
         <PasswordField onChange={handlePassword} labelText="Password" />
