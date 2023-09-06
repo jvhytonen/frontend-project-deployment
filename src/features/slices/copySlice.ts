@@ -6,7 +6,7 @@ const URL_BORROW = API_BASE_URL + 'checkouts/borrow/'
 const URL_RETURN = API_BASE_URL + 'checkouts/return/'
 
 import { addItem, deleteItem, getItemNoAuth } from '../utils/thunks'
-import { CopyState } from '../types/reduxTypes'
+import { Copy, CopyState } from '../types/reduxTypes'
 import { CheckoutRequest, CopyDeleteRequest, CopyPostRequest } from '../types/requestTypes'
 
 const initialState: CopyState = {
