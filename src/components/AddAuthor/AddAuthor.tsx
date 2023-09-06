@@ -31,6 +31,7 @@ function AddAuthor() {
       handleSubmit()
     }
   }, [modal.status])
+
   const handleSubmit: () => void = async () => {
     event?.preventDefault()
 

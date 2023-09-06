@@ -1,7 +1,7 @@
 //Forms:
 
 import { ChangeEvent, MouseEventHandler } from 'react'
-import { Author, Book, Category, Copy } from './reduxTypes'
+import { Author, Book, Category, Copy, User, UserState } from './reduxTypes'
 import { CheckoutActionType } from './actionTypes'
 
 export type InputItemType = {
@@ -117,4 +117,17 @@ export type FilterAuthorsCheckbox = {
   author: string
   defaultChecked: boolean
   filterBooks: FilterType
+}
+
+export interface MenuProps {
+  isAdmin: boolean
+}
+
+export interface HamburgerIconProps {
+  isMobileNavOpen: boolean
+  handleClick: () => void
+}
+
+export interface NavbarUserInfoProps {
+  user: UserState
 }
