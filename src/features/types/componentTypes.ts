@@ -131,3 +131,16 @@ export interface HamburgerIconProps {
 export interface NavbarUserInfoProps {
   user: UserState
 }
+
+type handleTabChangeType = (newTab: AdminTabTypes) => void
+
+export interface AdminTabsProps {
+  handleTabChange: (newTab: string) => void
+}
+
+export interface AdminTabProps {
+  link: string
+  onClick: () => void
+}
+
+export type AdminTabTypes = 'books' | 'categories' | 'authors'

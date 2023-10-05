@@ -4,9 +4,12 @@ import { NavbarLinkProps } from '../../features/types/componentTypes'
 
 function NavbarLink({ link, label }: NavbarLinkProps) {
   return (
-    <li className="block py-2 pl-3 pr-4 text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">
+    <li className="flex items-center">
       {/* NavLink automatically detects which link is active. The active link has blue text. */}
-      <NavLink to={link} className={({ isActive }) => (isActive ? 'text-blue-700' : '')} end>
+      <NavLink
+        to={link === 'home' ? '/' : link}
+        className={({ isActive }) => (isActive ? 'text-blue-700' : '')}
+        end>
         {label}
       </NavLink>
     </li>

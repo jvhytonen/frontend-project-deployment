@@ -1,28 +1,56 @@
+import { Button, Typography } from '@material-tailwind/react'
 import React from 'react'
 
 function Home() {
   return (
-    <div className="flex justify-center items-center w-full mt-20">
-      <div className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
-        <img
-          className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"
-          src="https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80"
-          alt=""
-        />
-        <div className="flex flex-col justify-between p-4 leading-normal">
-          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            Library app - Juho-Veikko Hytönen
-          </h5>
-          <h6>Tech stack:</h6>
-          <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-            Front: React, TypeScript, Tailwind CSS and Redux-toolkit
-          </p>
-          <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-            Back: Spring Boot and PostgreSQL
-          </p>
+    <header className="bg-white p-8">
+      <div className="container mx-auto grid h-full min-h-[85vh] w-full grid-cols-1 place-items-center gap-y-10 lg:grid-cols-2">
+        <div className="row-start-2 lg:row-auto lg:-mt-40">
+          <Typography
+            variant="h1"
+            color="blue-gray"
+            className="mb-2 max-w-sm text-3xl !leading-snug lg:mb-3 lg:text-5xl">
+            Desired Experiences
+          </Typography>
+          <Typography
+            variant="paragraph"
+            className="mb-6 font-normal !text-gray-500 md:pr-16 lg:mb-14 xl:pr-52">
+            The time is now for it to be okay to be great. For being a bright color. For standing
+            out.
+          </Typography>
+          <div className="flex gap-3">
+            <Button color="gray" className="w-full px-4 md:w-[10rem]">
+              contact us
+            </Button>
+            <Button color="gray" variant="outlined" className="w-full px-4 md:w-[10rem]">
+              read more
+            </Button>
+          </div>
+        </div>
+        <div className="mt-40 grid gap-6 lg:mt-0">
+          <div className="grid grid-cols-4 gap-6">
+            <img src="selkosenkansaa-cover.jpg" className="rounded-lg shadow-md" alt="flowers" />
+            <img src="harhama-covers.jpg" className="-mt-28 rounded-lg shadow-md" alt="flowers" />
+            <img src="gunslinger-cover.jpg" className="-mt-14 rounded-lg shadow-md" alt="flowers" />
+            <img
+              src="koirapuisto-cover.jpg"
+              className="-mt-20 rounded-lg shadow-md"
+              alt="flowers"
+            />
+          </div>
+          <div className="grid grid-cols-4 gap-6">
+            <div></div>
+            <img src="hytti6-cover.jpg" className="-mt-28 rounded-lg shadow-md" alt="flowers" />
+            <img
+              src="pohjantahti-cover.jpg"
+              className="-mt-14 rounded-lg shadow-md"
+              alt="flowers"
+            />
+            <img src="tuntematon-cover.jpg" className="-mt-20 rounded-lg shadow-md" alt="flowers" />
+          </div>
         </div>
       </div>
-    </div>
+    </header>
   )
 }
 

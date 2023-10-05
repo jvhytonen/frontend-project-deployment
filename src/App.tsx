@@ -6,15 +6,15 @@ import Books from './components/Books/Books'
 import Authors from './components/Authors/Authors'
 import Logout from './components/Logout/Logout'
 import Home from './components/Home/Home'
-import AddAuthor from './components/AddAuthor/AddAuthor'
+import AddAuthor from './components/Admin/AddAuthor/AddAuthor'
 import BookDetails from './components/BookDetails/BookDetails'
 import EditBook from './components/EditBook/EditBook'
-import AddBook from './components/AddBook/AddBook'
+import AddBook from './components/Admin/AddBook/AddBook'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
 import EditAuthor from './components/EditAuthor/EditAuthor'
-import Navbar from './components/Navbar/Navbar'
-import AddCategory from './components/AddCategory/AddCategory'
-import AdminDashboard from './components/AdminDashboard/AdminDashboard'
+import Navbar from './components/Navbar/Navigation'
+import AddCategory from './components/Admin/AddCategory/AddCategory'
+import AdminDashboard from './components/Admin/AdminDashboard/AdminDashboard'
 import Signup from './components/Signup/Signup'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from './store'
@@ -28,7 +28,7 @@ import { nullifyCopyError } from './features/slices/copySlice'
 import { nullifyUserError } from './features/slices/userSlice'
 import { findLoadingStates } from './features/utils/helpers'
 import { nullifyAuthError } from './features/slices/authSlice'
-import AdminCopies from './components/AdminCopies/AdminCopies'
+import AdminCopies from './components/Admin/AdminCopies/AdminCopies'
 import { resetModal, confirm } from './features/slices/modalSlice'
 
 function App() {
@@ -74,7 +74,7 @@ function App() {
   }
 
   return (
-    <div className="App w-full h-screen">
+    <div className="App w-full">
       <Navbar />
       <div className="flex justify-center items-center">
         <Routes>
@@ -109,7 +109,7 @@ function App() {
       {/* Modal for handling confirmation of adding, editing and deleting books, categories and authors */}
       {modal.text && modal.status !== null && (
         <Modal
-          heading={'Modal'}
+          heading={modal.status === 'finished' ? 'Success!' : 'Proceed the action?'}
           text={modal.text}
           type={modal.status}
           onConfirm={
