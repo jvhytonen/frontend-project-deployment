@@ -132,8 +132,6 @@ export interface NavbarUserInfoProps {
   user: UserState
 }
 
-type handleTabChangeType = (newTab: AdminTabTypes) => void
-
 export interface AdminTabsProps {
   handleTabChange: (newTab: string) => void
 }
@@ -144,3 +142,12 @@ export interface AdminTabProps {
 }
 
 export type AdminTabTypes = 'books' | 'categories' | 'authors'
+
+export interface BookCardProps {
+  imageUrl: string
+  category: string
+  title: string
+  description: string
+  author: string
+  yearPublished: string
+}

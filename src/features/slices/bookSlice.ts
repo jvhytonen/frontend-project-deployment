@@ -22,6 +22,14 @@ export const getAllBooks = createAsyncThunk('books/getAll', async () => {
   return response
 })
 
+export const getBooksByAuthor = createAsyncThunk('books/getByAuthor', async (authorId: string) => {
+  const req = {
+    url: URL + 'byAuthor/' + authorId
+  }
+  const response = await getItemNoAuth(req)
+  return response
+})
+
 export const uploadImage = createAsyncThunk('images/upload', async (file: File) => {
   // First version of the image upload that works
   try {
@@ -113,6 +121,17 @@ export const bookSlice = createSlice({
     builder.addCase(getAllBooks.rejected, (state) => {
       state.error = 'An error occurred! Try again later'
     })
+    builder.addCase(getBooksByAuthor.fulfilled, (state, action) => {
+      state.isLoading = false
+      state.items = action.payload
+    })
+    builder.addCase(getBooksByAuthor.pending, (state) => {
+      state.isLoading = true
+    })
+    builder.addCase(getBooksByAuthor.rejected, (state) => {
+      state.error = 'An error occurred! Try again later'
+    })
+
     builder.addCase(addNewBook.fulfilled, (state, action) => {
       state.isLoading = false
       if (state.items !== null) {

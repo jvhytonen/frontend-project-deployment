@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 
 import { RootState } from '../../store'
 import Copies from '../Copies/Copies'
-import BookCoverImage from '../BookCoverImage/BookCoverImage'
+// import BookCoverImage from '../BookCoverImage/BookCoverImage'
 import CardHeading from '../CardHeading/CardHeading'
 import CategoryAndPublisher from '../CategoryAndPublisher/CategoryAndPublisher'
 import Description from '../Description/Description'
@@ -20,7 +20,7 @@ function BookDetails() {
       {bookItem ? (
         <div className="block w-[90%] md:flex mx-8 rounded-lg bg-white shadow-lg">
           <div className="flex justify-center items-center">
-            <BookCoverImage imageUrl={bookItem.imageUrl} />
+            {/* <BookCoverImage imageUrl={bookItem.imageUrl} /> */}
           </div>
           <div className="h-full md:m-7 font-bold flex-grow">
             <CardHeading author={bookItem.author} title={bookItem.title} />
