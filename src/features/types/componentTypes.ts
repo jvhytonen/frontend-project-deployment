@@ -145,6 +145,7 @@ export type AdminTabTypes = 'books' | 'categories' | 'authors'
 
 export interface BookCardProps {
   imageUrl: string
+  id: string
   category: string
   title: string
   description: string

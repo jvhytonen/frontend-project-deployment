@@ -17,47 +17,33 @@ function Books() {
   }, [])
 
   return (
-    <section className="grid min-h-screen place-items-center p-8">
-      <div className="container my-auto grid grid-cols-1 gap-8 lg:grid-cols-2">
-        {items !== null
-          ? items.map((item: Book) => {
-              return (
-                <BookCard
-                  key={item.id}
-                  imageUrl={item.imageUrl ? S3IMAGEURL + item.imageUrl : 'defaultCover.jpg'}
-                  category={item.category.name}
-                  title={item.title}
-                  description={item.description}
-                  yearPublished={item.yearPublished}
-                  author={item.author.name}
-                />
-              )
-            })
-          : null}
-        {error ? <p className="text-red-600">{error}</p> : null}
+    <section className="py-10">
+      <div className="mx-auto flex max-w-6xl flex-col justify-center px-2 ">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-4">
+          {items !== null
+            ? items.map((item: Book) => {
+                return (
+                  <BookCard
+                    key={item.id}
+                    id={item.id as string}
+                    imageUrl={item.imageUrl ? S3IMAGEURL + item.imageUrl : 'defaultCover.jpg'}
+                    category={item.category.name}
+                    title={item.title}
+                    description={item.description}
+                    yearPublished={item.yearPublished}
+                    author={item.author.name}
+                  />
+                )
+              })
+            : null}
+          {error ? <p className="text-red-600">{error}</p> : null}
+        </div>
       </div>
-      <Pagination />
+      <div className="my-8">
+        <Pagination />
+      </div>
     </section>
   )
 }
 
 export default Books
-
-/* 
-{items !== null
-  ? items.map((item: Book) => {
-      return (
-        <BookIntro
-          key={item.id}
-          isbn={item.isbn}
-          id={item.id}
-          title={item.title}
-          author={item.author}
-          description={item.description}
-          imageUrl={item.imageUrl}
-        />
-      )
-    })
-  : null}
-{error ? <p className="text-red-600">{error}</p> : null} */
-// src={item.imageUrl ? S3IMAGEURL + item.imageUrl : 'defaultCover.jpg'}

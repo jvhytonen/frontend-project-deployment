@@ -10,13 +10,12 @@ function Home() {
             variant="h1"
             color="blue-gray"
             className="mb-2 max-w-sm text-3xl !leading-snug lg:mb-3 lg:text-5xl">
-            Desired Experiences
+            Find your e-book.
           </Typography>
           <Typography
             variant="paragraph"
             className="mb-6 font-normal !text-gray-500 md:pr-16 lg:mb-14 xl:pr-52">
-            The time is now for it to be okay to be great. For being a bright color. For standing
-            out.
+            Stop mindless surfing and start reading something deeper now.
           </Typography>
           <div className="flex gap-3">
             <Button color="gray" className="w-full px-4 md:w-[10rem]">

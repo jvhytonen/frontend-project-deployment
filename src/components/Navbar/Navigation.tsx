@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { Navbar, MobileNav, Button, Typography, IconButton } from '@material-tailwind/react'
 
@@ -14,6 +14,7 @@ function Navigation() {
   const navigate = useNavigate()
 
   useEffect(() => {
+    //For changing the navigation to mobile (and back).
     window.addEventListener('resize', () => window.innerWidth >= 960 && setOpenNav(false))
   }, [])
 
@@ -50,7 +51,7 @@ function Navigation() {
         <div className="flex items-center gap-4">
           <div className="mr-4 hidden lg:block">{navList}</div>
           <Button variant="gradient" size="sm" className="hidden lg:inline-block">
-            <span>{user ? 'Logout' : 'Login'}</span>
+            <Link to="/login">{user.token ? 'Logout' : 'Login'}</Link>
           </Button>
           <IconButton
             variant="text"
