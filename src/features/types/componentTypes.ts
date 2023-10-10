@@ -59,6 +59,7 @@ export type NavbarLinkProps = {
 
 export interface TableProps {
   children: React.ReactNode
+  classes?: string
 }
 
 export type TableHeadingProps = {

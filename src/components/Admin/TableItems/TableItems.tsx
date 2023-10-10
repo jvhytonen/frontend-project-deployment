@@ -2,17 +2,13 @@ import React from 'react'
 import { TableHeadingProps, TableProps } from '../../../features/types/componentTypes'
 
 export function TableHeading({ label }: TableHeadingProps) {
-  return (
-    <th className="py-4 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light">
-      {label}
-    </th>
-  )
+  return <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">{label}</th>
 }
 
 export function TableRow({ children }: TableProps) {
-  return <tr className="hover:bg-gray-100">{children}</tr>
+  return <tr>{children}</tr>
 }
 
-export function TableCell({ children }: TableProps) {
-  return <td className="py-4 px-6 border-b border-grey-light">{children}</td>
+export function TableCell({ children, classes }: TableProps) {
+  return <td className={classes}>{children}</td>
 }

@@ -1,80 +1,110 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
+import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/24/outline'
 import { RootState } from '../../store'
 import Copies from '../Copies/Copies'
-// import BookCoverImage from '../BookCoverImage/BookCoverImage'
-import CardHeading from '../CardHeading/CardHeading'
-import CategoryAndPublisher from '../CategoryAndPublisher/CategoryAndPublisher'
-import Description from '../Description/Description'
 import { Book } from '../../features/types/reduxTypes'
-import { Typography } from '@material-tailwind/react'
+import { Accordion, AccordionBody, AccordionHeader, Typography } from '@material-tailwind/react'
 import { S3IMAGEURL } from '../../features/utils/variables'
 
 function BookDetails() {
+  const [open, setOpen] = useState<number>(0)
   const book = useSelector((state: RootState) => state.book)
   const params = useParams()
   const filteredBook = book.items?.filter((item: Book) => params.id === item.id)
   const bookItem = filteredBook ? filteredBook[0] : null
+
+  /* Opening accordion and animating it. */
+  const handleOpen = (value: number) => setOpen(open === value ? 0 : value)
+  const CUSTOM_ANIMATION = {
+    mount: { scale: 1 },
+    unmount: { scale: 0.9 }
+  }
+
   return (
-    <section className="py-16 px-8 lg:py-28">
+    <section className="py-8 md:py-16 lg:py-24 px-4 md:px-8 lg:px-16 bg-gray-100">
+      <Link to="/books" className="hover:underline">
+        <Typography variant="paragraph" className="hover:underline">
+          Back
+        </Typography>
+      </Link>
       {bookItem ? (
-        <div className="container mx-auto grid items-center lg:grid-cols-2">
-          <div className="row-start-2 mt-12 lg:row-auto lg:mt-0 lg:pr-12">
-            <Typography color="blue-gray" className="mb-4 !font-semibold">
-              {bookItem.category.name}
-            </Typography>
-            <Typography
-              variant="h3"
-              color="blue-gray"
-              className="mb-6 pr-5 text-3xl !leading-snug lg:text-5xl">
-              {bookItem.title}
-            </Typography>
-            <Typography
-              variant="h4"
-              color="blue-gray"
-              className="mb-6 pr-5 text-2xl !leading-snug lg:text-5xl">
-              {bookItem.author.name}
-            </Typography>
-            <Typography variant="lead" className="mb-12 !text-gray-500">
-              {bookItem.description}
-            </Typography>
+        <>
+          <div className="container mx-auto flex flex-col md:flex-row items-center">
+            <div className="md:w-1/2">
+              <img
+                src={bookItem.imageUrl ? S3IMAGEURL + bookItem.imageUrl : 'defaultCover.jpg'}
+                alt="Book Cover"
+                className="w-full md:max-w-md rounded-lg shadow-lg"
+              />
+            </div>
+            <div className="md:w-1/2 md:pl-8">
+              <Typography
+                variant="h3"
+                color="blue-gray"
+                className="text-4xl md:text-5xl font-semibold mb-4">
+                {bookItem.title}
+              </Typography>
+              <Typography variant="h4" color="blue-gray" className="text-2xl font-semibold mb-2">
+                Author: {bookItem.author.name}
+              </Typography>
+              <Typography variant="h5" color="blue-gray" className="text-xl mb-4">
+                Category: {bookItem.category.name}
+              </Typography>
+              <Typography
+                variant="paragraph"
+                className="text-gray-700 text-lg mb-8 leading-relaxed">
+                {bookItem.description}
+              </Typography>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Typography variant="paragraph" className="text-gray-600 font-semibold">
+                    Year:
+                  </Typography>
+                  <Typography variant="paragraph" className="text-gray-700">
+                    {bookItem.yearPublished.slice(0, 4)}
+                  </Typography>
+                </div>
+                <div>
+                  <Typography variant="paragraph" className="text-gray-600 font-semibold">
+                    Publisher:
+                  </Typography>
+                  <Typography variant="paragraph" className="text-gray-700">
+                    {bookItem.publisher}
+                  </Typography>
+                </div>
+                <div>
+                  <Typography variant="paragraph" className="text-gray-600 font-semibold">
+                    ISBN:
+                  </Typography>
+                  <Typography variant="paragraph" className="text-gray-700">
+                    {bookItem.isbn}
+                  </Typography>
+                </div>
+              </div>
+              <div></div>
+            </div>
           </div>
-          <img
-            src={bookItem.imageUrl ? S3IMAGEURL + bookItem.imageUrl : 'defaultCover.jpg'}
-            alt="team work"
-            className="h-[50vh] w-full rounded-xl object-contain object-center md:h-[60vh]"
-          />
-          <Copies bookId={bookItem.id as string} />
-        </div>
+          {/* Copies-component under accordion */}
+          <Accordion open={open === 1} animate={CUSTOM_ANIMATION}>
+            <AccordionHeader onClick={() => handleOpen(1)}>
+              Click to show copies and availability{' '}
+              {open ? (
+                <ArrowUpIcon className="ml-2 h-6 w-6" />
+              ) : (
+                <ArrowDownIcon className="ml-2 h-6 w-6" />
+              )}
+            </AccordionHeader>
+            <AccordionBody>
+              <Copies bookId={bookItem.id as string} />
+            </AccordionBody>
+          </Accordion>
+        </>
       ) : null}
     </section>
   )
 }
 
 export default BookDetails
-{
-  /* <div>
-      {bookItem ? (
-        <div className="block w-[90%] md:flex mx-8 rounded-lg bg-white shadow-lg">
-          <div className="flex justify-center items-center">
-            {/* <BookCoverImage imageUrl={bookItem.imageUrl} /> 
-          </div>
-          <div className="h-full md:m-7 font-bold flex-grow">
-            <CardHeading author={bookItem.author} title={bookItem.title} />
-            <CategoryAndPublisher
-              category={bookItem.category}
-              publisher={bookItem.publisher}
-              yearPublished={bookItem.yearPublished}
-              isbn={bookItem.isbn}
-            />
-            <Description description={bookItem.description} />
-            <div className="flex border-t-2 border-gray-300">
-              <Copies bookId={bookItem.id as string} />
-            </div>
-          </div>
-        </div>
-      ) : null}
-    </div> */
-}

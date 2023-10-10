@@ -8,6 +8,7 @@ import AdminTable from '../AdminTable/AdminTable'
 import { useEffect, useState } from 'react'
 import { askConfirmation, finished } from '../../../features/slices/modalSlice'
 import { Author } from '../../../features/types/reduxTypes'
+import { Card, Typography } from '@material-tailwind/react'
 
 function AdminAuthors() {
   const [authorToDelete, setAuthorToDelete] = useState<Author | null>(null)
@@ -42,45 +43,70 @@ function AdminAuthors() {
       handleDelete()
     }
   }, [modal.status])
-  // Headers used in this table
-  const headers = ['Name', 'Actions']
-
-  const rows =
-    authors.items !== null && authors.items.length > 0
-      ? authors.items.map((author: Author) => {
-          return (
-            <TableRow key={author.id}>
-              <TableCell>{author.name}</TableCell>
-              <TableCell>
-                <div className="flex justify-around">
-                  <Button
-                    label="Edit"
-                    handleClick={() => navigate(`../authors/edit/${author.id}`)}
-                    type="edit"
-                  />
-                  <Button
-                    label="Delete"
-                    handleClick={() => handleDeleteConfirmation(author)}
-                    type="delete"
-                  />
-                </div>
-              </TableCell>
-            </TableRow>
-          )
-        })
-      : [
-          <TableRow key={0}>
-            <TableCell>No authors</TableCell>
-          </TableRow>
-        ]
 
   return (
-    <>
-      <AdminTable headers={headers} rows={rows} />
-      <div className="flex justify-center">
-        <Button label="New author" handleClick={handleNavigation} type="neutral" />
-      </div>
-    </>
+    <table className="w-full h-[50%] table-auto text-left">
+      <thead>
+        <tr>
+          <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="font-normal leading-none opacity-70">
+              Author
+            </Typography>
+          </th>
+          <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4" colSpan={2}>
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="font-normal leading-none opacity-70">
+              Actions
+            </Typography>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {authors.items !== null
+          ? authors.items.map((item, index) => {
+              const isLast = index === authors.items!.length - 1
+              const classes = isLast ? 'p-4' : 'p-4 border-b border-blue-gray-50'
+
+              return (
+                <tr key={item.name}>
+                  <td className={classes}>
+                    <Typography variant="small" color="blue-gray" className="font-normal">
+                      {item.name}
+                    </Typography>
+                  </td>
+                  <td className={classes}>
+                    <Typography
+                      as="a"
+                      href="#"
+                      variant="small"
+                      color="blue-gray"
+                      className="font-medium"
+                      onClick={() => navigate(`../authors/edit/${item.id}`)}>
+                      Edit
+                    </Typography>
+                  </td>
+                  <td className={classes}>
+                    <Typography
+                      as="a"
+                      href="#"
+                      variant="small"
+                      color="blue-gray"
+                      className="font-medium"
+                      onClick={() => handleDeleteConfirmation(item)}>
+                      Delete
+                    </Typography>
+                  </td>
+                </tr>
+              )
+            })
+          : null}
+      </tbody>
+    </table>
   )
 }
 

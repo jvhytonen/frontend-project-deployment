@@ -8,6 +8,7 @@ import Button from '../../Button/Button'
 import AdminTable from '../AdminTable/AdminTable'
 import { askConfirmation, finished } from '../../../features/slices/modalSlice'
 import { Category } from '../../../features/types/reduxTypes'
+import { Typography } from '@material-tailwind/react'
 
 function AdminCategories() {
   const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null)
@@ -45,45 +46,70 @@ function AdminCategories() {
       handleDelete()
     }
   }, [modal.status])
-  // Headers used in this table
-  const headers = ['Name', 'Actions']
-  // AdminTable.tsx is wrapping this table
-  const rows =
-    categories.items !== null && categories.items.length > 0
-      ? categories.items.map((category: Category) => {
-          return (
-            <TableRow key={category.id}>
-              <TableCell>{category.name}</TableCell>
-              <TableCell>
-                <div className="flex justify-around">
-                  <Button
-                    label="Edit"
-                    handleClick={() => navigate(`../categories/edit/${category.id}`)}
-                    type="edit"
-                  />
-                  <Button
-                    label="Delete"
-                    handleClick={() => handleDeleteConfirmation(category)}
-                    type="delete"
-                  />
-                </div>
-              </TableCell>
-            </TableRow>
-          )
-        })
-      : [
-          <TableRow key={0}>
-            <TableCell>No categories</TableCell>
-          </TableRow>
-        ]
 
   return (
-    <>
-      <AdminTable headers={headers} rows={rows} />
-      <div className="flex justify-center">
-        <Button label="New category" handleClick={handleNavigation} type="neutral" />
-      </div>
-    </>
+    <table className="w-full h-[50%] table-auto text-left">
+      <thead>
+        <tr>
+          <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="font-normal leading-none opacity-70">
+              Category
+            </Typography>
+          </th>
+          <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4" colSpan={2}>
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="font-normal leading-none opacity-70">
+              Actions
+            </Typography>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {categories.items !== null
+          ? categories.items.map((item, index) => {
+              const isLast = index === categories.items!.length - 1
+              const classes = isLast ? 'p-4' : 'p-4 border-b border-blue-gray-50'
+
+              return (
+                <tr key={item.name}>
+                  <td className={classes}>
+                    <Typography variant="small" color="blue-gray" className="font-normal">
+                      {item.name}
+                    </Typography>
+                  </td>
+                  <td className={classes}>
+                    <Typography
+                      as="a"
+                      href="#"
+                      variant="small"
+                      color="blue-gray"
+                      className="font-medium"
+                      onClick={() => navigate(`../categories/edit/${item.id}`)}>
+                      Edit
+                    </Typography>
+                  </td>
+                  <td className={classes}>
+                    <Typography
+                      as="a"
+                      href="#"
+                      variant="small"
+                      color="blue-gray"
+                      className="font-medium"
+                      onClick={() => handleDeleteConfirmation(item)}>
+                      Delete
+                    </Typography>
+                  </td>
+                </tr>
+              )
+            })
+          : null}
+      </tbody>
+    </table>
   )
 }
 

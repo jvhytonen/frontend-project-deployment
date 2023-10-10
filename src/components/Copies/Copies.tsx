@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 
 import { AppDispatch, RootState } from '../../store'
 import { useDispatch, useSelector } from 'react-redux'
-import CopyWithAuth from '../CopyWithAuth/CopyWithAuth'
-import CopyNoAuth from '../CopyNoAuth/CopyNoAuth'
 import { borrowCopy, getCopies, returnCopy } from '../../features/slices/copySlice'
 import { askConfirmation, finished } from '../../features/slices/modalSlice'
 import { useNavigate } from 'react-router-dom'
@@ -14,6 +12,8 @@ import {
   CheckoutBorrow,
   CheckoutReturn
 } from '../../features/types/actionTypes'
+import { Button, Card, Chip, Typography } from '@material-tailwind/react'
+import { formatDate } from '../../features/utils/helpers'
 
 function Copies({ bookId }: CopiesProps) {
   // Item to be borrowed or returned
@@ -86,29 +86,108 @@ function Copies({ bookId }: CopiesProps) {
   // If the user is logged in, the CopyWithAuth (with the possibility to borrow/return) will be rendered. If not CopyNoAuth will be shown.
   const isLoggedIn = user.role !== null ? true : false
 
-  const showCopies = () => {
-    if (isLoggedIn && copies !== null) {
-      return copies.map((item: Copy, index: number) => (
-        <CopyWithAuth
-          key={item.bookCopyId}
-          copy={item}
-          copyOrderNumber={index + 1}
-          onCheckout={handleCheckoutConfirmation}
-        />
-      ))
-    } else if (!isLoggedIn && copies !== null) {
-      return copies.map((item: Copy, index: number) => (
-        <CopyNoAuth key={item.bookCopyId} copyOrderNumber={index + 1} copy={item} />
-      ))
-    } else {
-      return <p key={'No data'}>No data about the copies available</p>
-    }
+  const CopiesTable = () => {
+    return (
+      <Card className="h-full w-[80%] overflow-scroll flex justify-center">
+        <table className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+          <thead>
+            <tr>
+              <th className="w-[5%] border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+                <Typography
+                  variant="small"
+                  color="blue-gray"
+                  className="font-normal leading-none opacity-70 text-left">
+                  Copy number
+                </Typography>
+              </th>
+              <th className="w-[50%] border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+                <Typography
+                  variant="small"
+                  color="blue-gray"
+                  className="font-normal leading-none opacity-70 text-left">
+                  Status
+                </Typography>
+              </th>
+              <th className="w-[45%] border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+                <Typography
+                  variant="small"
+                  color="blue-gray"
+                  className="font-normal leading-none opacity-70 text-left">
+                  Action
+                </Typography>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {copies !== null ? (
+              copies.map((item: Copy, index: number) => {
+                const isLast = index === copies.length - 1
+                const classes = isLast ? 'p-4' : 'p-4 border-b border-blue-gray-50'
+
+                return (
+                  <tr key={index}>
+                    <td className={classes}>
+                      <Typography variant="small" color="blue-gray" className="font-normal">
+                        {index + 1}
+                      </Typography>
+                    </td>
+                    <td className={`${classes} bg-blue-gray-50/50`}>
+                      <Typography variant="small" color="blue-gray" className="font-normal">
+                        <Chip
+                          size="sm"
+                          variant="ghost"
+                          value={
+                            item.latestCheckout === null
+                              ? 'Free'
+                              : item.latestCheckout.returned
+                              ? 'Free'
+                              : 'Borrowed. Return date: ' + formatDate(item.latestCheckout.endTime)
+                          }
+                          color={
+                            item.latestCheckout === null
+                              ? 'green'
+                              : item.latestCheckout.returned
+                              ? 'green'
+                              : 'red'
+                          }
+                        />
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography variant="small" color="blue-gray" className="font-normal">
+                        {isLoggedIn && item.latestCheckout === null ? (
+                          <Button color="green">Borrow</Button>
+                        ) : item.latestCheckout != null && item.latestCheckout.returned ? (
+                          <Button color="green">Borrow</Button>
+                        ) : item.latestCheckout != null &&
+                          item.latestCheckout.user.id === user.id ? (
+                          <Button color="amber">Return</Button>
+                        ) : (
+                          'Log in to borrow or return books'
+                        )}
+                      </Typography>
+                    </td>
+                  </tr>
+                )
+              })
+            ) : (
+              <tr>
+                <td className="p-4">
+                  <Typography variant="small" color="blue-gray" className="font-normal">
+                    No copies
+                  </Typography>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </Card>
+    )
   }
 
   return (
-    <div className="w-full">
-      <h3 className="text-2xl text-center">Copies</h3>
-      <div className="flex flex-col justify-around md:flex-row">{showCopies()}</div>
+    <div className="w-full flex justify-center">
+      {copies?.length === 0 ? <Typography>No copies</Typography> : <CopiesTable />}
     </div>
   )
 }

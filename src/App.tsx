@@ -75,39 +75,29 @@ function App() {
 
   return (
     <div className="App w-full">
-      {/*      {auth.items.role === 'ADMIN' ? (
-        //<Navigate to="/admin/dashboard" /> // Redirect admin users directly to AdminDashboard
-        <p>Navigate</p>
-      ) : ( */}
-      <>
-        {/* Navbar visible only with normal users and non-logged-in users */}
-        {auth.items.role === 'ADMIN' ? null : <Navbar />}
-        <div className="flex justify-center items-center">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/logout" element={<Logout />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/authors" element={<Authors />} />
-            <Route path="/books" element={<Books />} />
-            <Route path="books/:id" element={<BookDetails />} />
-            <Route path="admin/dashboard" element={<ProtectedRoute component={AdminDashboard} />} />
-            <Route path="authors/add" element={<ProtectedRoute component={AddAuthor} />} />
-            <Route path="categories/add" element={<ProtectedRoute component={AddCategory} />} />
-            <Route
-              path="categories/edit/:id"
-              element={<ProtectedRoute component={EditCategory} />}
-            />
-            <Route path="authors/edit/:id" element={<ProtectedRoute component={EditAuthor} />} />
-            <Route path="books/add" element={<ProtectedRoute component={AddBook} />} />
-            <Route
-              path="/admin/dashboard/books/edit/:id"
-              element={<ProtectedRoute component={EditBook} />}
-            />
-          </Routes>
-        </div>
-      </>
-      {/* )} */}
+      <Navbar />
+      <div className="flex justify-center items-center">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/logout" element={<Logout />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/authors" element={<Authors />} />
+          <Route path="/books" element={<Books />} />
+          <Route path="books/:id" element={<BookDetails />} />
+          <Route path="admin/dashboard" element={<ProtectedRoute component={AdminDashboard} />} />
+          <Route path="authors/add" element={<ProtectedRoute component={AddAuthor} />} />
+          <Route path="categories/add" element={<ProtectedRoute component={AddCategory} />} />
+          <Route path="categories/edit/:id" element={<ProtectedRoute component={EditCategory} />} />
+          <Route path="authors/edit/:id" element={<ProtectedRoute component={EditAuthor} />} />
+          <Route path="books/add" element={<ProtectedRoute component={AddBook} />} />
+          <Route
+            path="/admin/dashboard/books/edit/:id"
+            element={<ProtectedRoute component={EditBook} />}
+          />
+        </Routes>
+      </div>
+
       {/* Error-modal will be shown above all other features with backdrop and that's why it's here. */}
       {errorMessage && (
         <Modal heading={'Error!'} text={errorMessage} type={'error'} onConfirm={closeModal} />

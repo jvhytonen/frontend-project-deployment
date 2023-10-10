@@ -3,7 +3,7 @@ import { AdminTableProps } from '../../../features/types/componentTypes'
 // Table from https://tailwindcomponents.com/component/table
 function AdminTable({ headers, rows }: AdminTableProps) {
   return (
-    <table className="text-left w-full border-collapse">
+    <table className="w-full min-w-max table-auto text-left">
       <thead>
         <tr>
           {headers !== null && headers !== undefined
