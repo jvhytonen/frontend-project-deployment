@@ -1,7 +1,6 @@
 import AdminBooks from '../AdminBooks/AdminBooks'
 import AdminAuthors from '../AdminAuthors/AdminAuthors'
 import AdminCategories from '../AdminCategories/AdminCategories'
-import AdminTabs from '../AdminTabs/AdminTabs'
 import { useState } from 'react'
 import { AdminTabTypes } from '../../../features/types/componentTypes'
 import DashboardNavigation from '../DashBoardNavigation/DashboardNavigation'
@@ -29,9 +28,6 @@ function AdminDashboard() {
     case 'categories':
       activeTabComponent = (
         <div className="w-[75%] mt-5 text-center">
-          <Typography variant="h4" className="mb-5">
-            Categories
-          </Typography>
           <AdminCategories />
         </div>
       )
@@ -39,9 +35,6 @@ function AdminDashboard() {
     case 'authors':
       activeTabComponent = (
         <div className="w-[75%] mt-5 text-center">
-          <Typography variant="h4" className="mb-5">
-            Authors
-          </Typography>
           <AdminAuthors />
         </div>
       )

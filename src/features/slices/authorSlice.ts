@@ -61,6 +61,9 @@ export const authorSlice = createSlice({
   reducers: {
     nullifyAuthorError: (state) => {
       state.error = null
+    },
+    filterAuthors: (state, action) => {
+      console.log(action.payload)
     }
   },
   extraReducers: (builder) => {

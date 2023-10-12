@@ -33,7 +33,7 @@ function BookDetails() {
       {bookItem ? (
         <>
           <div className="container mx-auto flex flex-col md:flex-row items-center">
-            <div className="md:w-1/2">
+            <div className="md:max-w-1/3">
               <img
                 src={bookItem.imageUrl ? S3IMAGEURL + bookItem.imageUrl : 'defaultCover.jpg'}
                 alt="Book Cover"
@@ -44,18 +44,18 @@ function BookDetails() {
               <Typography
                 variant="h3"
                 color="blue-gray"
-                className="text-4xl md:text-5xl font-semibold mb-4">
+                className="text-3xl md:text-5xl font-semibold mb-4">
                 {bookItem.title}
               </Typography>
-              <Typography variant="h4" color="blue-gray" className="text-2xl font-semibold mb-2">
+              <Typography variant="h4" color="blue-gray" className="text-xl font-semibold mb-2">
                 Author: {bookItem.author.name}
               </Typography>
-              <Typography variant="h5" color="blue-gray" className="text-xl mb-4">
+              <Typography variant="h5" color="blue-gray" className="text-lg mb-4">
                 Category: {bookItem.category.name}
               </Typography>
               <Typography
                 variant="paragraph"
-                className="text-gray-700 text-lg mb-8 leading-relaxed">
+                className="text-gray-700 text-md mb-8 leading-relaxed">
                 {bookItem.description}
               </Typography>
               <div className="grid grid-cols-2 gap-4">

@@ -57,9 +57,9 @@ export type NavbarLinkProps = {
   closeMobileNav?: () => void
 }
 
-export interface TableProps {
-  children: React.ReactNode
-  classes?: string
+export interface TableBodyProps {
+  items: Author[] | Category[] | null
+  feature: 'categories' | 'authors'
 }
 
 export type TableHeadingProps = {
@@ -152,4 +152,11 @@ export interface BookCardProps {
   description: string
   author: string
   yearPublished: string
+}
+
+export interface AdminSearchAndAddProps {
+  section: string
+  navigation: string
+  label: string
+  filter: (word: string) => void
 }
