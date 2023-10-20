@@ -1,4 +1,4 @@
-import { TableCell, TableRow } from '../Admin/TableItems/TableItems'
+import { TableCell, TableRow } from '../Admin/TableBody/TableBody'
 // This will be rendered if some of the tables does not contain data
 function Loading() {
   return (

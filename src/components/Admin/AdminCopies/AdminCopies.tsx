@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 
 import { addNewCopy, deleteCopy, getCopies } from '../../../features/slices/copySlice'
 import Button from '../../Button/Button'
-import { TableCell, TableRow } from '../TableItems/TableItems'
+import { TableCell, TableRow } from '../TableBody/TableBody'
 import { useModal } from '../../../features/hooks/useModal'
 import AdminTable from '../AdminTable/AdminTable'
 import Modal from '../../Modal/Modal'

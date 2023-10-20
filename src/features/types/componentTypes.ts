@@ -57,11 +57,6 @@ export type NavbarLinkProps = {
   closeMobileNav?: () => void
 }
 
-export interface TableBodyProps {
-  items: Author[] | Category[] | null
-  feature: 'categories' | 'authors'
-}
-
 export type TableHeadingProps = {
   label: string
 }
@@ -142,8 +137,6 @@ export interface AdminTabProps {
   onClick: () => void
 }
 
-export type AdminTabTypes = 'books' | 'categories' | 'authors'
-
 export interface BookCardProps {
   imageUrl: string
   id: string
@@ -159,4 +152,16 @@ export interface AdminSearchAndAddProps {
   navigation: string
   label: string
   filter: (word: string) => void
+}
+
+type TableFeature = 'categories' | 'authors' | 'books'
+
+export interface DeleteItemProps {
+  feature: 'categories' | 'authors' | 'books'
+  item: Author | Category | Book
+}
+
+export interface TableBodyProps {
+  items: Author[] | Category[] | null
+  feature: TableFeature
 }

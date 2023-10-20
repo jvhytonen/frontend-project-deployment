@@ -30,6 +30,8 @@ import { findLoadingStates } from './features/utils/helpers'
 import { nullifyAuthError } from './features/slices/authSlice'
 import AdminCopies from './components/Admin/AdminCopies/AdminCopies'
 import { resetModal, confirm } from './features/slices/modalSlice'
+import NewsSection from './components/NewsSection/NewsSection'
+import About from './components/About/About'
 
 function App() {
   const dispatch = useDispatch<AppDispatch>()
@@ -83,8 +85,10 @@ function App() {
           <Route path="/logout" element={<Logout />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/authors" element={<Authors />} />
+          <Route path="/news" element={<NewsSection />} />
           <Route path="/books" element={<Books />} />
           <Route path="books/:id" element={<BookDetails />} />
+          <Route path="about" element={<About />} />
           <Route path="admin/dashboard" element={<ProtectedRoute component={AdminDashboard} />} />
           <Route path="authors/add" element={<ProtectedRoute component={AddAuthor} />} />
           <Route path="categories/add" element={<ProtectedRoute component={AddCategory} />} />

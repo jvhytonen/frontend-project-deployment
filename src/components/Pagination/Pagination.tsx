@@ -1,28 +1,47 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
+
 import { Button, IconButton } from '@material-tailwind/react'
 import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/24/outline'
+import { getBooksBySearchQuery } from '../../features/slices/bookSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '../../store'
+import { setPage } from '../../features/slices/searchquerySlice'
 
 function Pagination() {
-  const [active, setActive] = useState<number>(1)
+  const dispatch = useDispatch<AppDispatch>()
+  const page = useSelector((state: RootState) => state.search.page)
+  const text = useSelector((state: RootState) => state.search.query)
+
+  const getNextItems = () => {
+    const request = {
+      page: page,
+      query: text
+    }
+    dispatch(getBooksBySearchQuery(request))
+  }
+
+  useEffect(() => {
+    getNextItems()
+  }, [page])
 
   const getItemProps = (index: number) =>
     ({
-      variant: active === index ? 'filled' : 'text',
+      variant: page === index ? 'filled' : 'text',
       color: 'gray',
-      onClick: () => setActive(index),
+      onClick: () => setPage(index),
       className: 'rounded-full'
     } as any)
 
   const next = () => {
-    if (active === 5) return
+    if (page === 5) return
 
-    setActive(active + 1)
+    dispatch(setPage(page + 1))
   }
 
   const prev = () => {
-    if (active === 1) return
+    if (page === 1) return
 
-    setActive(active - 1)
+    dispatch(setPage(page - 1))
   }
 
   return (
@@ -31,7 +50,7 @@ function Pagination() {
         variant="text"
         className="flex items-center gap-2 rounded-full"
         onClick={prev}
-        disabled={active === 1}>
+        disabled={page === 1}>
         <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" /> Previous
       </Button>
       <div className="flex items-center gap-2">
@@ -45,7 +64,7 @@ function Pagination() {
         variant="text"
         className="flex items-center gap-2 rounded-full"
         onClick={next}
-        disabled={active === 5}>
+        disabled={page === 5}>
         Next
         <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
       </Button>

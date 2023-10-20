@@ -8,6 +8,7 @@ import authorSlice from './features/slices/authorSlice'
 import userSlice from './features/slices/userSlice'
 import copySlice from './features/slices/copySlice'
 import categorySlice from './features/slices/categorySlice'
+import searchQuerySlice from './features/slices/searchquerySlice'
 import authSlice from './features/slices/authSlice'
 import modalSlice from './features/slices/modalSlice'
 import {
@@ -16,6 +17,7 @@ import {
   CategoryState,
   CopyState,
   ModalState,
+  SearchQueryState,
   UserState
 } from './features/types/reduxTypes'
 
@@ -26,6 +28,7 @@ export interface RootState {
   copy: CopyState
   category: CategoryState
   auth: UserState
+  search: SearchQueryState
   modal: ModalState
 }
 
@@ -42,6 +45,7 @@ const rootReducer = combineReducers<RootState>({
   copy: copySlice,
   category: categorySlice,
   auth: authSlice,
+  search: searchQuerySlice,
   modal: modalSlice
 })
 

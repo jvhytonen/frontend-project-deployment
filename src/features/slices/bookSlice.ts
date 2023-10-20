@@ -3,10 +3,11 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { deleteItem, getItemNoAuth } from '../utils/thunks'
 import { API_BASE_URL } from '../utils/variables'
 import { Book, BookState } from '../types/reduxTypes'
-import { BookDeleteRequest, BookPostRequest } from '../types/requestTypes'
+import { BookDeleteRequest, BookPostRequest, SearchRequest } from '../types/requestTypes'
 
 const URL = API_BASE_URL + 'books/'
 const IMAGEUPLOADURL = API_BASE_URL + 'images/upload/'
+const PAGE_SIZE = 8
 
 const initialState: BookState = {
   items: null,
@@ -22,6 +23,14 @@ export const getAllBooks = createAsyncThunk('books/getAll', async () => {
   return response
 })
 
+export const getBooksByPage = createAsyncThunk('books/list', async (page: number) => {
+  const req = {
+    url: URL + `list/?page=${page}&size=${PAGE_SIZE}`
+  }
+  const response = await getItemNoAuth(req)
+  return response
+})
+
 export const getBooksByAuthor = createAsyncThunk('books/getByAuthor', async (authorId: string) => {
   const req = {
     url: URL + 'byAuthor/' + authorId
@@ -30,8 +39,19 @@ export const getBooksByAuthor = createAsyncThunk('books/getByAuthor', async (aut
   return response
 })
 
+export const getBooksBySearchQuery = createAsyncThunk(
+  'books/getByQuery',
+  async (request: SearchRequest) => {
+    const req = {
+      url: URL + `list/?page=${request.page - 1}&size=${PAGE_SIZE}&query=${request.query}`
+    }
+    console.log(req.url)
+    const response = await getItemNoAuth(req)
+    return response
+  }
+)
+
 export const uploadImage = createAsyncThunk('images/upload', async (file: File) => {
-  // First version of the image upload that works
   try {
     const formData = new FormData()
     formData.append('file', file)
@@ -121,6 +141,16 @@ export const bookSlice = createSlice({
     builder.addCase(getAllBooks.rejected, (state) => {
       state.error = 'An error occurred! Try again later'
     })
+    builder.addCase(getBooksByPage.fulfilled, (state, action) => {
+      state.isLoading = false
+      state.items = action.payload.content
+    })
+    builder.addCase(getBooksByPage.pending, (state) => {
+      state.isLoading = true
+    })
+    builder.addCase(getBooksByPage.rejected, (state) => {
+      state.error = 'An error occurred! Try again later'
+    })
     builder.addCase(getBooksByAuthor.fulfilled, (state, action) => {
       state.isLoading = false
       state.items = action.payload
@@ -129,6 +159,16 @@ export const bookSlice = createSlice({
       state.isLoading = true
     })
     builder.addCase(getBooksByAuthor.rejected, (state) => {
+      state.error = 'An error occurred! Try again later'
+    })
+    builder.addCase(getBooksBySearchQuery.fulfilled, (state, action) => {
+      state.isLoading = false
+      state.items = action.payload.content
+    })
+    builder.addCase(getBooksBySearchQuery.pending, (state) => {
+      state.isLoading = true
+    })
+    builder.addCase(getBooksBySearchQuery.rejected, (state) => {
       state.error = 'An error occurred! Try again later'
     })
 

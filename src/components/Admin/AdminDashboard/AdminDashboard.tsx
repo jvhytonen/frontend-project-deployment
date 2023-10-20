@@ -2,9 +2,7 @@ import AdminBooks from '../AdminBooks/AdminBooks'
 import AdminAuthors from '../AdminAuthors/AdminAuthors'
 import AdminCategories from '../AdminCategories/AdminCategories'
 import { useState } from 'react'
-import { AdminTabTypes } from '../../../features/types/componentTypes'
 import DashboardNavigation from '../DashBoardNavigation/DashboardNavigation'
-import { Typography } from '@material-tailwind/react'
 
 function AdminDashboard() {
   const [currentTab, setCurrentTab] = useState<string>('books')
@@ -18,7 +16,7 @@ function AdminDashboard() {
   switch (currentTab) {
     case 'books':
       activeTabComponent = (
-        <div className="w-2/3 mx-auto">
+        <div className="w-[75%] mx-auto">
           <div className="bg-white shadow-md rounded my-6">
             <AdminBooks />
           </div>

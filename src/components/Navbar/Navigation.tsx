@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { Navbar, MobileNav, Button, Typography, IconButton } from '@material-tailwind/react'
+import { Navbar, Button, Typography, IconButton, Collapse } from '@material-tailwind/react'
 
 import { AppDispatch, RootState } from '../../store'
 import { logUserOut } from '../../features/slices/authSlice'
@@ -17,7 +17,7 @@ function Navigation() {
     //For changing the navigation to mobile (and back).
     window.addEventListener('resize', () => window.innerWidth >= 960 && setOpenNav(false))
   }, [])
-
+  /* When the login/logout -button is pressed, the user is guided to login or logged out */
   const handleLoginLogOut = () => {
     if (user.token) {
       dispatch(logUserOut())
@@ -25,6 +25,9 @@ function Navigation() {
     } else {
       navigate('/login')
     }
+  }
+  {
+    /* Navigation links */
   }
   const navHeadings = ['Home', 'Books', 'News', 'About']
   const navList = (
@@ -39,6 +42,12 @@ function Navigation() {
           <NavbarLink link={heading.toLowerCase()} label={heading} />
         </Typography>
       ))}
+      {/* If the user is ADMIN, the link to Dashboard will be visible */}
+      {user.items.role === 'ADMIN' ? (
+        <Typography as="li" variant="small" color="blue-gray" className="p-1 font-normal">
+          <NavbarLink link="admin/dashboard" label="Admin" />
+        </Typography>
+      ) : null}
     </ul>
   )
 
@@ -50,9 +59,14 @@ function Navigation() {
         </Typography>
         <div className="flex items-center gap-4">
           <div className="mr-4 hidden lg:block">{navList}</div>
-          <Button variant="gradient" size="sm" className="hidden lg:inline-block">
-            <Link to="/login">{user.token ? 'Logout' : 'Login'}</Link>
+          <Button
+            variant="gradient"
+            size="sm"
+            className="hidden lg:inline-block"
+            onClick={handleLoginLogOut}>
+            {user.token ? 'Logout' : 'Login'}
           </Button>
+          {/* Hamburger icon and closing icon for mobile navigation */}
           <IconButton
             variant="text"
             className="ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
@@ -81,12 +95,13 @@ function Navigation() {
           </IconButton>
         </div>
       </div>
-      <MobileNav open={openNav}>
+      {/* Mobile navigation */}
+      <Collapse open={openNav}>
         {navList}
         <Button variant="gradient" size="sm" fullWidth className="mb-2" onClick={handleLoginLogOut}>
-          <span>{user ? 'Logout' : 'Login'}</span>
+          <span>{user.token ? 'Logout' : 'Login'}</span>
         </Button>
-      </MobileNav>
+      </Collapse>
     </Navbar>
   )
 }

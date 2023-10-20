@@ -59,3 +59,8 @@ export interface GetRequestWithAuth {
 }
 
 export type GetRequestWithoutAuth = Omit<GetRequestWithAuth, 'token'>
+
+export interface SearchRequest {
+  page: number
+  query: string
+}

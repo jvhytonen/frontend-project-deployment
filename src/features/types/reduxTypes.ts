@@ -96,6 +96,11 @@ export type ModalState = {
   status: null | 'waitingConfirmation' | 'confirmed' | 'finished' | 'error' | 'confirm' | 'success'
 }
 
+export type SearchQueryState = {
+  query: string
+  page: number
+}
+
 // For the Redux persist to store data even when the browser is refreshed:
 
 export type PartialPersistedState = Partial<{

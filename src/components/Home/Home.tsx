@@ -1,7 +1,9 @@
 import { Button, Typography } from '@material-tailwind/react'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function Home() {
+  const navigate = useNavigate()
   return (
     <header className="bg-white p-8">
       <div className="container mx-auto grid h-full min-h-[85vh] w-full grid-cols-1 place-items-center gap-y-10 lg:grid-cols-2">
@@ -18,11 +20,18 @@ function Home() {
             Stop mindless surfing and start reading something deeper now.
           </Typography>
           <div className="flex gap-3">
-            <Button color="gray" className="w-full px-4 md:w-[10rem]">
-              contact us
+            <Button
+              color="gray"
+              className="w-full px-4 md:w-[10rem]"
+              onClick={() => navigate('/books')}>
+              browse books
             </Button>
-            <Button color="gray" variant="outlined" className="w-full px-4 md:w-[10rem]">
-              read more
+            <Button
+              color="gray"
+              variant="outlined"
+              className="w-full px-4 md:w-[10rem]"
+              onClick={() => navigate('/about')}>
+              read more about this project
             </Button>
           </div>
         </div>
