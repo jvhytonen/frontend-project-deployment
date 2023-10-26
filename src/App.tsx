@@ -1,4 +1,5 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 import './App.css'
 import Login from './components/Login/Login'
@@ -6,6 +7,7 @@ import Books from './components/Books/Books'
 import Authors from './components/Authors/Authors'
 import Logout from './components/Logout/Logout'
 import Home from './components/Home/Home'
+import Modal from './components/Modal/Modal'
 import AddAuthor from './components/Admin/AddAuthor/AddAuthor'
 import BookDetails from './components/BookDetails/BookDetails'
 import EditBook from './components/EditBook/EditBook'
@@ -16,26 +18,15 @@ import Navbar from './components/Navbar/Navigation'
 import AddCategory from './components/Admin/AddCategory/AddCategory'
 import AdminDashboard from './components/Admin/AdminDashboard/AdminDashboard'
 import Signup from './components/Signup/Signup'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from './store'
-import Modal from './components/Modal/Modal'
-import { findError } from './features/utils/errors'
-import { nullifyCategoryError } from './features/slices/categorySlice'
+import { RootState } from './store'
+
 import EditCategory from './components/EditCategory/EditCategory'
-import { nullifyBookError } from './features/slices/bookSlice'
-import { nullifyAuthorError } from './features/slices/authorSlice'
-import { nullifyCopyError } from './features/slices/copySlice'
-import { nullifyUserError } from './features/slices/userSlice'
 import { findLoadingStates } from './features/utils/helpers'
-import { nullifyAuthError } from './features/slices/authSlice'
-import AdminCopies from './components/Admin/AdminCopies/AdminCopies'
-import { resetModal, confirm } from './features/slices/modalSlice'
 import NewsSection from './components/NewsSection/NewsSection'
 import About from './components/About/About'
 
 function App() {
-  const dispatch = useDispatch<AppDispatch>()
-  // For the global error modal.
+  // To control the mouse cursor during loading stage.
   const category = useSelector((state: RootState) => state.category)
   const book = useSelector((state: RootState) => state.book)
   const author = useSelector((state: RootState) => state.author)
@@ -45,35 +36,9 @@ function App() {
   const modal = useSelector((state: RootState) => state.modal)
 
   const states = [category, book, author, copy, user, auth]
-  // There can only be one error at the time. Function returns that error if it exists
-  const errorMessage = findError(states)
   // The cursor will be in wait-mode if there is ongoing API-request that is not completed.
   const isLoading = findLoadingStates(states)
   document.body.style.cursor = isLoading ? 'wait' : 'auto'
-
-  const closeModal = () => {
-    if (category) {
-      dispatch(nullifyCategoryError())
-    }
-    if (book) {
-      dispatch(nullifyBookError())
-    }
-    if (author) {
-      dispatch(nullifyAuthorError())
-    }
-    if (category) {
-      dispatch(nullifyCategoryError())
-    }
-    if (copy) {
-      dispatch(nullifyCopyError())
-    }
-    if (user) {
-      dispatch(nullifyUserError())
-    }
-    if (auth) {
-      dispatch(nullifyAuthError())
-    }
-  }
 
   return (
     <div className="App w-full">
@@ -101,24 +66,8 @@ function App() {
           />
         </Routes>
       </div>
-
-      {/* Error-modal will be shown above all other features with backdrop and that's why it's here. */}
-      {errorMessage && (
-        <Modal heading={'Error!'} text={errorMessage} type={'error'} onConfirm={closeModal} />
-      )}
-      {/* Modal for handling confirmation of adding, editing, and deleting books, categories, and authors */}
-      {modal.text && modal.status !== null && (
-        <Modal
-          heading={modal.status === 'finished' ? 'Success!' : 'Proceed the action?'}
-          text={modal.text}
-          type={modal.status}
-          onConfirm={
-            modal.status === 'waitingConfirmation'
-              ? () => dispatch(confirm())
-              : () => dispatch(resetModal())
-          }
-        />
-      )}
+      {/* Global modal will be visible if isOpen in the modalSlice is true */}
+      {modal.isOpen ? <Modal /> : null}
     </div>
   )
 }

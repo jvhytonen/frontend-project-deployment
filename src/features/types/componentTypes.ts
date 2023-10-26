@@ -1,7 +1,7 @@
 //Forms:
 
 import { ChangeEvent, MouseEventHandler } from 'react'
-import { Author, Book, Category, Copy, User, UserState } from './reduxTypes'
+import { Author, Book, Category, Copy, UserState } from './reduxTypes'
 import { CheckoutActionType } from './actionTypes'
 
 export type InputItemType = {
@@ -67,19 +67,20 @@ export interface AdminTableProps {
 }
 
 export type BookIntroProps = Partial<Book>
+export type ModalMessageType = 'info' | 'confirm' | 'confirmed' | 'finished' | 'error'
 
-export type Modal = {
-  type: string
+export type ModalContent = {
   heading: string
-  message: string
+  content: string
+  type: ModalMessageType
 }
 
 export type ModalProps = {
-  heading: string
-  text: string
-  type: 'waitingConfirmation' | 'confirmed' | 'finished' | 'error' | 'confirm' | 'success'
-  onConfirm: () => void
-  onCancel?: () => void
+  head: string
+  content: string
+  type?: 'confirm' | 'confirmed' | 'info' | 'error'
+  // onConfirm: () => void
+  // onCancel?: () => void
 }
 
 export interface CopyProps {

@@ -45,7 +45,6 @@ export const getBooksBySearchQuery = createAsyncThunk(
     const req = {
       url: URL + `list/?page=${request.page - 1}&size=${PAGE_SIZE}&query=${request.query}`
     }
-    console.log(req.url)
     const response = await getItemNoAuth(req)
     return response
   }

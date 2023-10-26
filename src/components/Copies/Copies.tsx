@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { AppDispatch, RootState } from '../../store'
 import { useDispatch, useSelector } from 'react-redux'
 import { borrowCopy, getCopies, returnCopy } from '../../features/slices/copySlice'
-import { askConfirmation, finished } from '../../features/slices/modalSlice'
+import { finished, openModal } from '../../features/slices/modalSlice'
 import { useNavigate } from 'react-router-dom'
 import { CopiesProps } from '../../features/types/componentTypes'
 import { Copy } from '../../features/types/reduxTypes'
@@ -36,18 +36,23 @@ function Copies({ bookId }: CopiesProps) {
 
   useEffect(() => {
     // When the user confirms the action in modal, borrow or return is excecuted.
-    if (modal.status === 'confirmed' && checkoutType === 'borrow') {
+    if (modal.type === 'confirmed' && checkoutType === 'borrow') {
       handleBorrow()
-    } else if (modal.status === 'confirmed' && checkoutType === 'return') {
+    } else if (modal.type === 'confirmed' && checkoutType === 'return') {
       handleReturn()
     }
-  }, [modal.status])
+  }, [modal.type])
 
   const handleCheckoutConfirmation = (checkoutObj: Copy, actionType: CheckoutActionType) => {
     //Action type defines is this a borrow or return of the book.
     setCheckoutItem(checkoutObj)
     setCheckoutType(actionType)
-    dispatch(askConfirmation(`Are you sure you want to ${actionType} this book?`))
+    dispatch(
+      openModal({
+        heading: 'Confirm action',
+        modalContent: `Are you sure you want to ${actionType} this book?`
+      })
+    )
   }
 
   const handleBorrow = async () => {

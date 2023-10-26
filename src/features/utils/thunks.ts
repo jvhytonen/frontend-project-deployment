@@ -33,7 +33,7 @@ export const getItemWithAuth = async (req: GetRequestWithAuth) => {
 }
 
 export const deleteItem = async (req: DeleteRequest) => {
-  const response = await fetch(req.url, {
+  const response = await fetch(req.url + 'jv', {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
@@ -41,7 +41,10 @@ export const deleteItem = async (req: DeleteRequest) => {
         'Authorization': `Bearer ${req.token}`
     }
   })
-  await apiErrorHandler(response)
+  if (!response.ok) {
+    // If the response status code is not in the 2xx range, reject the promise.
+    throw new Error(`Failed to delete item: ${response.status} - ${response.statusText}`)
+  }
   const responseData = await response.json()
   return responseData
 }
@@ -56,7 +59,7 @@ export const addItem = async (req: PostRequest) => {
     },
     body: JSON.stringify(req.body)
   })
-  await apiErrorHandler(response)
+  // await apiErrorHandler(response)
   const responseData = await response.json()
   return responseData
 }

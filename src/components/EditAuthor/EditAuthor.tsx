@@ -8,7 +8,7 @@ import { validateAuthorData } from '../../features/validation/validate'
 import { updateExistingAuthor } from '../../features/slices/authorSlice'
 import InputItem from '../FormControls/InputItem/InputItem'
 import TextArea from '../FormControls/TextArea/TextArea'
-import { askConfirmation, finished } from '../../features/slices/modalSlice'
+import { confirm, finished, openModal } from '../../features/slices/modalSlice'
 import { Author } from '../../features/types/reduxTypes'
 import { FormElement } from '../../features/types/componentTypes'
 import { AuthorPostRequest } from '../../features/types/requestTypes'
@@ -35,10 +35,10 @@ function EditAuthor() {
     }
   }
   useEffect(() => {
-    if (modal.status === 'confirmed') {
+    if (modal.type === 'confirmed') {
       handleSubmit()
     }
-  }, [modal.status])
+  }, [modal.type])
 
   const handleSubmit: () => void = () => {
     if (token !== null && authorToEdit !== null && authorToEdit !== undefined) {
@@ -53,7 +53,7 @@ function EditAuthor() {
         }
       }
       setAuthorToEdit(null)
-      dispatch(finished('Author edited succesfully!'))
+      dispatch(finished({ heading: 'Success!', content: 'Author edited succesfully!' }))
       navigate('../admin/dashboard')
     }
   }
@@ -88,9 +88,10 @@ function EditAuthor() {
                 handleClick={(e) => {
                   e.preventDefault()
                   dispatch(
-                    askConfirmation(
-                      `Are you sure you want to add edit author "${authorToEdit?.name}"?`
-                    )
+                    openModal({
+                      heading: 'Confirm action',
+                      modalContent: `Are you sure you want to add edit author "${authorToEdit?.name}"?`
+                    })
                   )
                 }}
                 type="neutral"

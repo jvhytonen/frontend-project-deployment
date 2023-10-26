@@ -6,16 +6,15 @@ import InputItem from '../../FormControls/InputItem/InputItem'
 import Button from '../../Button/Button'
 import { AppDispatch, RootState } from '../../../store'
 import { addNewCategory } from '../../../features/slices/categorySlice'
-import { askConfirmation, finished } from '../../../features/slices/modalSlice'
+import { finished, openModal, openErrorModal } from '../../../features/slices/modalSlice'
 import { Category } from '../../../features/types/reduxTypes'
 import { CategoryPostRequest } from '../../../features/types/requestTypes'
 
 function AddCategory() {
   const token = useSelector((state: RootState) => state.auth.token)
   const modal = useSelector((state: RootState) => state.modal)
+  const error = useSelector((state: RootState) => state.category.error)
   const [newCategory, setNewCategory] = useState<Category | null>(null)
-  //const [showConfirmation, setShowConfirmation] = useState<boolean>(false)
-  //const [showCompletion, setShowCompletion] = useState<boolean>(false)
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
   const handleChange: (
@@ -29,10 +28,10 @@ function AddCategory() {
   }
 
   useEffect(() => {
-    if (modal.status === 'confirmed') {
+    if (modal.type === 'confirmed') {
       handleSubmit()
     }
-  }, [modal.status])
+  }, [modal.type])
 
   const handleSubmit: () => void = async () => {
     event?.preventDefault()
@@ -44,9 +43,13 @@ function AddCategory() {
       }
       // Send data to server via Redux thunk
       if (newCategory) {
-        await dispatch(addNewCategory(categoryData)).unwrap()
-        dispatch(finished('Category added succesfully!'))
-        navigate('../admin/dashboard')
+        try {
+          await dispatch(addNewCategory(categoryData)).unwrap()
+          dispatch(finished({ heading: 'Success', content: 'Category added succesfully!' }))
+          navigate('../admin/dashboard')
+        } catch (err) {
+          dispatch(openErrorModal({ heading: 'An error!', content: error }))
+        }
       }
     }
   }
@@ -70,9 +73,10 @@ function AddCategory() {
               handleClick={(e) => {
                 e.preventDefault()
                 dispatch(
-                  askConfirmation(
-                    `Are you sure you want to add new category "${newCategory?.name}"?`
-                  )
+                  openModal({
+                    heading: 'Confirm action',
+                    content: `Are you sure you want to add new category "${newCategory?.name}"?`
+                  })
                 )
               }}
               type="neutral"

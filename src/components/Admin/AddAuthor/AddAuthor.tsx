@@ -7,7 +7,7 @@ import { AppDispatch, RootState } from '../../../store'
 import { addNewAuthor } from '../../../features/slices/authorSlice'
 import TextArea from '../../FormControls/TextArea/TextArea'
 import InputItem from '../../FormControls/InputItem/InputItem'
-import { askConfirmation, finished } from '../../../features/slices/modalSlice'
+import { finished, openModal } from '../../../features/slices/modalSlice'
 import { Author } from '../../../features/types/reduxTypes'
 import { FormElement } from '../../../features/types/componentTypes'
 import { AuthorPostRequest } from '../../../features/types/requestTypes'
@@ -27,10 +27,10 @@ function AddAuthor() {
   }
 
   useEffect(() => {
-    if (modal.status === 'confirmed') {
+    if (modal.type === 'confirmed') {
       handleSubmit()
     }
-  }, [modal.status])
+  }, [modal.type])
 
   const handleSubmit: () => void = async () => {
     event?.preventDefault()
@@ -44,7 +44,7 @@ function AddAuthor() {
       // Send data to server via Redux thunk
       if (newAuthor) {
         await dispatch(addNewAuthor(authorData)).unwrap()
-        dispatch(finished('Author added succesfully!'))
+        dispatch(finished({ heading: 'Success!', content: 'Author added succesfully!' }))
         navigate('../admin/dashboard')
       }
     }
@@ -75,7 +75,10 @@ function AddAuthor() {
               handleClick={(e) => {
                 e.preventDefault()
                 dispatch(
-                  askConfirmation(`Are you sure you want to add new author "${newAuthor?.name}"?`)
+                  openModal({
+                    heading: 'Confirmation needed',
+                    content: `Are you sure you want to add new author "${newAuthor?.name}"?`
+                  })
                 )
               }}
               type="neutral"

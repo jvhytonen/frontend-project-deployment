@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Author, Book, Category } from '../../../features/types/reduxTypes'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../../store'
-import { askConfirmation, finished } from '../../../features/slices/modalSlice'
+import { finished, openModal } from '../../../features/slices/modalSlice'
 import { deleteAuthor } from '../../../features/slices/authorSlice'
 import { useNavigate } from 'react-router-dom'
 import { deleteCategory } from '../../../features/slices/categorySlice'
@@ -19,19 +19,22 @@ function DeleteItem({ feature, item }: DeleteItemProps) {
   const [itemToDelete, setItemToDelete] = useState<Category | Author | Book | null>(null)
 
   const handleDeleteConfirmation = (objToDelete: Category | Author | Book | null) => {
-    console.log('HandleDelete')
     if (objToDelete !== null) {
       setItemToDelete(objToDelete)
 
       if ('name' in objToDelete) {
         dispatch(
-          askConfirmation(
-            `Are you sure you want to delete "${(objToDelete as Category | Author).name}"?`
-          )
+          openModal({
+            heading: 'Confirm action',
+            content: `Are you sure you want to delete "${(objToDelete as Category | Author).name}"?`
+          })
         )
       } else if ('title' in objToDelete) {
         dispatch(
-          askConfirmation(`Are you sure you want to delete "${(objToDelete as Book).title}"?`)
+          openModal({
+            heading: 'Confirm action',
+            content: `Are you sure you want to delete "${(objToDelete as Book).title}"?`
+          })
         )
       }
     }
@@ -44,24 +47,24 @@ function DeleteItem({ feature, item }: DeleteItemProps) {
       }
       if (feature === 'authors') {
         await dispatch(deleteAuthor(deleteReq)).unwrap()
-        dispatch(finished('Author deleted'))
+        dispatch(finished({ heading: 'Success!', content: 'Author deleted' }))
         navigate('../admin/dashboard')
       } else if (feature === 'categories') {
         await dispatch(deleteCategory(deleteReq)).unwrap()
-        dispatch(finished('Category deleted'))
+        dispatch(finished({ heading: 'Success!', content: 'Category deleted' }))
         navigate('../admin/dashboard')
       } else if (feature === 'books') {
         await dispatch(deleteBook(deleteReq)).unwrap()
-        dispatch(finished('Book deleted'))
+        dispatch(finished({ heading: 'Success!', content: 'Book deleted' }))
         navigate('../admin/dashboard')
       }
     }
   }
   useEffect(() => {
-    if (modal.status === 'confirmed') {
+    if (modal.type === 'confirmed') {
       handleDelete()
     }
-  }, [modal.status])
+  }, [modal.type])
   return (
     <div onClick={() => handleDeleteConfirmation(item)}>
       <Tooltip content="Delete">

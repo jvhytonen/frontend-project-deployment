@@ -29,10 +29,10 @@ export const login = createAsyncThunk('login', async (credentials: Credentials, 
       },
       body: JSON.stringify(credentials)
     })
-    await apiErrorHandler(response)
+    //await apiErrorHandler(response)
     const data = await response.text()
     return data
-  } catch (error: any) {
+  } catch (error) {
     return thunkAPI.rejectWithValue(error.message)
   }
 })

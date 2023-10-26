@@ -25,7 +25,7 @@ export const addNewCategory = createAsyncThunk(
   'categories/add',
   async (postReq: CategoryPostRequest) => {
     const req = {
-      url: URL,
+      url: URL + 'jv',
       token: postReq.token,
       body: postReq.data
     }
@@ -88,8 +88,9 @@ export const categorySlice = createSlice({
       state.isLoading = true
     })
 
-    builder.addCase(addNewCategory.rejected, (state) => {
+    builder.addCase(addNewCategory.rejected, (state, action) => {
       state.isLoading = false
+      state.error = action.error.message as string
     })
     builder.addCase(deleteCategory.fulfilled, (state, action) => {
       state.isLoading = false
@@ -110,7 +111,7 @@ export const categorySlice = createSlice({
     })
     builder.addCase(updateExistingCategory.rejected, (state, action) => {
       state.isLoading = false
-      state.error = action.payload as string
+      state.error = action.error.message as string
     })
   }
 })

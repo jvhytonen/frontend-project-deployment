@@ -11,7 +11,7 @@ import { getAllAuthors } from '../../../features/slices/authorSlice'
 import OptionItem from '../../FormControls/OptionItem/OptionItem'
 import TextArea from '../../FormControls/TextArea/TextArea'
 import UploadImage from '../../FormControls/UploadImage/UploadImage'
-import { askConfirmation, finished } from '../../../features/slices/modalSlice'
+import { finished, openModal } from '../../../features/slices/modalSlice'
 import { Book } from '../../../features/types/reduxTypes'
 import { BookPostRequest } from '../../../features/types/requestTypes'
 
@@ -34,10 +34,10 @@ function AddBook() {
   }, [])
 
   useEffect(() => {
-    if (modal.status === 'confirmed') {
+    if (modal.type === 'confirmed') {
       handleSubmit()
     }
-  }, [modal.status])
+  }, [modal.type])
 
   const handleChange: (
     e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>
@@ -79,7 +79,7 @@ function AddBook() {
       }
       if (newBook) {
         await dispatch(addNewBook(newBookReq)).unwrap()
-        dispatch(finished('Book added succesfully!'))
+        dispatch(finished({ heading: 'Success', content: 'A new book added succesfully' }))
         navigate('../admin/dashboard')
       }
     }
@@ -164,7 +164,10 @@ function AddBook() {
               handleClick={(e) => {
                 e.preventDefault()
                 dispatch(
-                  askConfirmation(`Are you sure you want to add new author "${newBook?.title}"?`)
+                  openModal({
+                    heading: 'Confirmation required',
+                    content: `Are you sure you want to add new author "${newBook?.title}"?`
+                  })
                 )
               }}
               type="neutral"

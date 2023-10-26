@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../../store'
 import { borrowCopy } from '../../../features/slices/copySlice'
 import { useNavigate } from 'react-router-dom'
-import { askConfirmation, finished } from '../../../features/slices/modalSlice'
+import { finished, openModal } from '../../../features/slices/modalSlice'
 import { BorrowProps } from '../../../features/types/componentTypes'
 import { CheckoutBorrow } from '../../../features/types/actionTypes'
 
@@ -16,10 +16,10 @@ function Borrow({ copyId }: BorrowProps) {
   const dispatch = useDispatch<AppDispatch>()
 
   useEffect(() => {
-    if (modal.status === 'confirmed') {
+    if (modal.type === 'confirmed') {
       handleBorrow()
     }
-  }, [modal.status])
+  }, [modal.type])
 
   const handleBorrow = async () => {
     if (token !== null) {
@@ -32,7 +32,7 @@ function Borrow({ copyId }: BorrowProps) {
         data: checkoutData
       }
       await dispatch(borrowCopy(req)).unwrap()
-      dispatch(finished('Book borrowed!'))
+      dispatch(finished({ heading: 'Success', content: 'Book borrowed!' }))
       navigate('/books')
     }
   }
@@ -42,7 +42,12 @@ function Borrow({ copyId }: BorrowProps) {
         label="Add category"
         handleClick={(e) => {
           e.preventDefault()
-          dispatch(askConfirmation(`Are you sure you want to this book?`))
+          dispatch(
+            openModal({
+              heading: 'Confirm action',
+              content: `Are you sure you want to borrow this book?`
+            })
+          )
         }}
         type="neutral"
       />

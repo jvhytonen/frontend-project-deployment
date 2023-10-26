@@ -2,32 +2,47 @@ import { createSlice } from '@reduxjs/toolkit'
 import { ModalState } from '../types/reduxTypes'
 
 const initialState: ModalState = {
-  text: null,
-  status: null
+  isOpen: false,
+  heading: null,
+  content: null,
+  type: null
 }
 
-export const modalSlice = createSlice({
+const modalSlice = createSlice({
   name: 'modal',
   initialState,
   reducers: {
-    resetModal: (state) => {
-      state.text = null
-      state.status = null
+    openModal: (state, action) => {
+      state.isOpen = true
+      state.heading = action.payload.heading
+      state.content = action.payload.content
+      state.type = 'confirm'
     },
-    askConfirmation: (state, action) => {
-      state.text = action.payload
-      state.status = 'waitingConfirmation'
+    openErrorModal: (state, action) => {
+      state.isOpen = true
+      state.heading = action.payload.heading
+      state.content = action.payload.content
+      state.type = 'error'
+    },
+    closeModal: (state) => {
+      state.isOpen = false
+      state.heading = null
+      state.content = null
+      state.type = null
     },
     confirm: (state) => {
-      state.text = null
-      state.status = 'confirmed'
+      state.isOpen = false
+      state.content = null
+      state.type = 'confirmed'
     },
     finished: (state, action) => {
-      state.text = action.payload
-      state.status = 'finished'
+      state.isOpen = true
+      state.heading = action.payload.heading
+      state.content = action.payload.content
+      state.type = 'finished'
     }
   }
 })
 
-export const { resetModal, askConfirmation, confirm, finished } = modalSlice.actions
+export const { openModal, openErrorModal, closeModal, confirm, finished } = modalSlice.actions
 export default modalSlice.reducer

@@ -6,7 +6,7 @@ import InputItem from '../FormControls/InputItem/InputItem'
 import Button from '../Button/Button'
 import { AppDispatch, RootState } from '../../store'
 import { updateExistingCategory } from '../../features/slices/categorySlice'
-import { askConfirmation, finished } from '../../features/slices/modalSlice'
+import { confirm, finished, openModal } from '../../features/slices/modalSlice'
 import { Category } from '../../features/types/reduxTypes'
 import { FormElement } from '../../features/types/componentTypes'
 import { CategoryPostRequest } from '../../features/types/requestTypes'
@@ -34,10 +34,10 @@ function EditCategory() {
     }
   }
   useEffect(() => {
-    if (modal.status === 'confirmed') {
+    if (modal.type === 'confirmed') {
       handleSubmit()
     }
-  }, [modal.status])
+  }, [modal.type])
 
   const handleSubmit: () => void = async () => {
     event?.preventDefault()
@@ -50,7 +50,7 @@ function EditCategory() {
       // Send data to server via Redux thunk
       if (categoryToEdit) {
         await dispatch(updateExistingCategory(categoryReq)).unwrap()
-        dispatch(finished('Category added succesfully!'))
+        dispatch(finished({ heading: 'Success', content: 'Category added succesfully!' }))
         navigate('../admin/dashboard')
       }
     }
@@ -75,9 +75,10 @@ function EditCategory() {
               handleClick={(e) => {
                 e.preventDefault()
                 dispatch(
-                  askConfirmation(
-                    `Are you sure you want to edit category "${categoryToEdit?.name}"?`
-                  )
+                  openModal({
+                    heading: 'Confirm action',
+                    content: `Are you sure you want to edit category "${categoryToEdit?.name}"?`
+                  })
                 )
               }}
               type="neutral"

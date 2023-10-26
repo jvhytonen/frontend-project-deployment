@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -10,27 +10,18 @@ import InputItem from '../FormControls/InputItem/InputItem'
 import OptionItem from '../FormControls/OptionItem/OptionItem'
 import TextArea from '../FormControls/TextArea/TextArea'
 import UploadImage from '../FormControls/UploadImage/UploadImage'
-import { useModal } from '../../features/hooks/useModal'
-import Modal from '../Modal/Modal'
 import { Book } from '../../features/types/reduxTypes'
 import { BookPostRequest } from '../../features/types/requestTypes'
+import { finished, openModal } from '../../features/slices/modalSlice'
 
 function EditBook() {
-  const {
-    showConfirmation,
-    showCompletion,
-    confirmationText,
-    handleConfirm,
-    setShowConfirmation,
-    setShowCompletion
-  } = useModal()
   const params = useParams()
-  const navigate = useNavigate()
   // Variables from Redux
   const book = useSelector((state: RootState) => state.book)
   const token = useSelector((state: RootState) => state.auth.token)
   const authors = useSelector((state: RootState) => state.author.items)
   const categories = useSelector((state: RootState) => state.category.items)
+  const modal = useSelector((state: RootState) => state.modal)
   // Item is the book to be edited.
   const item = book.items ? book.items?.find((book: Book) => params.id === book.id) : null
 
@@ -39,6 +30,7 @@ function EditBook() {
   const [validationError, setValidationError] = useState<boolean>(false)
 
   const dispatch = useDispatch<AppDispatch>()
+  const navigate = useNavigate()
 
   const handleChange: (
     e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>
@@ -60,19 +52,13 @@ function EditBook() {
     }))
   }
 
-  // In case the user don't want to add new category
-  const handleCancel: () => void = () => {
-    setShowConfirmation(false)
-  }
+  useEffect(() => {
+    if (modal.type === 'confirmed') {
+      handleSubmit()
+    }
+  }, [modal.type])
 
-  //When user clicks "ok" after successfull addition of category.
-  const handleCompletionModalClosing: () => void = () => {
-    setBookToEdit(null)
-    setShowCompletion(false)
-    navigate('../admin/dashboard')
-  }
   const handleSubmit: () => void = async () => {
-    setShowConfirmation(false)
     // If the user has previously tried to update data that has validation error, it must be set to false.
     if (validationError) {
       setValidationError(false)
@@ -89,7 +75,8 @@ function EditBook() {
       }
       if (validateUpdatedBookData(bookToEdit)) {
         await dispatch(updateExistingBook(updatedBookReq)).unwrap()
-        setShowCompletion(true)
+        dispatch(finished({ heading: 'Success', content: 'Book edited successfully' }))
+        navigate('../admin/dashboard')
       } else {
         setValidationError(true)
       }
@@ -181,32 +168,20 @@ function EditBook() {
             />
             <Button
               label="Update"
-              handleClick={(e) =>
-                handleConfirm(e, `Are you sure you want to update "${item?.title}"?`)
-              }
+              handleClick={(e) => {
+                e.preventDefault()
+                dispatch(
+                  openModal({
+                    heading: 'Confirm action',
+                    content: `Are you sure you want to edit book "${bookToEdit?.title}"?`
+                  })
+                )
+              }}
               type="neutral"
             />
           </form>
         </div>
       ) : null}
-      {showConfirmation && (
-        <Modal
-          type="confirm"
-          heading={'Confirm updating book'}
-          text={confirmationText}
-          onConfirm={handleSubmit}
-          onCancel={handleCancel}
-        />
-      )}
-      {/* Modal to show that the operation was succesfull. */}
-      {showCompletion && (
-        <Modal
-          type="success"
-          heading={'Book updated'}
-          text={`Book "${bookToEdit?.title}" updated`}
-          onConfirm={handleCompletionModalClosing}
-        />
-      )}
     </>
   )
 }

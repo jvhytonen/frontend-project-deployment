@@ -1,5 +1,7 @@
 // Items:
 
+import { ModalContent, ModalMessageType } from './componentTypes'
+
 export type Book = {
   id?: string
   isbn: string
@@ -92,8 +94,10 @@ export type CategoryState = {
 }
 
 export type ModalState = {
-  text: string | null
-  status: null | 'waitingConfirmation' | 'confirmed' | 'finished' | 'error' | 'confirm' | 'success'
+  content: string | null
+  heading: string | null
+  isOpen: boolean
+  type: ModalMessageType | null
 }
 
 export type SearchQueryState = {
