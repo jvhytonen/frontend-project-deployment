@@ -123,45 +123,6 @@ function AdminCopies() {
           type="neutral"
         />
       </div>
-      {/* When adding copy */}
-      {/* Modal to ask confirmation from the user. */}
-      {showConfirmation && copyToBeDeleted === null ? (
-        <Modal
-          type="confirm"
-          heading={'Confirm adding new copy'}
-          text={confirmationText}
-          onConfirm={handleAddNewCopy}
-          onCancel={handleCancel}
-        />
-      ) : null}
-      {/* Modal to show that the operation was succesfull. */}
-      {showCompletion && copyToBeDeleted === null ? (
-        <Modal
-          type="success"
-          heading={'New copy added'}
-          text={`New copy of "${item?.title}" added.`}
-          onConfirm={handleCompletionModalClosing}
-        />
-      ) : null}
-      {/* When deleting copy */}
-      {showConfirmation && copyToBeDeleted !== null ? (
-        <Modal
-          type="confirm"
-          heading={'Confirm deleting copy'}
-          text={confirmationText}
-          onConfirm={handleDeleteCopy}
-          onCancel={handleCancel}
-        />
-      ) : null}
-      {/* Modal to show that the operation was succesfull. */}
-      {showCompletion && copyToBeDeleted !== null ? (
-        <Modal
-          type="success"
-          heading={'Copy deleted'}
-          text={`Copy "${copyToBeDeleted}" deleted`}
-          onConfirm={handleCompletionModalClosing}
-        />
-      ) : null}
     </>
   )
 }

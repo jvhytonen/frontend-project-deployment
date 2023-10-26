@@ -4,7 +4,6 @@ import {
   GetRequestWithoutAuth,
   PostRequest
 } from '../types/requestTypes'
-import { apiErrorHandler } from './errors'
 
 export const getItemNoAuth = async (req: GetRequestWithoutAuth) => {
   const response = await fetch(req.url, {
@@ -13,7 +12,10 @@ export const getItemNoAuth = async (req: GetRequestWithoutAuth) => {
       'Content-Type': 'application/json'
     }
   })
-  await apiErrorHandler(response)
+  if (!response.ok) {
+    // If the response status code is not ok, an error will be thrown and Error modal will be set open.
+    throw new Error(`Failed to fetch items: ${response.status} - ${response.statusText}`)
+  }
   const responseData = await response.json()
   return responseData
 }
@@ -27,7 +29,10 @@ export const getItemWithAuth = async (req: GetRequestWithAuth) => {
       'Authorization': `Bearer ${req.token}`
     }
   })
-  await apiErrorHandler(response)
+  if (!response.ok) {
+    // If the response status code is not ok, an error will be thrown and Error modal will be set open.
+    throw new Error(`Failed to fetch items: ${response.status} - ${response.statusText}`)
+  }
   const responseData = await response.json()
   return responseData
 }
@@ -42,7 +47,7 @@ export const deleteItem = async (req: DeleteRequest) => {
     }
   })
   if (!response.ok) {
-    // If the response status code is not in the 2xx range, reject the promise.
+    // If the response status code is not ok, an error will be thrown and Error modal will be set open.
     throw new Error(`Failed to delete item: ${response.status} - ${response.statusText}`)
   }
   const responseData = await response.json()
@@ -59,7 +64,10 @@ export const addItem = async (req: PostRequest) => {
     },
     body: JSON.stringify(req.body)
   })
-  // await apiErrorHandler(response)
+  if (!response.ok) {
+    // If the response status code is not ok, an error will be thrown and Error modal will be set open.
+    throw new Error(`Failed to add item: ${response.status} - ${response.statusText}`)
+  }
   const responseData = await response.json()
   return responseData
 }
@@ -74,7 +82,10 @@ export const updateItem = async (req: PostRequest) => {
     },
     body: JSON.stringify(req.body)
   })
-  await apiErrorHandler(response)
+  if (!response.ok) {
+    // If the response status code is not ok, an error will be thrown and Error modal will be set open.
+    throw new Error(`Failed to update item: ${response.status} - ${response.statusText}`)
+  }
   const responseData = await response.json()
   return responseData
 }

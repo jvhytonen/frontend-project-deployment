@@ -7,7 +7,7 @@ import { AppDispatch, RootState } from '../../../store'
 import { addNewAuthor } from '../../../features/slices/authorSlice'
 import TextArea from '../../FormControls/TextArea/TextArea'
 import InputItem from '../../FormControls/InputItem/InputItem'
-import { finished, openModal } from '../../../features/slices/modalSlice'
+import { finished, openErrorModal, openModal } from '../../../features/slices/modalSlice'
 import { Author } from '../../../features/types/reduxTypes'
 import { FormElement } from '../../../features/types/componentTypes'
 import { AuthorPostRequest } from '../../../features/types/requestTypes'
@@ -15,6 +15,7 @@ import { AuthorPostRequest } from '../../../features/types/requestTypes'
 function AddAuthor() {
   const modal = useSelector((state: RootState) => state.modal)
   const token = useSelector((state: RootState) => state.auth.token)
+  const error = useSelector((state: RootState) => state.author.error)
   const [newAuthor, setNewAuthor] = useState<Author | null>(null)
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
@@ -43,9 +44,13 @@ function AddAuthor() {
       }
       // Send data to server via Redux thunk
       if (newAuthor) {
-        await dispatch(addNewAuthor(authorData)).unwrap()
-        dispatch(finished({ heading: 'Success!', content: 'Author added succesfully!' }))
-        navigate('../admin/dashboard')
+        try {
+          await dispatch(addNewAuthor(authorData)).unwrap()
+          dispatch(finished({ heading: 'Success!', content: 'Author added succesfully!' }))
+          navigate('../admin/dashboard')
+        } catch (err) {
+          dispatch(openErrorModal({ heading: 'An error!', content: error }))
+        }
       }
     }
   }

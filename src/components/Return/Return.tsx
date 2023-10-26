@@ -1,17 +1,18 @@
 import React, { useEffect } from 'react'
-import Button from '../../Button/Button'
+import Button from '../Button/Button'
 import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '../../../store'
-import { returnCopy } from '../../../features/slices/copySlice'
+import { AppDispatch, RootState } from '../../store'
+import { returnCopy } from '../../features/slices/copySlice'
 import { useNavigate } from 'react-router-dom'
-import { ReturnProps } from '../../../features/types/componentTypes'
-import { CheckoutReturn } from '../../../features/types/actionTypes'
-import { openModal } from '../../../features/slices/modalSlice'
+import { ReturnProps } from '../../features/types/componentTypes'
+import { CheckoutReturn } from '../../features/types/actionTypes'
+import { finished, openErrorModal, openModal } from '../../features/slices/modalSlice'
 
 function Borrow({ copyId, checkoutId }: ReturnProps) {
   const user = useSelector((state: RootState) => state.auth.items)
   const token = useSelector((state: RootState) => state.auth.token)
   const modal = useSelector((state: RootState) => state.modal)
+  const error = useSelector((state: RootState) => state.copy.error)
   const navigate = useNavigate()
   const dispatch = useDispatch<AppDispatch>()
 
@@ -26,8 +27,15 @@ function Borrow({ copyId, checkoutId }: ReturnProps) {
         token: token,
         data: checkoutData
       }
-      await dispatch(returnCopy(req)).unwrap()
-
+      try {
+        /* In case of fullfilled action in the slice a modal with success message will be shown. */
+        await dispatch(returnCopy(req)).unwrap()
+        dispatch(finished({ heading: 'Success', content: 'Book returned!' }))
+        navigate('/books')
+      } catch (err) {
+        /* In case of rejected action in the slice the error message will be shown.  */
+        dispatch(openErrorModal({ heading: 'An error!', content: error }))
+      }
       navigate('/')
     }
   }

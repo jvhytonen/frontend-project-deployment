@@ -11,7 +11,7 @@ import { getAllAuthors } from '../../../features/slices/authorSlice'
 import OptionItem from '../../FormControls/OptionItem/OptionItem'
 import TextArea from '../../FormControls/TextArea/TextArea'
 import UploadImage from '../../FormControls/UploadImage/UploadImage'
-import { finished, openModal } from '../../../features/slices/modalSlice'
+import { finished, openModal, openErrorModal } from '../../../features/slices/modalSlice'
 import { Book } from '../../../features/types/reduxTypes'
 import { BookPostRequest } from '../../../features/types/requestTypes'
 
@@ -20,6 +20,7 @@ function AddBook() {
   const token = useSelector((state: RootState) => state.auth.token)
   const authors = useSelector((state: RootState) => state.author.items)
   const categories = useSelector((state: RootState) => state.category.items)
+  const error = useSelector((state: RootState) => state.book.error)
   const modal = useSelector((state: RootState) => state.modal)
   // States
   const [newBook, setNewBook] = useState<Book | null>(null)
@@ -78,9 +79,13 @@ function AddBook() {
         token: token
       }
       if (newBook) {
-        await dispatch(addNewBook(newBookReq)).unwrap()
-        dispatch(finished({ heading: 'Success', content: 'A new book added succesfully' }))
-        navigate('../admin/dashboard')
+        try {
+          await dispatch(addNewBook(newBookReq)).unwrap()
+          dispatch(finished({ heading: 'Success', content: 'A new book added succesfully' }))
+          navigate('../admin/dashboard')
+        } catch (err) {
+          dispatch(openErrorModal({ heading: 'An error!', content: error }))
+        }
       }
     }
   }
