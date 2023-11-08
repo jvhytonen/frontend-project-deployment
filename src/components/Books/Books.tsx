@@ -12,7 +12,6 @@ import SearchItems from '../SearchField/SearchField'
 function Books() {
   const dispatch = useDispatch<AppDispatch>()
   const { items, error } = useSelector((state: RootState) => state.book)
-
   const initialState: SearchQueryState = {
     query: '',
     page: 1

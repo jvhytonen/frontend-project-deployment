@@ -24,6 +24,7 @@ import EditCategory from './components/EditCategory/EditCategory'
 import { findLoadingStates } from './features/utils/helpers'
 import NewsSection from './components/NewsSection/NewsSection'
 import About from './components/About/About'
+import AdminCopies from './components/Admin/AdminCopies/AdminCopies'
 
 function App() {
   // To control the mouse cursor during loading stage.
@@ -39,7 +40,6 @@ function App() {
   // The cursor will be in wait-mode if there is ongoing API-request that is not completed.
   const isLoading = findLoadingStates(states)
   document.body.style.cursor = isLoading ? 'wait' : 'auto'
-
   return (
     <div className="App w-full">
       <Navbar />
@@ -60,6 +60,7 @@ function App() {
           <Route path="categories/edit/:id" element={<ProtectedRoute component={EditCategory} />} />
           <Route path="authors/edit/:id" element={<ProtectedRoute component={EditAuthor} />} />
           <Route path="books/add" element={<ProtectedRoute component={AddBook} />} />
+          <Route path="copies/edit/:id" element={<ProtectedRoute component={AdminCopies} />} />
           <Route
             path="/admin/dashboard/books/edit/:id"
             element={<ProtectedRoute component={EditBook} />}

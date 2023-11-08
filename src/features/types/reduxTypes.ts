@@ -1,6 +1,6 @@
 // Items:
 
-import { ModalContent, ModalMessageType } from './componentTypes'
+import { ModalMessageType } from './componentTypes'
 
 export type Book = {
   id?: string
@@ -36,9 +36,10 @@ export type Checkout = {
 }
 
 export type Copy = {
-  bookCopyId: string
+  id: string
   latestCheckout: null | Checkout
 }
+//id?: string // This is temporary fix to smoothly use same Delete-component with Author, Book and Category
 
 export type NewCopy = {
   bookId: string

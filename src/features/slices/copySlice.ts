@@ -16,10 +16,12 @@ const initialState: CopyState = {
 }
 
 export const getCopies = createAsyncThunk('book-copies/fetch', async (id: string) => {
+  console.log(id)
   const req = {
     url: URL_COPIES + id
   }
   const response = await getItemNoAuth(req)
+  //console.log(response)
   return response
 })
 
@@ -106,7 +108,7 @@ export const copySlice = createSlice({
     })
 
     builder.addCase(deleteCopy.fulfilled, (state, action) => {
-      state.items = state.items?.filter((item) => action.payload !== item.bookCopyId) as Copy[]
+      state.items = state.items?.filter((item) => action.payload !== item.id) as Copy[]
     })
 
     builder.addCase(deleteCopy.pending, (state) => {
@@ -122,9 +124,7 @@ export const copySlice = createSlice({
       if (state.items === null) {
         state.items = [newCheckout]
       }
-      const objIndexToUpdate = state.items?.findIndex(
-        (obj) => obj.bookCopyId === newCheckout.bookCopyId
-      )
+      const objIndexToUpdate = state.items?.findIndex((obj) => obj.id === newCheckout.bookCopyId)
       if (objIndexToUpdate === -1 || objIndexToUpdate === undefined) {
         state.items.push(newCheckout)
       } else {

@@ -2,128 +2,118 @@ import React, { useEffect, useState } from 'react'
 import { AppDispatch, RootState } from '../../../store'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { PlusCircleIcon } from '@heroicons/react/24/outline'
 
 import { addNewCopy, deleteCopy, getCopies } from '../../../features/slices/copySlice'
-import Button from '../../Button/Button'
-import { TableCell, TableRow } from '../TableBody/TableBody'
-import { useModal } from '../../../features/hooks/useModal'
-import AdminTable from '../AdminTable/AdminTable'
-import Modal from '../../Modal/Modal'
+import { TableBody } from '../TableBody/TableBody'
 import { formatDate } from '../../../features/utils/helpers'
 import { Book, Checkout, Copy } from '../../../features/types/reduxTypes'
+import { Button, Card, IconButton, Tooltip, Typography } from '@material-tailwind/react'
+import TableHeading from '../TableHeading/TableHeading'
+import DeleteItem from '../DeleteItem/DeleteItem'
+import { finished, openModal } from '../../../features/slices/modalSlice'
 
 function AdminCopies() {
-  const {
-    showConfirmation,
-    showCompletion,
-    confirmationText,
-    handleConfirm,
-    setShowConfirmation,
-    setShowCompletion
-  } = useModal()
   const [copyToBeDeleted, setCopyToBeDeleted] = useState<string | null>(null)
   const params = useParams()
   const dispatch = useDispatch<AppDispatch>()
   const token = useSelector((state: RootState) => state.auth.token)
-  const copies = useSelector((state: RootState) => state.copy)
+  const copies = useSelector((state: RootState) => state.copy.items)
+  const modal = useSelector((state: RootState) => state.modal)
   const book = useSelector((state: RootState) => state.book)
   // Item is the book related to the copies.
   const item = book.items ? book.items?.find((book: Book) => params.id === book.id) : null
 
   const handleAddNewCopy = async () => {
-    setShowConfirmation(false)
     if (item !== undefined && item !== null && item.id !== undefined && token !== null) {
       const postReq = {
         bookId: item?.id,
         token: token
       }
       await dispatch(addNewCopy(postReq)).unwrap()
-      setShowCompletion(true)
+      dispatch(finished({ heading: 'Success!', content: 'Copy added' }))
     } else {
       return
     }
-  }
-  // In case the user don't want to add new category
-  const handleCancel: () => void = () => {
-    setShowConfirmation(false)
-  }
-  //When user clicks "ok" after successfull addition of category.
-  const handleCompletionModalClosing: () => void = () => {
-    setCopyToBeDeleted(null)
-    setShowCompletion(false)
   }
 
-  const handleDeleteCopy = async () => {
-    setShowConfirmation(false)
-    if (copyToBeDeleted !== undefined && copyToBeDeleted !== null && token !== null) {
-      const deleteReq = {
-        id: copyToBeDeleted,
-        token: token
-      }
-      await dispatch(deleteCopy(deleteReq)).unwrap()
-      setShowCompletion(true)
-    } else {
-      return
+  useEffect(() => {
+    if (modal.type === 'confirmed') {
+      handleAddNewCopy()
     }
-  }
-  const showStatus = (checkout: Checkout | null) => {
-    if (checkout === null || checkout.returned) {
-      return 'Free'
-    } else {
-      return 'Borrowed. Return date: ' + formatDate(checkout.endTime)
-    }
-  }
+  }, [modal.type])
+
   useEffect(() => {
     if (params.id) {
       dispatch(getCopies(params.id))
     }
   }, [])
-  // Headers used in this table
-  const headers = ['Copy-id', 'Status', 'Actions']
-  const rows =
-    copies.items !== null && copies.items.length > 0
-      ? copies.items.map((copy: Copy) => {
+  const headers = ['Copy Id', 'Delete']
+  const rows = (
+    <tbody>
+      {copies !== null ? (
+        copies.map((copy, index) => {
+          const isLast = index === copies.length - 1
+          const classes = isLast ? 'p-4' : 'p-4 border-b border-blue-gray-50'
+
           return (
-            <TableRow key={copy.bookCopyId}>
-              <TableCell>{copy.bookCopyId}</TableCell>
-              <TableCell>{showStatus(copy.latestCheckout)}</TableCell>
-              <TableCell>
-                <Button
-                  label="Delete copy"
-                  handleClick={(e) => {
-                    setCopyToBeDeleted(copy.bookCopyId)
-                    handleConfirm(
-                      e,
-                      `Are you sure you want to delete copy of "${item?.title}" with id "${copy.bookCopyId}"`
-                    )
-                  }}
-                  type="delete"
-                />
-              </TableCell>
-            </TableRow>
+            <tr key={copy.id}>
+              <td className={classes}>
+                <Typography variant="small" color="blue-gray" className="font-normal">
+                  {copy.id}
+                </Typography>
+              </td>
+              {/*/ All delete-logic will be handled in separate component */}
+              <td className={classes}>
+                {copy.latestCheckout === null || copy.latestCheckout?.returned ? (
+                  <DeleteItem feature={'copies'} item={copy} />
+                ) : (
+                  <Typography variant="small" color="red" className="font-normal">
+                    Borrowed. Cannot be deleted before the book is returned.
+                  </Typography>
+                )}
+              </td>
+            </tr>
           )
         })
-      : [
-          <TableRow key={0}>
-            <TableCell>No copies found.</TableCell>
-          </TableRow>
-        ]
+      ) : (
+        <tr>
+          <td className="p-4">
+            <Typography variant="small" color="blue-gray" className="font-normal">
+              No data
+            </Typography>
+          </td>
+        </tr>
+      )}
+    </tbody>
+  )
+
   return (
-    <>
-      <h2>Edit copies: </h2>
-      <h3>{item?.title}</h3>
-      <h3>ISBN: {item?.isbn}</h3>
-      <AdminTable headers={headers} rows={rows} />
-      <div className="flex justify-center">
+    <Card className="h-full w-full">
+      <table className="w-full h-[50%] table-auto text-left">
+        <thead>
+          {headers.map((heading) => {
+            return <TableHeading key={heading} label={heading} />
+          })}
+        </thead>
+        {rows}
+      </table>
+      <div className="flex items-center justify-center">
         <Button
-          label="Add copy to the book"
-          handleClick={(e) =>
-            handleConfirm(e, `Are you sure you want to add new copy to "${item?.title}"`)
-          }
-          type="neutral"
-        />
+          className="flex items-center gap-3"
+          size="sm"
+          onClick={() =>
+            dispatch(
+              openModal({
+                heading: 'Confirm action',
+                content: `Are you sure you want to add new copy to this book?`
+              })
+            )
+          }>
+          <PlusCircleIcon strokeWidth={2} className="h-4 w-4" /> Add new
+        </Button>
       </div>
-    </>
+    </Card>
   )
 }
 

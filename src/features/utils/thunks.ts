@@ -38,7 +38,7 @@ export const getItemWithAuth = async (req: GetRequestWithAuth) => {
 }
 
 export const deleteItem = async (req: DeleteRequest) => {
-  const response = await fetch(req.url + 'jv', {
+  const response = await fetch(req.url, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',

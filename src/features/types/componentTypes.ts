@@ -158,8 +158,8 @@ export interface AdminSearchAndAddProps {
 type TableFeature = 'categories' | 'authors' | 'books'
 
 export interface DeleteItemProps {
-  feature: 'categories' | 'authors' | 'books'
-  item: Author | Category | Book
+  feature: 'categories' | 'authors' | 'books' | 'copies'
+  item: Author | Category | Book | Copy
 }
 
 export interface TableBodyProps {

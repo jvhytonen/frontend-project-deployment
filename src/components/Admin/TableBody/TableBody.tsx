@@ -15,7 +15,7 @@ export function TableBody({ items, feature }: TableBodyProps) {
           const classes = isLast ? 'p-4' : 'p-4 border-b border-blue-gray-50'
 
           return (
-            <tr key={item.name}>
+            <tr key={item.id}>
               <td className={classes}>
                 <Typography variant="small" color="blue-gray" className="font-normal">
                   {item.name}

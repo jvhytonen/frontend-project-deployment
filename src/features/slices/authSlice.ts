@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { User, UserState } from '../types/reduxTypes'
 import jwtDecode from 'jwt-decode'
-import { apiErrorHandler } from '../utils/errors'
 import { API_BASE_URL } from '../utils/variables'
 import { Credentials } from '../types/actionTypes'
 
@@ -29,11 +28,11 @@ export const login = createAsyncThunk('login', async (credentials: Credentials, 
       },
       body: JSON.stringify(credentials)
     })
-    //await apiErrorHandler(response)
     const data = await response.text()
+    console.log(data)
     return data
   } catch (error) {
-    return thunkAPI.rejectWithValue(error.message)
+    return thunkAPI.rejectWithValue(error)
   }
 })
 

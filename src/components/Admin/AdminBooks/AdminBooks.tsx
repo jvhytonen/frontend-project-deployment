@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { AppDispatch, RootState } from '../../../store'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { getAllAuthors } from '../../../features/slices/authorSlice'
 import { getAllCategories } from '../../../features/slices/categorySlice'
@@ -40,7 +40,7 @@ function AdminBooks() {
     dispatch(getAllCategories())
   }, [])
 
-  const headings = ['Title', 'Author', 'Year', 'Category', 'ISBN', 'Edit', 'Delete']
+  const headings = ['Title', 'Author', 'Year', 'Category', 'ISBN', 'Delete', 'Edit book', 'Copies']
 
   return (
     <Card className="h-full w-full">
@@ -104,11 +104,20 @@ function AdminBooks() {
                         <DeleteItem feature="books" item={item} />
                       </td>
                       <td className={classes}>
-                        <Tooltip content="Edit book">
-                          <IconButton variant="text">
-                            <PencilIcon className="h-4 w-4" />
-                          </IconButton>
-                        </Tooltip>
+                        <Link to={`/admin/dashboard/books/edit/${item.id}`}>
+                          <Tooltip content="Edit book">
+                            <IconButton variant="text">
+                              <PencilIcon className="h-4 w-4" />
+                            </IconButton>
+                          </Tooltip>
+                        </Link>
+                      </td>
+                      <td className={classes}>
+                        <Link to={`/copies/edit/${item.id}`}>
+                          <Typography variant="small" color="blue-gray" className="font-normal">
+                            Edit copies
+                          </Typography>
+                        </Link>
                       </td>
                     </tr>
                   )

@@ -2,8 +2,8 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../../store'
 import { useNavigate } from 'react-router-dom'
+import { Button } from '@material-tailwind/react'
 
-import Button from '../../Button/Button'
 import { addNewBook, uploadImage } from '../../../features/slices/bookSlice'
 import InputItem from '../../FormControls/InputItem/InputItem'
 import { getAllCategories } from '../../../features/slices/categorySlice'
@@ -165,8 +165,8 @@ function AddBook() {
               handleChange={handleChange}
             />
             <Button
-              label="Add"
-              handleClick={(e) => {
+              color="blue"
+              onClick={(e) => {
                 e.preventDefault()
                 dispatch(
                   openModal({
@@ -174,9 +174,9 @@ function AddBook() {
                     content: `Are you sure you want to add new author "${newBook?.title}"?`
                   })
                 )
-              }}
-              type="neutral"
-            />
+              }}>
+              Add book
+            </Button>
           </form>
         </div>
       ) : (

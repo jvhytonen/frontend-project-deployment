@@ -50,7 +50,7 @@ function Copies({ bookId }: CopiesProps) {
     dispatch(
       openModal({
         heading: 'Confirm action',
-        modalContent: `Are you sure you want to ${actionType} this book?`
+        content: `Are you sure you want to ${actionType} this book?`
       })
     )
   }
@@ -58,7 +58,7 @@ function Copies({ bookId }: CopiesProps) {
   const handleBorrow = async () => {
     if (token !== null) {
       const checkoutData: CheckoutBorrow = {
-        copyId: checkoutItem?.bookCopyId as string,
+        copyId: checkoutItem?.id as string,
         userId: user?.id
       }
       const req = {
@@ -66,7 +66,12 @@ function Copies({ bookId }: CopiesProps) {
         data: checkoutData
       }
       await dispatch(borrowCopy(req)).unwrap()
-      dispatch(finished('Book borrowed!'))
+      dispatch(
+        finished({
+          heading: 'Success',
+          content: 'Book borrowed'
+        })
+      )
       navigate('/books')
     }
   }
@@ -75,7 +80,7 @@ function Copies({ bookId }: CopiesProps) {
     if (token !== null) {
       const checkoutData: CheckoutReturn = {
         checkoutId: checkoutItem?.latestCheckout?.id as string,
-        copyId: checkoutItem?.bookCopyId as string,
+        copyId: checkoutItem?.id as string,
         userId: user?.id
       }
       const req = {
@@ -83,7 +88,12 @@ function Copies({ bookId }: CopiesProps) {
         data: checkoutData
       }
       await dispatch(returnCopy(req)).unwrap()
-      dispatch(finished('Book returned!'))
+      dispatch(
+        finished({
+          heading: 'Success',
+          content: 'Book returned'
+        })
+      )
       navigate('/books')
     }
   }
@@ -160,14 +170,31 @@ function Copies({ bookId }: CopiesProps) {
                     </td>
                     <td className={classes}>
                       <Typography variant="small" color="blue-gray" className="font-normal">
+                        {/* User can borrow the copy if it has never been borrowed before */}
                         {isLoggedIn && item.latestCheckout === null ? (
-                          <Button color="green">Borrow</Button>
-                        ) : item.latestCheckout != null && item.latestCheckout.returned ? (
-                          <Button color="green">Borrow</Button>
+                          <Button
+                            onClick={() => handleCheckoutConfirmation(item, 'borrow')}
+                            color="green">
+                            Borrow
+                          </Button>
+                        ) : /* Or it is returned by the previous borrower */
+                        item.latestCheckout != null && item.latestCheckout.returned ? (
+                          <Button
+                            onClick={() => handleCheckoutConfirmation(item, 'borrow')}
+                            color="green">
+                            Borrow
+                          </Button>
                         ) : item.latestCheckout != null &&
                           item.latestCheckout.user.id === user.id ? (
-                          <Button color="amber">Return</Button>
-                        ) : (
+                          /* User can return the copy if she has borrowed it */
+                          <Button
+                            onClick={() => handleCheckoutConfirmation(item, 'return')}
+                            color="amber">
+                            Return
+                          </Button>
+                        ) : item.latestCheckout !== null &&
+                          /* No text (null) is shown if someone else has borrowed it, if the user is not logged in, she will be insisted to do so. */
+                          item.latestCheckout.user.id !== user.id ? null : (
                           'Log in to borrow or return books'
                         )}
                       </Typography>

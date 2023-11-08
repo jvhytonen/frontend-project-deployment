@@ -1,9 +1,9 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { Button } from '@material-tailwind/react'
 
 import InputItem from '../../FormControls/InputItem/InputItem'
-import Button from '../../Button/Button'
 import { AppDispatch, RootState } from '../../../store'
 import { addNewCategory } from '../../../features/slices/categorySlice'
 import { finished, openModal, openErrorModal } from '../../../features/slices/modalSlice'
@@ -48,7 +48,10 @@ function AddCategory() {
           dispatch(finished({ heading: 'Success', content: 'Category added succesfully!' }))
           navigate('../admin/dashboard')
         } catch (err) {
-          dispatch(openErrorModal({ heading: 'An error!', content: error }))
+          // We must add some delay to this before we can show the message as otherwise error is empty.
+          setTimeout(() => {
+            dispatch(openErrorModal({ heading: 'An error!', content: error }))
+          }, 100)
         }
       }
     }
@@ -69,8 +72,8 @@ function AddCategory() {
           />
           <div>
             <Button
-              label="Add category"
-              handleClick={(e) => {
+              color="blue"
+              onClick={(e) => {
                 e.preventDefault()
                 dispatch(
                   openModal({
@@ -78,9 +81,9 @@ function AddCategory() {
                     content: `Are you sure you want to add new category "${newCategory?.name}"?`
                   })
                 )
-              }}
-              type="neutral"
-            />
+              }}>
+              Add category
+            </Button>
           </div>
         </form>
       </div>
