@@ -3,6 +3,7 @@ import AdminAuthors from '../AdminAuthors/AdminAuthors'
 import AdminCategories from '../AdminCategories/AdminCategories'
 import { useState } from 'react'
 import DashboardNavigation from '../DashBoardNavigation/DashboardNavigation'
+import AdminUsers from '../AdminUsers/AdminUsers'
 
 function AdminDashboard() {
   const [currentTab, setCurrentTab] = useState<string>('books')
@@ -34,6 +35,13 @@ function AdminDashboard() {
       activeTabComponent = (
         <div className="w-[75%] mt-5 text-center">
           <AdminAuthors />
+        </div>
+      )
+      break
+    case 'users':
+      activeTabComponent = (
+        <div className="w-[75%] mt-5 text-center">
+          <AdminUsers />
         </div>
       )
       break

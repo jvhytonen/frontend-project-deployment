@@ -57,11 +57,6 @@ export const uploadImage = createAsyncThunk('images/upload', async (file: File) 
 
     const response = await fetch(IMAGEUPLOADURL, {
       method: 'POST',
-      headers: {
-        //'Content-Type': 'multipart/form-data'
-        // eslint-disable-next-line prettier/prettier
-        //  'Authorization': `Bearer ${token}`
-      },
       body: formData
     })
     if (response.ok) {

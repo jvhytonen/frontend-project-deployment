@@ -64,3 +64,7 @@ export interface SearchRequest {
   page: number
   query: string
 }
+
+export interface GetUsersRequest {
+  token: string
+}

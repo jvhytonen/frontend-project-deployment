@@ -41,12 +41,27 @@ export const validateAuthorData = (formInputs: Author) => {
   }
 }
 
-export const validateSignUp = (username: string, password: string, confirmedPassword: string) => {
-  let error = null
-  if (!username) {
-    error = 'Please fill in the username-field'
-  } else if (password !== confirmedPassword) {
-    error = 'Make sure your password confimation matches your password! '
+export const validateSignUp = (password: string, confirmedPassword: string) => {
+  if (
+    password === confirmedPassword &&
+    password.length > 7 &&
+    hasLowerCase(password) &&
+    hasUpperCase(password) &&
+    containsNumbers(password)
+  ) {
+    return false
+  } else {
+    return true
   }
-  return error
+}
+
+function hasLowerCase(str: string) {
+  return str.toUpperCase() !== str
+}
+function hasUpperCase(str: string) {
+  return str.toLowerCase() !== str
+}
+const containsNumbers = (string: string): boolean => {
+  const regex = /\d/
+  return regex.test(string)
 }

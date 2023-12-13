@@ -1,24 +1,32 @@
-import { PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { fetchData } from '../fetchAPI/fetchAPI'
-import jwtDecode from 'jwt-decode'
-import { User, UserState } from '../types/reduxTypes'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-const initialUser: User = {
-  id: '',
-  username: '',
-  role: null
-}
+import { API_BASE_URL } from '../utils/variables'
+import { User, UserState } from '../types/reduxTypes'
+import { GetUsersRequest } from '../types/requestTypes'
+import { getItemWithAuth } from '../utils/thunks'
+
+const initialUsers: User[] = [
+  {
+    id: '',
+    name: '',
+    username: '',
+    role: null
+  }
+]
 
 const initialState: UserState = {
   token: null,
-  items: initialUser,
+  items: initialUsers,
   isLoading: false,
   error: null
 }
 
-export const getUsers = createAsyncThunk('users/fetch', async (id: string) => {
-  const URL = 'http://localhost:8081/api/v1/users/' + id
-  const response = fetchData(URL)
+export const getAllUsers = createAsyncThunk('users/getAll', async (token: string) => {
+  const request = {
+    url: API_BASE_URL + 'users/',
+    token: token
+  }
+  const response = await getItemWithAuth(request)
   return response
 })
 
@@ -26,23 +34,24 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    getUser: (state, action: PayloadAction<User>) => {
-      console.log('Login')
-    },
     nullifyUserError: (state) => {
       state.error = null
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(getUsers.pending, (state) => {
+    builder.addCase(getAllUsers.fulfilled, (state, action) => {
+      state.isLoading = false
+      console.log(action.payload)
+    })
+    builder.addCase(getAllUsers.pending, (state) => {
       state.isLoading = true
     })
-    builder.addCase(getUsers.rejected, (state) => {
+    builder.addCase(getAllUsers.rejected, (state) => {
       state.error = 'An error occurred! Try again later'
     })
   }
 })
 
-export const { getUser, nullifyUserError } = userSlice.actions
+export const { nullifyUserError } = userSlice.actions
 
 export default userSlice.reducer

@@ -21,7 +21,6 @@ export const getCopies = createAsyncThunk('book-copies/fetch', async (id: string
     url: URL_COPIES + id
   }
   const response = await getItemNoAuth(req)
-  //console.log(response)
   return response
 })
 
@@ -55,8 +54,6 @@ export const borrowCopy = createAsyncThunk(
       token: postReq.token,
       body: postReq.data
     }
-    console.log('jh')
-    console.log(req)
     const response = await addItem(req)
     return response
   }

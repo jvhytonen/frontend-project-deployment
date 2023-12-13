@@ -145,7 +145,7 @@ function Login() {
           </Button>
           <Typography color="gray" className="mt-6 text-center font-normal">
             Not registered?{' '}
-            <a href="#" className="font-medium text-gray-900">
+            <a href="/signup" className="font-medium text-gray-900">
               Create account
             </a>
           </Typography>

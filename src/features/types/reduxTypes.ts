@@ -47,6 +47,7 @@ export type NewCopy = {
 
 export type User = {
   id: string
+  name: string
   username: string
   role: 'USER' | 'ADMIN' | null
 }
@@ -70,6 +71,13 @@ export type BookState = {
 }
 
 export type UserState = {
+  token: string | null
+  items: User[]
+  isLoading: boolean
+  error: null | string
+}
+
+export type AuthState = {
   token: string | null
   items: User
   isLoading: boolean

@@ -12,6 +12,7 @@ import searchQuerySlice from './features/slices/searchquerySlice'
 import authSlice from './features/slices/authSlice'
 import modalSlice from './features/slices/modalSlice'
 import {
+  AuthState,
   AuthorState,
   BookState,
   CategoryState,
@@ -27,7 +28,7 @@ export interface RootState {
   user: UserState
   copy: CopyState
   category: CategoryState
-  auth: UserState
+  auth: AuthState
   search: SearchQueryState
   modal: ModalState
 }

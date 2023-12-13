@@ -25,6 +25,7 @@ import { findLoadingStates } from './features/utils/helpers'
 import NewsSection from './components/NewsSection/NewsSection'
 import About from './components/About/About'
 import AdminCopies from './components/Admin/AdminCopies/AdminCopies'
+import SignUpComplete from './components/SignUpComplete/SignUpComplete'
 
 function App() {
   // To control the mouse cursor during loading stage.
@@ -54,6 +55,7 @@ function App() {
           <Route path="/books" element={<Books />} />
           <Route path="books/:id" element={<BookDetails />} />
           <Route path="about" element={<About />} />
+          <Route path="/signUpComplete" element={<SignUpComplete />} />
           <Route path="admin/dashboard" element={<ProtectedRoute component={AdminDashboard} />} />
           <Route path="authors/add" element={<ProtectedRoute component={AddAuthor} />} />
           <Route path="categories/add" element={<ProtectedRoute component={AddCategory} />} />

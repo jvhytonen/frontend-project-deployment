@@ -1,3 +1,7 @@
+/*
+Mock data for blogspots. Blog-section in the backend not yet implemented.  
+*/
+
 export const posts = [
   {
     img: '/img/blog1.jpg',

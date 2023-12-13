@@ -11,6 +11,12 @@ export type Credentials = {
   password: string
 }
 
+export type SignUpData = {
+  name: string
+  username: string
+  password: string
+}
+
 export type CheckoutBorrow = {
   copyId: string
   userId: string
