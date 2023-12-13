@@ -72,7 +72,7 @@ export type BookState = {
 
 export type UserState = {
   token: string | null
-  items: User[]
+  items: User[] | NewUser
   isLoading: boolean
   error: null | string
 }

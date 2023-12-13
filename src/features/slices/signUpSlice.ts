@@ -2,8 +2,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { NewUser, User, UserState } from '../types/reduxTypes'
 
 const URL = 'e'
-const initialUser: User = {
-  id: '',
+const initialUser: NewUser = {
+  name: '',
   username: '',
   role: null
 }
