@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { NewUser, User, UserState } from '../types/reduxTypes'
+import { NewUser, SignUpState } from '../types/reduxTypes'
 
 const URL = 'e'
 const initialUser: NewUser = {
@@ -8,7 +8,7 @@ const initialUser: NewUser = {
   role: null
 }
 
-const initialState: UserState = {
+const initialState: SignUpState = {
   token: null,
   items: initialUser,
   isLoading: false,
