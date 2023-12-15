@@ -4,17 +4,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
 
-import { addNewCopy, deleteCopy, getCopies } from '../../../features/slices/copySlice'
-import { TableBody } from '../TableBody/TableBody'
-import { formatDate } from '../../../features/utils/helpers'
-import { Book, Checkout, Copy } from '../../../features/types/reduxTypes'
-import { Button, Card, IconButton, Tooltip, Typography } from '@material-tailwind/react'
+import { addNewCopy, getCopies } from '../../../features/slices/copySlice'
+import { Book } from '../../../features/types/reduxTypes'
+import { Button, Card, Typography } from '@material-tailwind/react'
 import TableHeading from '../TableHeading/TableHeading'
 import DeleteItem from '../DeleteItem/DeleteItem'
 import { finished, openModal } from '../../../features/slices/modalSlice'
 
 function AdminCopies() {
-  const [copyToBeDeleted, setCopyToBeDeleted] = useState<string | null>(null)
+  const [isAddingNewCopy, setIsAddingNewCopy] = useState<boolean>(false)
   const params = useParams()
   const dispatch = useDispatch<AppDispatch>()
   const token = useSelector((state: RootState) => state.auth.token)
@@ -32,13 +30,14 @@ function AdminCopies() {
       }
       await dispatch(addNewCopy(postReq)).unwrap()
       dispatch(finished({ heading: 'Success!', content: 'Copy added' }))
+      setIsAddingNewCopy(false)
     } else {
       return
     }
   }
 
   useEffect(() => {
-    if (modal.type === 'confirmed') {
+    if (modal.type === 'confirmed' && isAddingNewCopy) {
       handleAddNewCopy()
     }
   }, [modal.type])
@@ -92,9 +91,11 @@ function AdminCopies() {
     <Card className="h-full w-full">
       <table className="w-full h-[50%] table-auto text-left">
         <thead>
-          {headers.map((heading) => {
-            return <TableHeading key={heading} label={heading} />
-          })}
+          <tr>
+            {headers.map((heading) => {
+              return <TableHeading key={heading} label={heading} />
+            })}
+          </tr>
         </thead>
         {rows}
       </table>
@@ -102,14 +103,15 @@ function AdminCopies() {
         <Button
           className="flex items-center gap-3"
           size="sm"
-          onClick={() =>
+          onClick={() => {
             dispatch(
               openModal({
                 heading: 'Confirm action',
                 content: `Are you sure you want to add new copy to this book?`
               })
             )
-          }>
+            setIsAddingNewCopy(true)
+          }}>
           <PlusCircleIcon strokeWidth={2} className="h-4 w-4" /> Add new
         </Button>
       </div>

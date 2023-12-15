@@ -16,7 +16,6 @@ const initialState: CopyState = {
 }
 
 export const getCopies = createAsyncThunk('book-copies/fetch', async (id: string) => {
-  console.log(id)
   const req = {
     url: URL_COPIES + id
   }

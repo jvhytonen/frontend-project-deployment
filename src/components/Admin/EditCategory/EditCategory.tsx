@@ -2,14 +2,14 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import InputItem from '../FormControls/InputItem/InputItem'
-import Button from '../Button/Button'
-import { AppDispatch, RootState } from '../../store'
-import { updateExistingCategory } from '../../features/slices/categorySlice'
-import { confirm, finished, openModal } from '../../features/slices/modalSlice'
-import { Category } from '../../features/types/reduxTypes'
-import { FormElement } from '../../features/types/componentTypes'
-import { CategoryPostRequest } from '../../features/types/requestTypes'
+import InputItem from '../../FormControls/InputItem/InputItem'
+import Button from '../../Button/Button'
+import { AppDispatch, RootState } from '../../../store'
+import { updateExistingCategory } from '../../../features/slices/categorySlice'
+import { confirm, finished, openModal } from '../../../features/slices/modalSlice'
+import { Category } from '../../../features/types/reduxTypes'
+import { FormElement } from '../../../features/types/componentTypes'
+import { CategoryPostRequest } from '../../../features/types/requestTypes'
 
 function EditCategory() {
   const token = useSelector((state: RootState) => state.auth.token)

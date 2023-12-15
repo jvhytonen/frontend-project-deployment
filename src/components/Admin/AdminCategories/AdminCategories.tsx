@@ -35,9 +35,11 @@ function AdminCategories() {
       />
       <table className="w-full h-[50%] table-auto text-left">
         <thead>
-          {headings.map((heading) => {
-            return <TableHeading key={heading} label={heading} />
-          })}
+          <tr>
+            {headings.map((heading) => {
+              return <TableHeading key={heading} label={heading} />
+            })}
+          </tr>
         </thead>
         <TableBody items={categories} feature={'categories'} />
       </table>

@@ -2,17 +2,17 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { AppDispatch, RootState } from '../../store'
-import Button from '../Button/Button'
-import { updateExistingBook } from '../../features/slices/bookSlice'
-import { validateUpdatedBookData } from '../../features/validation/validate'
-import InputItem from '../FormControls/InputItem/InputItem'
-import OptionItem from '../FormControls/OptionItem/OptionItem'
-import TextArea from '../FormControls/TextArea/TextArea'
-import UploadImage from '../FormControls/UploadImage/UploadImage'
-import { Book } from '../../features/types/reduxTypes'
-import { BookPostRequest } from '../../features/types/requestTypes'
-import { finished, openModal } from '../../features/slices/modalSlice'
+import { AppDispatch, RootState } from '../../../store'
+import Button from '../../Button/Button'
+import { updateExistingBook, uploadImage } from '../../../features/slices/bookSlice'
+import { validateUpdatedBookData } from '../../../features/validation/validate'
+import InputItem from '../../FormControls/InputItem/InputItem'
+import OptionItem from '../../FormControls/OptionItem/OptionItem'
+import TextArea from '../../FormControls/TextArea/TextArea'
+import UploadImage from '../../FormControls/UploadImage/UploadImage'
+import { Book } from '../../../features/types/reduxTypes'
+import { BookPostRequest } from '../../../features/types/requestTypes'
+import { finished, openModal } from '../../../features/slices/modalSlice'
 
 function EditBook() {
   const params = useParams()
@@ -48,8 +48,18 @@ function EditBook() {
     setCoverImage(image)
     setBookToEdit((prevState) => ({
       ...(prevState as Book),
-      imageUrl: fileName
+      imageUrl: bookToEdit?.isbn + '.jpg'
     }))
+  }
+
+  // Change image filename to isbn-number and upload it before sending other data to server.
+  const handleImageUpload = async () => {
+    if (coverImage && bookToEdit?.isbn) {
+      const blob = new Blob([coverImage], { type: coverImage.type })
+      const fileName = bookToEdit.isbn + '.jpg'
+      const imageToUpload = new File([blob], fileName, { type: coverImage.type })
+      await dispatch(uploadImage(imageToUpload)).unwrap()
+    }
   }
 
   useEffect(() => {
@@ -64,10 +74,10 @@ function EditBook() {
       setValidationError(false)
     }
     if (token !== null && bookToEdit) {
+      await handleImageUpload()
       //categoryId and authorId must be added to object before sending data to backend.
       bookToEdit.authorId = bookToEdit.author.id
       bookToEdit.categoryId = bookToEdit.category.id
-      //All data needed in redux slice to send the request: token and body.
       // All data needed in redux slice to send the request: token and body.
       const updatedBookReq: BookPostRequest = {
         data: bookToEdit,

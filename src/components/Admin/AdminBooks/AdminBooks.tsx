@@ -53,9 +53,11 @@ function AdminBooks() {
       <CardBody className="overflow-scroll px-0">
         <table className="w-full min-w-max table-auto text-left">
           <thead>
-            {headings.map((heading) => {
-              return <TableHeading key={heading} label={heading} />
-            })}
+            <tr>
+              {headings.map((heading) => {
+                return <TableHeading key={heading} label={heading} />
+              })}
+            </tr>
           </thead>
           <tbody>
             {filteredBooks !== null && filteredBooks !== undefined

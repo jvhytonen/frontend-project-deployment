@@ -152,14 +152,18 @@ function Copies({ bookId }: CopiesProps) {
                           size="sm"
                           variant="ghost"
                           value={
-                            item.latestCheckout === null
+                            item.latestCheckout === undefined
+                              ? 'Free'
+                              : item.latestCheckout === null
                               ? 'Free'
                               : item.latestCheckout.returned
                               ? 'Free'
                               : 'Borrowed. Return date: ' + formatDate(item.latestCheckout.endTime)
                           }
                           color={
-                            item.latestCheckout === null
+                            item.latestCheckout === undefined
+                              ? 'green'
+                              : item.latestCheckout === null
                               ? 'green'
                               : item.latestCheckout.returned
                               ? 'green'
@@ -171,7 +175,8 @@ function Copies({ bookId }: CopiesProps) {
                     <td className={classes}>
                       <Typography variant="small" color="blue-gray" className="font-normal">
                         {/* User can borrow the copy if it has never been borrowed before */}
-                        {isLoggedIn && item.latestCheckout === null ? (
+                        {isLoggedIn &&
+                        (item.latestCheckout === null || item.latestCheckout === undefined) ? (
                           <Button
                             onClick={() => handleCheckoutConfirmation(item, 'borrow')}
                             color="green">
