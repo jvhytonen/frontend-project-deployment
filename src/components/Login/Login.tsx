@@ -2,7 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { AppDispatch, RootState } from '../../store'
-import { login, nullifyAuthError } from '../../features/slices/authSlice'
+import { login } from '../../features/slices/authSlice'
 import { useNavigate } from 'react-router-dom'
 import { Button, Checkbox, Input, Typography } from '@material-tailwind/react'
 
@@ -24,10 +24,6 @@ function Login() {
   }
 
   const handleSubmit = async () => {
-    // We must make error null if the user has tried to unsuccessfully log in before.
-    if (error) {
-      dispatch(nullifyAuthError())
-    }
     if (userName && passWord) {
       const credentials = {
         username: userName,
@@ -162,19 +158,3 @@ function Login() {
 }
 
 export default Login
-/* 
-
-<div className="flex justify-center items-center w-full mt-20">
-<div className="w-[40%] bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col">
-  <UsernameField onChange={handleUserName} />
-  <PasswordField onChange={handlePassword} labelText="Password" />
-  <div className="flex items-center justify-between">
-    <button
-      className="bg-blue-500 hover:bg-blue-800 font-bold py-2 px-4 rounded"
-      type="button"
-      onClick={() => handleSubmit()}>
-      Sign in
-    </button>
-  </div>
-</div>
-</div> */
