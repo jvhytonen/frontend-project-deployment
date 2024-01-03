@@ -1,5 +1,6 @@
 import { Button, Dialog, DialogHeader, DialogBody, DialogFooter } from '@material-tailwind/react'
 import { useDispatch, useSelector } from 'react-redux'
+
 import { AppDispatch, RootState } from '../../store'
 import { closeModal, confirm } from '../../features/slices/modalSlice'
 

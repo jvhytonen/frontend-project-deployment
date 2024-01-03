@@ -29,7 +29,7 @@ export default function DashboardNavigation({ handleTabChange }: AdminTabsProps)
         </Typography>
       </div>
       <List>
-        <ListItem onClick={() => handleTabChange('dashboard')}>
+        <ListItem onClick={() => handleTabChange('home')}>
           <ListItemPrefix>
             <PresentationChartBarIcon className="h-5 w-5" />
           </ListItemPrefix>

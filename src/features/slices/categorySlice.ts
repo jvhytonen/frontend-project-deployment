@@ -61,12 +61,7 @@ export const deleteCategory = createAsyncThunk(
 export const categorySlice = createSlice({
   name: 'categories',
   initialState,
-  // Normal reducers only needed for TypeScript
-  reducers: {
-    nullifyCategoryError: (state) => {
-      state.error = null
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getAllCategories.fulfilled, (state, action) => {
       state.isLoading = false
@@ -104,7 +99,7 @@ export const categorySlice = createSlice({
       state.isLoading = false
       state.error = action.error.message as string
     })
-    builder.addCase(updateExistingCategory.fulfilled, (state, action) => {
+    builder.addCase(updateExistingCategory.fulfilled, (state) => {
       state.isLoading = false
     })
     builder.addCase(updateExistingCategory.pending, (state) => {
@@ -116,7 +111,5 @@ export const categorySlice = createSlice({
     })
   }
 })
-
-export const { nullifyCategoryError } = categorySlice.actions
 
 export default categorySlice.reducer

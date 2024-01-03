@@ -14,6 +14,7 @@ import UploadImage from '../../FormControls/UploadImage/UploadImage'
 import { finished, openModal, openErrorModal } from '../../../features/slices/modalSlice'
 import { Book } from '../../../features/types/reduxTypes'
 import { BookPostRequest } from '../../../features/types/requestTypes'
+import { validateNewBookData } from '../../../features/validation/validate'
 
 function AddBook() {
   // Variables from Redux
@@ -71,6 +72,12 @@ function AddBook() {
 
   const handleSubmit: () => void = async () => {
     if (token !== null && newBook !== null) {
+      if (!validateNewBookData(newBook)) {
+        dispatch(
+          openErrorModal({ heading: 'An error!', content: 'Fill all the necessary fields first!' })
+        )
+        return
+      }
       // Upload cover image first.
       await handleImageUpload()
       // All data needed in redux slice to send the request: token and body.

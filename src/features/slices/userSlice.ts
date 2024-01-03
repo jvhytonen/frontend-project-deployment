@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 import { API_BASE_URL } from '../utils/variables'
 import { User, UserState } from '../types/reduxTypes'
-import { GetUsersRequest } from '../types/requestTypes'
 import { getItemWithAuth } from '../utils/thunks'
 
 const initialUsers: User[] = [
@@ -41,7 +40,6 @@ export const userSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getAllUsers.fulfilled, (state, action) => {
       state.isLoading = false
-      console.log(action.payload)
     })
     builder.addCase(getAllUsers.pending, (state) => {
       state.isLoading = true

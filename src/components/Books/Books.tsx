@@ -11,7 +11,7 @@ import SearchItems from '../SearchField/SearchField'
 
 function Books() {
   const dispatch = useDispatch<AppDispatch>()
-  const { items, error } = useSelector((state: RootState) => state.book)
+  const { items } = useSelector((state: RootState) => state.book)
   const initialState: SearchQueryState = {
     query: '',
     page: 1
@@ -46,7 +46,6 @@ function Books() {
                 )
               })
             : null}
-          {error ? <p className="text-red-600">{error}</p> : null}
         </div>
       </div>
       <div className="my-8">

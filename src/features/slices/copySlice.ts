@@ -48,6 +48,7 @@ export const deleteCopy = createAsyncThunk(
 export const borrowCopy = createAsyncThunk(
   'book-copies/borrow',
   async (postReq: CheckoutRequest) => {
+    console.log('Borrow')
     const req = {
       url: URL_BORROW,
       token: postReq.token,
@@ -73,11 +74,7 @@ export const returnCopy = createAsyncThunk(
 export const copySlice = createSlice({
   name: 'copies',
   initialState,
-  reducers: {
-    nullifyCopyError: (state) => {
-      state.error = null
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getCopies.fulfilled, (state, action) => {
       state.isLoading = false
@@ -116,10 +113,12 @@ export const copySlice = createSlice({
       state.error = action.error.message as string
     })
     builder.addCase(borrowCopy.fulfilled, (state, action) => {
+      // Backend returns the borrowed copy if borrow is succesful.
       const newCheckout = action.payload
       if (state.items === null) {
         state.items = [newCheckout]
       }
+      // Find the index of the newly borrowed copy and replace the old data with the new from the backend.
       const objIndexToUpdate = state.items?.findIndex((obj) => obj.id === newCheckout.bookCopyId)
       if (objIndexToUpdate === -1 || objIndexToUpdate === undefined) {
         state.items.push(newCheckout)
@@ -138,7 +137,5 @@ export const copySlice = createSlice({
     })
   }
 })
-
-export const { nullifyCopyError } = copySlice.actions
 
 export default copySlice.reducer

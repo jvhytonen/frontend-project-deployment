@@ -119,11 +119,7 @@ export const deleteBook = createAsyncThunk('books/delete', async (request: BookD
 export const bookSlice = createSlice({
   name: 'books',
   initialState,
-  reducers: {
-    nullifyBookError: (state) => {
-      state.error = null
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getAllBooks.fulfilled, (state, action) => {
       state.isLoading = false
@@ -175,11 +171,12 @@ export const bookSlice = createSlice({
       }
     })
     builder.addCase(addNewBook.pending, (state) => {
-      console.log('Loading')
+      state.isLoading = true
     })
 
     builder.addCase(addNewBook.rejected, (state) => {
       state.error = 'Failed to add book'
+      state.isLoading = false
     })
     builder.addCase(deleteBook.fulfilled, (state, action) => {
       state.isLoading = false
@@ -204,7 +201,5 @@ export const bookSlice = createSlice({
     })
   }
 })
-
-export const { nullifyBookError } = bookSlice.actions
 
 export default bookSlice.reducer

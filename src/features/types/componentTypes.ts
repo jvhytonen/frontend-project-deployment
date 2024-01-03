@@ -1,8 +1,6 @@
-//Forms:
-
 import { ChangeEvent, MouseEventHandler } from 'react'
+
 import { Author, Book, Category, Copy, UserState } from './reduxTypes'
-import { CheckoutActionType } from './actionTypes'
 
 export type InputItemType = {
   fieldName: string
@@ -86,7 +84,6 @@ export type ModalProps = {
 export interface CopyProps {
   copyOrderNumber: number
   copy: Copy
-  onCheckout: (checkoutObj: Copy, actionType: CheckoutActionType) => void
 }
 
 export type CopyPropsNoAuth = Omit<CopyProps, 'onCheckout'>
@@ -165,4 +162,13 @@ export interface DeleteItemProps {
 export interface TableBodyProps {
   items: Author[] | Category[] | null
   feature: TableFeature
+}
+
+export interface CopyStatusProps {
+  copyItem: Copy
+}
+
+export interface CopyActionsProps {
+  copyItem: Copy
+  classes: string
 }

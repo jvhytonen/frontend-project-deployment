@@ -1,105 +1,23 @@
-import React, { useEffect, useState } from 'react'
-
+import { useEffect } from 'react'
 import { AppDispatch, RootState } from '../../store'
 import { useDispatch, useSelector } from 'react-redux'
-import { borrowCopy, getCopies, returnCopy } from '../../features/slices/copySlice'
-import { finished, openModal } from '../../features/slices/modalSlice'
-import { useNavigate } from 'react-router-dom'
 import { CopiesProps } from '../../features/types/componentTypes'
 import { Copy } from '../../features/types/reduxTypes'
-import {
-  CheckoutActionType,
-  CheckoutBorrow,
-  CheckoutReturn
-} from '../../features/types/actionTypes'
-import { Button, Card, Chip, Typography } from '@material-tailwind/react'
-import { formatDate } from '../../features/utils/helpers'
+import { Card, Typography } from '@material-tailwind/react'
+
+import CopyStatus from '../CopyStatus/CopyStatus'
+import CopyActions from '../CopyActions/CopyActions'
+import { getCopies } from '../../features/slices/copySlice'
 
 function Copies({ bookId }: CopiesProps) {
-  // Item to be borrowed or returned
-  const [checkoutItem, setCheckoutItem] = useState<Copy | null>(null)
-  // 'borrow' or 'return'
-  const [checkoutType, setCheckoutType] = useState<CheckoutActionType | null>(null)
-
-  const user = useSelector((state: RootState) => state.auth.items)
-  const token = useSelector((state: RootState) => state.auth.token)
   const copies = useSelector((state: RootState) => state.copy.items)
-  const modal = useSelector((state: RootState) => state.modal)
   const dispatch = useDispatch<AppDispatch>()
-  const navigate = useNavigate()
 
   useEffect(() => {
     if (bookId) {
       dispatch(getCopies(bookId))
     }
   }, [])
-
-  useEffect(() => {
-    // When the user confirms the action in modal, borrow or return is excecuted.
-    if (modal.type === 'confirmed' && checkoutType === 'borrow') {
-      handleBorrow()
-    } else if (modal.type === 'confirmed' && checkoutType === 'return') {
-      handleReturn()
-    }
-  }, [modal.type])
-
-  const handleCheckoutConfirmation = (checkoutObj: Copy, actionType: CheckoutActionType) => {
-    //Action type defines is this a borrow or return of the book.
-    setCheckoutItem(checkoutObj)
-    setCheckoutType(actionType)
-    dispatch(
-      openModal({
-        heading: 'Confirm action',
-        content: `Are you sure you want to ${actionType} this book?`
-      })
-    )
-  }
-
-  const handleBorrow = async () => {
-    if (token !== null) {
-      const checkoutData: CheckoutBorrow = {
-        copyId: checkoutItem?.id as string,
-        userId: user?.id
-      }
-      const req = {
-        token: token,
-        data: checkoutData
-      }
-      await dispatch(borrowCopy(req)).unwrap()
-      dispatch(
-        finished({
-          heading: 'Success',
-          content: 'Book borrowed'
-        })
-      )
-      navigate('/books')
-    }
-  }
-
-  const handleReturn = async () => {
-    if (token !== null) {
-      const checkoutData: CheckoutReturn = {
-        checkoutId: checkoutItem?.latestCheckout?.id as string,
-        copyId: checkoutItem?.id as string,
-        userId: user?.id
-      }
-      const req = {
-        token: token,
-        data: checkoutData
-      }
-      await dispatch(returnCopy(req)).unwrap()
-      dispatch(
-        finished({
-          heading: 'Success',
-          content: 'Book returned'
-        })
-      )
-      navigate('/books')
-    }
-  }
-
-  // If the user is logged in, the CopyWithAuth (with the possibility to borrow/return) will be rendered. If not CopyNoAuth will be shown.
-  const isLoggedIn = user.role !== null ? true : false
 
   const CopiesTable = () => {
     return (
@@ -147,63 +65,11 @@ function Copies({ bookId }: CopiesProps) {
                       </Typography>
                     </td>
                     <td className={`${classes} bg-blue-gray-50/50`}>
-                      <Typography variant="small" color="blue-gray" className="font-normal">
-                        <Chip
-                          size="sm"
-                          variant="ghost"
-                          value={
-                            item.latestCheckout === undefined
-                              ? 'Free'
-                              : item.latestCheckout === null
-                              ? 'Free'
-                              : item.latestCheckout.returned
-                              ? 'Free'
-                              : 'Borrowed. Return date: ' + formatDate(item.latestCheckout.endTime)
-                          }
-                          color={
-                            item.latestCheckout === undefined
-                              ? 'green'
-                              : item.latestCheckout === null
-                              ? 'green'
-                              : item.latestCheckout.returned
-                              ? 'green'
-                              : 'red'
-                          }
-                        />
-                      </Typography>
+                      {/* Own component to show if the copy is borrowed or free */}
+                      <CopyStatus copyItem={item} />
                     </td>
-                    <td className={classes}>
-                      <Typography variant="small" color="blue-gray" className="font-normal">
-                        {/* User can borrow the copy if it has never been borrowed before */}
-                        {isLoggedIn &&
-                        (item.latestCheckout === null || item.latestCheckout === undefined) ? (
-                          <Button
-                            onClick={() => handleCheckoutConfirmation(item, 'borrow')}
-                            color="green">
-                            Borrow
-                          </Button>
-                        ) : /* Or it is returned by the previous borrower */
-                        item.latestCheckout != null && item.latestCheckout.returned ? (
-                          <Button
-                            onClick={() => handleCheckoutConfirmation(item, 'borrow')}
-                            color="green">
-                            Borrow
-                          </Button>
-                        ) : item.latestCheckout != null &&
-                          item.latestCheckout.user.id === user.id ? (
-                          /* User can return the copy if she has borrowed it */
-                          <Button
-                            onClick={() => handleCheckoutConfirmation(item, 'return')}
-                            color="amber">
-                            Return
-                          </Button>
-                        ) : item.latestCheckout !== null &&
-                          /* No text (null) is shown if someone else has borrowed it, if the user is not logged in, she will be insisted to do so. */
-                          item.latestCheckout.user.id !== user.id ? null : (
-                          'Log in to borrow or return books'
-                        )}
-                      </Typography>
-                    </td>
+                    {/* Action buttons in their own component */}
+                    <CopyActions copyItem={item} classes={classes} />
                   </tr>
                 )
               })

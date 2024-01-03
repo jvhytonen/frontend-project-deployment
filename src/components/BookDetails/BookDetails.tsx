@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
-
+import { Accordion, AccordionBody, AccordionHeader, Typography } from '@material-tailwind/react'
 import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/24/outline'
+
 import { RootState } from '../../store'
 import Copies from '../Copies/Copies'
 import { Book } from '../../features/types/reduxTypes'
-import { Accordion, AccordionBody, AccordionHeader, Typography } from '@material-tailwind/react'
 import { S3IMAGEURL } from '../../features/utils/variables'
 
 function BookDetails() {

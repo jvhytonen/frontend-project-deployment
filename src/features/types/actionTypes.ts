@@ -27,5 +27,3 @@ export type CheckoutReturn = {
   copyId: string
   userId: string
 }
-
-export type CheckoutActionType = 'borrow' | 'return'

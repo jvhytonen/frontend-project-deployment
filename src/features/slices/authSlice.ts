@@ -74,9 +74,6 @@ export const authSlice = createSlice({
     logUserOut: (state) => {
       state.items = initialUser
       state.token = null
-    },
-    nullifyAuthError: (state) => {
-      state.error = null
     }
   },
   extraReducers: (builder) => {
@@ -112,6 +109,6 @@ export const authSlice = createSlice({
   }
 })
 
-export const { logUserOut, nullifyAuthError } = authSlice.actions
+export const { logUserOut } = authSlice.actions
 
 export default authSlice.reducer

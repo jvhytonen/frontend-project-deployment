@@ -58,14 +58,7 @@ export const deleteAuthor = createAsyncThunk(
 export const authorSlice = createSlice({
   name: 'authors',
   initialState,
-  reducers: {
-    nullifyAuthorError: (state) => {
-      state.error = null
-    },
-    filterAuthors: (state, action) => {
-      console.log(action.payload)
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getAllAuthors.fulfilled, (state, action) => {
       state.isLoading = false
@@ -117,5 +110,4 @@ export const authorSlice = createSlice({
   }
 })
 
-export const { nullifyAuthorError } = authorSlice.actions
 export default authorSlice.reducer
