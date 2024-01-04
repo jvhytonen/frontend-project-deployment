@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import { addItem, deleteItem, getItemNoAuth, updateItem } from '../utils/thunks'
+import { addItem, deleteItem, getItemNoAuth, updateItem } from '../utils/fetchAPI'
 import { API_BASE_URL } from '../utils/variables'
 import { Category, CategoryState } from '../types/reduxTypes'
 import { CategoryDeleteRequest, CategoryPostRequest } from '../types/requestTypes'

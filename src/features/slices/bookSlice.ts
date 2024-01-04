@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import { deleteItem, getItemNoAuth } from '../utils/thunks'
+import { deleteItem, getItemNoAuth } from '../utils/fetchAPI'
 import { API_BASE_URL } from '../utils/variables'
 import { Book, BookState } from '../types/reduxTypes'
 import { BookDeleteRequest, BookPostRequest, SearchRequest } from '../types/requestTypes'

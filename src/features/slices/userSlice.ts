@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 import { API_BASE_URL } from '../utils/variables'
 import { User, UserState } from '../types/reduxTypes'
-import { getItemWithAuth } from '../utils/thunks'
+import { getItemWithAuth } from '../utils/fetchAPI'
 
 const initialUsers: User[] = [
   {

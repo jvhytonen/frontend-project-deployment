@@ -40,6 +40,7 @@ function Login() {
     }
   }
   useEffect(() => {
+    // If the role of the user is ADMIN, Dashboard will be shown.
     if (authenticationCompleted) {
       if (role === 'ADMIN') {
         navigate('../admin/dashboard')

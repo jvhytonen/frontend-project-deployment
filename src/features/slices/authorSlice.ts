@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { AuthorState, Author } from '../types/reduxTypes'
-import { addItem, deleteItem, getItemNoAuth, updateItem } from '../utils/thunks'
+import { addItem, deleteItem, getItemNoAuth, updateItem } from '../utils/fetchAPI'
 import { API_BASE_URL } from '../utils/variables'
 import { AuthorDeleteRequest, AuthorPostRequest } from '../types/requestTypes'
 
